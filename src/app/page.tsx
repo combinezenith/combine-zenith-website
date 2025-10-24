@@ -1,19 +1,11 @@
 // import Header from '@/app/components/Header';
-import HeroSection from '@/app/(components)/HeroSection';
-import ServicesSection from '@/app/(components)/ServicesSection';
-import AboutSection from '@/app/(components)/AboutSection';
-import CTASection from '@/app/(components)/CTASection'
+import HeroSection from '@/app/(pages)/home';
 // import Footer from '@/app/components/Footer';
 
 export default function Home() {
   return (
     <main className="min-h-screen">
-      {/* <Header /> */}
-      <HeroSection />
-      <ServicesSection />
-      <AboutSection />
-      <CTASection />
-      {/* <Footer /> */}
+      <Home />
     </main>
   );
 }
