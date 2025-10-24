@@ -3,6 +3,9 @@ import AboutMeSection from '@/app/(components)/TeamAbout';
 import SkillsExpertiseSection from '@/app/(components)/TeamSkills';
 import TeamInfo from '@/app/(components)/TeamInfo';
 import NotableAccomplishments from '@/app/(components)/NotableAccomplishments';
+import Jibran from "../../../../../public/Jibran.png"
+import Waqas from "../../../../../public/Waqas.jpg"
+import { StaticImageData } from 'next/image'; 
 
 // Define the accomplishment type
 type Accomplishment = {
@@ -11,19 +14,19 @@ type Accomplishment = {
   image: string;
 };
 
-// Define the member type
+// Define the member type - allow both string and StaticImageData
 type TeamMember = {
   name: string;
   role: string;
   tagline: string;
-  image: string;
+  image: string | StaticImageData; // Now properly typed
   bio: string;
   philosophy: string;
   skills: string[];
   email: string;
   linkedin?: string;
   twitter?: string;
-  accomplishments: Accomplishment[];  // Add this
+  accomplishments: Accomplishment[];
 };
 
 // Define the team members type with specific keys
@@ -43,16 +46,16 @@ export default async function TeamMemberPage({ params }: PageProps) {
 
   // All 6 team members database with proper typing
   const teamMembers: TeamMembersData = {
-    'eleanor-pena': {
-      name: "Eleanor Pena",
+    'Muhammad-Jibran-Rehan': {
+      name: "Muhammad Jibran Rehan",
       role: "Chief Executive Officer",
       tagline: "Driving brand success through innovative and data-led strategies.",
-      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1200&h=600&fit=crop",
-      bio: "Eleanor Pena is a visionary Chief Executive Officer with over 15 years of experience in leading high-impact campaigns for global brands. Her expertise spans digital marketing, brand development, market research, and strategic communications. Eleanor is known for her ability to transform complex market data into actionable strategies that yield measurable results and foster sustainable growth. She thrives on building high-performing teams and fostering a culture of innovation. Prior to joining Combine Zenith, Eleanor held senior marketing roles at leading tech and consumer goods companies, where she successfully launched several flagship products and significantly expanded market share. Her strategic foresight and commitment to excellence have consistently placed her at the forefront of industry trends.",
+      image: Jibran,
+      bio: "Muhammad Jibran Rehan is a visionary Chief Executive Officer with over 15 years of experience in leading high-impact campaigns for global brands. Her expertise spans digital marketing, brand development, market research, and strategic communications. Eleanor is known for her ability to transform complex market data into actionable strategies that yield measurable results and foster sustainable growth. She thrives on building high-performing teams and fostering a culture of innovation. Prior to joining Combine Zenith, Eleanor held senior marketing roles at leading tech and consumer goods companies, where she successfully launched several flagship products and significantly expanded market share. Her strategic foresight and commitment to excellence have consistently placed her at the forefront of industry trends.",
       philosophy: "My philosophy centers on the belief that truly effective marketing is a blend of artistry and science. It requires deep empathy for the customer, rigorous data analysis, and a relentless pursuit of creative solutions. I am passionate about crafting narratives that resonate authentically and building brands that not only succeed but also inspire.",
       skills: ["Strategic Leadership", "Brand Development", "Market Research", "Digital Marketing", "Team Building", "Innovation Management", "Data Analytics", "Business Strategy"],
       email: "eleanor.pena@combinezenith.com",
-      linkedin: "https://linkedin.com/in/eleanor-pena",
+      linkedin: "https://linkedin.com/in/Muhammad-Jibran-Rehan",
       twitter: "https://twitter.com/eleanor_pena",
       accomplishments: [
         {
@@ -72,17 +75,17 @@ export default async function TeamMemberPage({ params }: PageProps) {
         }
       ]
     },
-    'ralph-edwards': {
-      name: "Ralph Edwards",
+    'Waqas-Ahmed': {
+      name: "Waqas Ahmed",
       role: "Head of Marketing",
       tagline: "Transforming marketing campaigns into measurable business results.",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=1200&h=600&fit=crop",
-      bio: "Ralph Edwards is an accomplished Head of Marketing with over 12 years of experience driving revenue growth through innovative digital strategies. His expertise includes campaign management, performance marketing, and brand positioning. Ralph has a proven track record of scaling marketing operations for startups and Fortune 500 companies alike. He specializes in data-driven decision making and has successfully managed multi-million dollar budgets while consistently exceeding ROI targets. His leadership style emphasizes collaboration, continuous learning, and pushing creative boundaries to achieve exceptional results.",
+      image: Waqas,
+      bio: "Waqas Ahmed is an accomplished Head of Marketing with over 12 years of experience driving revenue growth through innovative digital strategies. His expertise includes campaign management, performance marketing, and brand positioning. Ralph has a proven track record of scaling marketing operations for startups and Fortune 500 companies alike. He specializes in data-driven decision making and has successfully managed multi-million dollar budgets while consistently exceeding ROI targets. His leadership style emphasizes collaboration, continuous learning, and pushing creative boundaries to achieve exceptional results.",
       philosophy: "I believe that great marketing is about creating genuine connections between brands and people. Every campaign should tell a compelling story while being grounded in data and measurable outcomes. My approach combines creativity with analytical rigor to drive sustainable growth and build lasting customer relationships.",
       skills: ["Digital Marketing", "Campaign Management", "Performance Marketing", "Brand Positioning", "SEO/SEM", "Marketing Analytics", "Budget Management", "Team Leadership"],
       email: "ralph.edwards@combinezenith.com",
-      linkedin: "https://linkedin.com/in/ralph-edwards",
-      twitter: "https://twitter.com/ralph_edwards",
+      linkedin: "https://linkedin.com/in/Waqas-Ahmed",
+      twitter: "https://twitter.com/Waqas_Ahmed",
       accomplishments: [
         {
           title: "Revenue Growth Achievement",
