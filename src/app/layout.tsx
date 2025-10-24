@@ -1,15 +1,52 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
+import Header from "@/app/components/Header";
+import CursorSpark from "./components/CursorSpark";
+import Footer from "@/app/components/Footer";
+import WhatsAppFloat from "./components/WhatsAppFloat";
+import Agent from "./components/Agent";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const surgena = localFont({
+  src: [
+    { path: "./fonts/Surgena-Regular.woff2", weight: "400" },
+    { path: "./fonts/Surgena-Medium.woff2", weight: "500" },
+    { path: "./fonts/Surgena-Bold.woff2", weight: "700" },
+  ],
+  variable: "--font-surgena",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const glancyr = localFont({
+  src: [
+    { path: "./fonts/Glancyr-Regular.woff2", weight: "400" },
+    { path: "./fonts/Glancyr-Medium.woff2", weight: "500" },
+    { path: "./fonts/Glancyr-Bold.woff2", weight: "700" },
+  ],
+  variable: "--font-glancyr",
+});
+
+const montserrat = localFont({
+  src: [
+    { path: "./fonts/Montserrat-Thin.woff2", weight: "100" },
+    { path: "./fonts/Montserrat-ThinItalic.woff2", weight: "100", style: "italic" },
+    { path: "./fonts/Montserrat-ExtraLight.woff2", weight: "200" },
+    { path: "./fonts/Montserrat-ExtraLightItalic.woff2", weight: "200", style: "italic" },
+    { path: "./fonts/Montserrat-Light.woff2", weight: "300" },
+    { path: "./fonts/Montserrat-LightItalic.woff2", weight: "300", style: "italic" },
+    { path: "./fonts/Montserrat-Regular.woff2", weight: "400" },
+    { path: "./fonts/Montserrat-Italic.woff2", weight: "400", style: "italic" },
+    { path: "./fonts/Montserrat-Medium.woff2", weight: "500" },
+    { path: "./fonts/Montserrat-MediumItalic.woff2", weight: "500", style: "italic" },
+    { path: "./fonts/Montserrat-SemiBold.woff2", weight: "600" },
+    { path: "./fonts/Montserrat-SemiBoldItalic.woff2", weight: "600", style: "italic" },
+    { path: "./fonts/Montserrat-Bold.woff2", weight: "700" },
+    { path: "./fonts/Montserrat-BoldItalic.woff2", weight: "700", style: "italic" },
+    { path: "./fonts/Montserrat-ExtraBold.woff2", weight: "800" },
+    { path: "./fonts/Montserrat-ExtraBoldItalic.woff2", weight: "800", style: "italic" },
+    { path: "./fonts/Montserrat-Black.woff2", weight: "900" },
+    { path: "./fonts/Montserrat-BlackItalic.woff2", weight: "900", style: "italic" },
+  ],
+  variable: "--font-montserrat",
 });
 
 export const metadata: Metadata = {
@@ -25,9 +62,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${surgena.variable} ${glancyr.variable} ${montserrat.variable} antialiased bg-background text-foreground`}
       >
+        <Header/>
+        <CursorSpark />
         {children}
+         <WhatsAppFloat />
+         <Agent />
+        <Footer/>
       </body>
     </html>
   );
