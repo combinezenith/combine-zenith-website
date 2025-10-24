@@ -25,58 +25,58 @@ export default function DarkThemeAgent() {
     scrollToBottom();
   }, [messages]);
 
-  const handleSendMessage = async () => {
-    if (inputMessage.trim() === '') return;
+const handleSendMessage = async () => {
+  if (inputMessage.trim() === '') return;
 
-    const userMessage = {
-      id: messages.length + 1,
-      text: inputMessage,
-      isBot: false,
+  const userMessage = {
+    id: messages.length + 1,
+    text: inputMessage,
+    isBot: false,
+    timestamp: new Date()
+  };
+
+  setMessages(prev => [...prev, userMessage]);
+  setInputMessage('');
+  setIsLoading(true);
+
+  try {
+    // ✅ CORRECT BACKEND URL - Use your actual backend domain
+    const response = await fetch('https://combine-zenith-agent.vercel.app/api/chat', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        message: inputMessage
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    const botResponse = {
+      id: messages.length + 2,
+      text: data.response,
+      isBot: true,
       timestamp: new Date()
     };
-
-    setMessages(prev => [...prev, userMessage]);
-    setInputMessage('');
-    setIsLoading(true);
-
-    try {
-      // Send message to Python backend - CORRECTED BODY
-      const response = await fetch('https://combine-zenith-agent.vercel.app/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: inputMessage // Remove conversation_history as your backend doesn't expect it
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      const botResponse = {
-        id: messages.length + 2,
-        text: data.response,
-        isBot: true,
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, botResponse]);
-    } catch (error) {
-      console.error('Error:', error);
-      const errorResponse = {
-        id: messages.length + 2,
-        text: "I apologize, but I'm having trouble connecting to the server. Please try again later or contact us directly at +92 319 3372277.",
-        isBot: true,
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, errorResponse]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    setMessages(prev => [...prev, botResponse]);
+  } catch (error) {
+    console.error('Error:', error);
+    const errorResponse = {
+      id: messages.length + 2,
+      text: "I apologize, but I'm having trouble connecting to the server. Please try again later or contact us directly at +92 319 3372277.",
+      isBot: true,
+      timestamp: new Date()
+    };
+    setMessages(prev => [...prev, errorResponse]);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
