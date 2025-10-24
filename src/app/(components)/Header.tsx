@@ -38,7 +38,7 @@ export default function Header() {
                 Services
               </Link>
               <Link href="/team" className="text-white hover:text-purple-300 transition-colors duration-200">
-                team
+                Team
               </Link>
               <Link href="/portfolio" className="text-white hover:text-purple-300 transition-colors duration-200">
                 Portfolio
@@ -101,7 +101,7 @@ export default function Header() {
                 className="text-white hover:text-purple-300 transition-colors duration-200 py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
-                team
+                Team
               </Link>
               <Link 
                 href="/portfolio" 
@@ -137,3 +137,4 @@ export default function Header() {
     </header>
   );
 }
+
