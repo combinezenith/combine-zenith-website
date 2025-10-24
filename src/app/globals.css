@@ -8,16 +8,16 @@
     --radius: 0.5rem;
 
     /* Base dark theme */
-    --background: 263 100% 16%; /* For components, not the body gradient */
+    --background: 263 100% 16%;
     --foreground: 0 0% 100%;
 
-    --primary: 263 100% 16%; /* #200053 */
+    --primary: 263 100% 16%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 270 20% 45%; /* #685885 */
+    --secondary: 270 20% 45%;
     --secondary-foreground: 0 0% 100%;
 
-    --accent: 270 25% 72%; /* #b5a6d0 */
+    --accent: 270 25% 72%;
     --accent-foreground: 0 0% 10%;
 
     --border: 270 20% 25%;
@@ -27,12 +27,9 @@
 }
 
 body {
-<<<<<<< Updated upstream
-font-family: var(--font-montsterrat);
-=======
-  @apply text-foreground;
+  /* Use direct color instead of @apply */
+  color: hsl(var(--foreground));
   font-family: var(--font-montsterrat);
->>>>>>> Stashed changes
   background: linear-gradient(
     to bottom right,
     #000000 0%,
@@ -44,45 +41,6 @@ font-family: var(--font-montsterrat);
   background-size: cover;
 }
 
-<<<<<<< Updated upstream
-h2, h3, h4, h5, h6, br {
-  font-family: var(--font-glancyr);
-}
-
-h1, .font-surgena {
-  font-family: var(--font-surgena);
-}
-
-@keyframes marquee-left {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-@keyframes marquee-right {
-  0% {
-    transform: translateX(-50%);
-  }
-  100% {
-    transform: translateX(0);
-  }
-}
-
-.animate-marquee-left {
-  animation: marquee-left 25s linear infinite;
-  display: flex;
-  width: max-content;
-}
-
-.animate-marquee-right {
-  animation: marquee-right 25s linear infinite;
-  display: flex;
-  width: max-content;
-}
-=======
 h2,
 h3,
 h4,
@@ -99,7 +57,6 @@ h1,
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: hsl(var(--border));
   }
 }
->>>>>>> Stashed changes

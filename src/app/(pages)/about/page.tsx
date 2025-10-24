@@ -1,7 +1,7 @@
 // import Header from '@/app/components/Header';
-import AboutStory from '../components/AboutStory';
-import CoreValues from '../components/CoreValues';
-import AboutTeam from '../components/AboutTeam';
+import AboutStory from '@/app/(components)/AboutStory';
+import CoreValues from '@/app/(components)/CoreValues';
+import AboutTeam from '@/app/(components)/AboutTeam';
 // import Footer from '@/app/components/Footer';
 
 export default function About() {

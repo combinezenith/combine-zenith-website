@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import Header from "@/app/components/Header";
-import CursorSpark from "./components/CursorSpark";
-import Footer from "@/app/components/Footer";
-import WhatsAppFloat from "./components/WhatsAppFloat";
-import Agent from "./components/Agent";
+import Header from "@/app/(components)/Header";
+import CursorSpark from "@/app/(components)/CursorSpark";
+import Footer from "@/app/(components)/Footer";
+import WhatsAppFloat from "@/app/(components)/WhatsAppFloat";
+import Agent from "@/app/(components)/Agent";
 
 const surgena = localFont({
   src: [
