@@ -41,7 +41,7 @@ export default function DarkThemeAgent() {
 
     try {
       // Send message to Python backend - CORRECTED BODY
-      const response = await fetch('http://localhost:8000/api/chat', {
+      const response = await fetch('https://combine-zenith-agent.vercel.app/api/chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
