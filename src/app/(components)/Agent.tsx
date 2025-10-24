@@ -40,7 +40,7 @@ const handleSendMessage = async () => {
   setIsLoading(true);
 
   try {
-    // ✅ CORRECT BACKEND URL - Use your actual backend domain
+    // ✅ CORRECT URL - Use your Vercel backend
     const response = await fetch('https://combine-zenith-agent.vercel.app/api/chat', {
       method: 'POST',
       headers: {
