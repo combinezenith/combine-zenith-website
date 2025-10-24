@@ -39,16 +39,6 @@ export default function Footer() {
                   Privacy Policy
                 </Link>
               </li>
-              <li>
-                <Link href="/terms" className="text-purple-300 hover:text-white transition">
-                  Terms of Service
-                </Link>
-              </li>
-              <li>
-                <Link href="/cookies" className="text-purple-300 hover:text-white transition">
-                  Cookie Policy
-                </Link>
-              </li>
             </ul>
           </div>
 
