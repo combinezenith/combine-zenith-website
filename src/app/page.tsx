@@ -1,9 +1,19 @@
-import Home from '@/app/(pages)/home';
+// import Header from '@/app/components/Header';
+import HeroSection from '@/app//(components)/HeroSection';
+import ServicesSection from '@/app/(components)/ServicesSection';
+import AboutSection from '@/app/(components)/AboutSection';
+import CTASection from '@/app/(components)/CTASection';
+// import Footer from '@/app/components/Footer';
 
-export default function Main() {
+export default function Home() {
   return (
     <main className="min-h-screen">
-      <Home />
+      {/* <Header /> */}
+      <HeroSection />
+      <ServicesSection />
+      <AboutSection />
+      <CTASection />
+      {/* <Footer /> */}
     </main>
   );
 }
