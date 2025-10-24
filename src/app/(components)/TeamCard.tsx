@@ -1,42 +1,45 @@
 import Link from 'next/link';
+import Jibran from "../../../public/Jibran.png"
+import Waqas from "../../../public/Waqas.jpg"
+import Image from 'next/image';
 
 export default function TeamCard() {
   const teamMembers = [
     {
-      id: "eleanor-pena",
-      name: "Eleanor Pena",
+      id: "Muhammad-Jibran-Rehan",
+      name: "Muhammad Jibran Rehan",
       role: "Chief Executive Officer",
-      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop"
+      image: Jibran
     },
     {
-      id: "ralph-edwards",
-      name: "Ralph Edwards",
+      id: "Waqas-Ahmed",
+      name: "Waqas Ahmed",
       role: "Head of Marketing",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop"
+      image: Waqas
     },
     {
       id: "esther-howard",
-      name: "Esther Howard",
+      name: "Hamza Ali",
       role: "Strategy Lead",
-      image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop"
+      image: "PIC"
     },
     {
       id: "brooklyn-simmons",
-      name: "Brooklyn Simmons",
+      name: "Muhammad Umer",
       role: "Creative Director",
-      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop"
+      image: "PIC"
     },
     {
       id: "cameron-williamson",
-      name: "Cameron Williamson",
+      name: "Muhammad Shabbir Sabir",
       role: "Creative Director",
-      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop"
+      image: "PIC"
     },
     {
       id: "leslie-alexander",
-      name: "Leslie Alexander",
+      name: "Esha Ahmed",
       role: "Client Relations Manager",
-      image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400&h=400&fit=crop"
+      image: "PIC"
     }
   ];
 
@@ -57,12 +60,21 @@ export default function TeamCard() {
               className="relative rounded-3xl overflow-hidden shadow-2xl group cursor-pointer block"
               style={{ aspectRatio: '1 / 1.25' }}
             >
-              {/* Team Member Image */}
-              <img
-                src={member.image}
-                alt={member.name}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-              />
+              {/* Team Member Image - Use Next.js Image for local, img for external */}
+              {typeof member.image === 'string' ? (
+                <img
+                  src={member.image}
+                  alt={member.name}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+              ) : (
+                <Image
+                  src={member.image}
+                  alt={member.name}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  placeholder="blur"
+                />
+              )}
               
               {/* Dark Gradient Overlay - Bottom Heavy */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>

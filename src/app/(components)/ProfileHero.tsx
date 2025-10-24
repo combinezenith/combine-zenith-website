@@ -1,12 +1,14 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import { StaticImageData } from 'next/image';
 
 interface TeamMember {
   name: string;
   role: string;
   tagline: string;
-  image: string;
+  image: string | StaticImageData;
 }
 
 interface ProfileHeroSectionProps {
@@ -24,11 +26,24 @@ export default function ProfileHeroSection({ member }: ProfileHeroSectionProps) 
     <div className="relative h-96 w-full overflow-hidden rounded-3xl">
       {/* Background Image */}
       <div className="absolute inset-0">
-        <img
-          src={member.image}
-          alt={member.name}
-          className="w-full h-full object-cover"
-        />
+        {typeof member.image === 'string' ? (
+          // For external URLs
+          <img
+            src={member.image}
+            alt={member.name}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          // For local images (StaticImageData)
+          <Image
+            src={member.image}
+            alt={member.name}
+            className="w-full h-full object-cover"
+            placeholder="blur"
+            fill
+            sizes="100vw"
+          />
+        )}
         {/* Purple/Blue Overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-purple-800/80 via-indigo-800/70 to-blue-900/60"></div>
       </div>
@@ -58,6 +73,3 @@ export default function ProfileHeroSection({ member }: ProfileHeroSectionProps) 
     </div>
   );
 }
-
-// Example usage in [id]/page.tsx:
-// <ProfileHeroSection member={memberData} />
