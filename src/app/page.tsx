@@ -1,6 +1,4 @@
-// import Header from '@/app/components/Header';
-import HeroSection from '@/app/(pages)/home';
-// import Footer from '@/app/components/Footer';
+import Home from '@/app/(pages)/home';
 
 export default function Home() {
   return (
