@@ -25,11 +25,11 @@ export default function AboutSection() {
 
           {/* Row 1 - moves left */}
           <div className="relative overflow-hidden">
-            <div className="flex animate-marquee-left gap-8">
+            <div className="flex animate-marquee-left gap-12">
               {[...Array(6)].map((_, index) => (
                 <div
                   key={`row1-${index}`}
-                  className="w-32 h-16 bg-[#b5a6d0] rounded-lg flex items-center justify-center text-white font-semibold"
+                  className="w-48 h-24 bg-[#b5a6d0] rounded-xl flex items-center justify-center text-white font-semibold text-lg"
                 >
                   Logo {index + 1}
                 </div>
@@ -38,7 +38,7 @@ export default function AboutSection() {
               {[...Array(6)].map((_, index) => (
                 <div
                   key={`row1-copy-${index}`}
-                  className="w-32 h-16 bg-[#b5a6d0] rounded-lg flex items-center justify-center text-white font-semibold"
+                  className="w-48 h-24 bg-[#b5a6d0] rounded-xl flex items-center justify-center text-white font-semibold text-lg"
                 >
                   Logo {index + 1}
                 </div>
@@ -48,20 +48,20 @@ export default function AboutSection() {
 
           {/* Row 2 - moves right */}
           <div className="relative overflow-hidden mt-12">
-            <div className="flex animate-marquee-right gap-8">
-              {[...Array(12)].map((_, index) => (
+            <div className="flex animate-marquee-right gap-12">
+              {[...Array(6)].map((_, index) => (
                 <div
                   key={`row2-${index}`}
-                  className="w-32 h-16 bg-[#b5a6d0] rounded-lg flex items-center justify-center text-white font-semibold"
+                  className="w-48 h-24 bg-[#b5a6d0] rounded-xl flex items-center justify-center text-white font-semibold text-lg"
                 >
                   Logo {index + 1}
                 </div>
               ))}
               {/* Duplicate for seamless loop */}
-              {[...Array(12)].map((_, index) => (
+              {[...Array(6)].map((_, index) => (
                 <div
                   key={`row2-copy-${index}`}
-                  className="w-32 h-16 bg-[#b5a6d0] rounded-lg flex items-center justify-center text-white font-semibold"
+                  className="w-48 h-24 bg-[#b5a6d0] rounded-xl flex items-center justify-center text-white font-semibold text-lg"
                 >
                   Logo {index + 1}
                 </div>
@@ -90,10 +90,12 @@ export default function AboutSection() {
           }
         }
         .animate-marquee-left {
-          animation: marquee-left 30s linear infinite;
+          animation: marquee-left 15s linear infinite;
+          width: max-content;
         }
         .animate-marquee-right {
-          animation: marquee-right 30s linear infinite;
+          animation: marquee-right 15s linear infinite;
+          width: max-content;
         }
       `}</style>
     </section>

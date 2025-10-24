@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden m-10 mt-52 lg:mt-20">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden m-10 lg:mt-20">
      <div className="container mx-32 relative">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Text Content */}

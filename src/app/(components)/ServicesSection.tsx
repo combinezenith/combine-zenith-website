@@ -52,7 +52,7 @@ export default function ServicesSection() {
 
         {/* Services Horizontal Scroll */}
         <div className="relative overflow-hidden">
-          <div className="flex animate-marquee-right gap-6 py-2">
+          <div className="flex animate-marquee-smooth gap-6 py-2">
             {/* First set of services */}
             {services.map((service, index) => {
               const Icon = service.icon;
@@ -143,20 +143,21 @@ export default function ServicesSection() {
           </div>
         </div>
 
-        {/* Custom CSS for marquee animation */}
+        {/* Custom CSS for smooth marquee animation */}
         <style jsx>{`
-          @keyframes marquee-right {
+          @keyframes marquee-smooth {
             0% {
               transform: translateX(0);
             }
             100% {
-              transform: translateX(-50%);
+              transform: translateX(calc(-100% / 2));
             }
           }
-          .animate-marquee-right {
-            animation: marquee-right 30s linear infinite;
+          .animate-marquee-smooth {
+            animation: marquee-smooth 20s linear infinite;
+            width: max-content;
           }
-          .animate-marquee-right:hover {
+          .animate-marquee-smooth:hover {
             animation-play-state: paused;
           }
         `}</style>
