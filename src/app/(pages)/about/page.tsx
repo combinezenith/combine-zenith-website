@@ -1,11 +1,17 @@
-import React from "react";
+// import Header from '@/app/components/Header';
+import AboutStory from '../components/AboutStory';
+import CoreValues from '../components/CoreValues';
+import AboutTeam from '../components/AboutTeam';
+// import Footer from '@/app/components/Footer';
 
-const About = () => {
+export default function About() {
   return (
-    <div>
-      <h1>This is About Page</h1>
-    </div>
+    <main className="min-h-screen">
+        {/* <Header /> */}
+        <AboutStory />
+        <CoreValues />
+        <AboutTeam />
+        {/* <Footer /> */}
+    </main>
   );
-};
-
-export default About;
+}
