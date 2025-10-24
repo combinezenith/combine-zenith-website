@@ -1,11 +1,19 @@
-import React from "react";
+// import Header from '@/app/components/Header';
+import HeroSection from '@/app/components/HeroSection';
+import ServicesSection from '@/app/components/ServicesSection';
+import AboutSection from './components/AboutSection';
+import CTASection from '@/app/components/CTASection'
+// import Footer from '@/app/components/Footer';
 
-const Home = () => {
+export default function Home() {
   return (
-    <div>
-      <h1>This is Home page</h1>
-    </div>
+    <main className="min-h-screen">
+      {/* <Header /> */}
+      <HeroSection />
+      <ServicesSection />
+      <AboutSection />
+      <CTASection />
+      {/* <Footer /> */}
+    </main>
   );
-};
-
-export default Home;
+}
