@@ -1,5 +1,4 @@
 import Image, { StaticImageData } from 'next/image';
-import React from 'react'
 import { IconType } from 'react-icons';
 import { LuLightbulb, LuTarget, LuPalette, LuVideo, LuSearch, LuTrendingUp, LuCode, LuPrinter } from 'react-icons/lu';
 
