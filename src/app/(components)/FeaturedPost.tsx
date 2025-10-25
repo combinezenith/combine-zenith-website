@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Calendar, Clock } from 'lucide-react';
 import { blogPosts } from './blogData';
+import Image from 'next/image';
 
 export default function FeaturedPost() {
   const featuredPost = blogPosts.find(post => post.featured);
@@ -17,7 +18,7 @@ export default function FeaturedPost() {
             Our Latest Insights
           </h1>
           <p className="text-purple-200 text-lg max-w-2xl mx-auto">
-            Stay informed with Combine Zenith's expertise. Explore articles, strategies, and industry news crafted to elevate your business.
+            Stay informed with Combine Zenith&apos;s expertise. Explore articles, strategies, and industry news crafted to elevate your business.
           </p>
         </div>
 
@@ -26,7 +27,7 @@ export default function FeaturedPost() {
           <div className="bg-white/5 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10 hover:border-purple-400/50 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20 group cursor-pointer">
             {/* Image Container */}
             <div className="relative overflow-hidden">
-              <img
+              <Image
                 src={featuredPost.image}
                 alt={featuredPost.title}
                 className="w-full h-64 md:h-80 object-cover group-hover:scale-105 transition-transform duration-500"

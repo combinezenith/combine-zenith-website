@@ -2,6 +2,7 @@ import Link from "next/link";
 import React from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { blogPosts } from './blogData';
+import Image from "next/image";
 
 interface BlogPostDetailProps {
   slug: string;
@@ -17,7 +18,7 @@ export default function BlogPostDetail({ slug }: BlogPostDetailProps) {
       <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-purple-950 to-indigo-900 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-4xl font-bold text-white mb-4">Post Not Found</h1>
-          <p className="text-purple-300 mb-6">The blog post you're looking for doesn't exist.</p>
+          <p className="text-purple-300 mb-6">The blog post you&apos;re looking for doesn&apos;t exist.</p>
           <Link href="/blog" className="text-purple-300 hover:text-white underline">
             Back to all posts
           </Link>
@@ -30,7 +31,7 @@ export default function BlogPostDetail({ slug }: BlogPostDetailProps) {
     <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-purple-950 to-indigo-900">
       {/* Hero Image Section */}
       <div className="relative w-full h-[400px] overflow-hidden">
-        <img
+        <Image
           src={post.image}
           alt={post.title}
           className="w-full h-full object-cover"
@@ -83,7 +84,7 @@ export default function BlogPostDetail({ slug }: BlogPostDetailProps) {
               {index === 1 && post.content?.quote && (
                 <div className="bg-purple-800/30 border-l-4 border-purple-400 pl-6 py-4 my-8">
                   <p className="text-purple-100 italic text-lg leading-relaxed mb-2">
-                    "{post.content.quote.text}"
+                    &apos;{post.content.quote.text}&apos;
                   </p>
                   <p className="text-purple-300 text-sm">
                     - {post.content.quote.author}
@@ -105,7 +106,7 @@ export default function BlogPostDetail({ slug }: BlogPostDetailProps) {
           {/* Author Section */}
           {post.author && (
             <div className="flex items-center gap-4 pt-8 border-t border-purple-700/30">
-              <img
+              <Image
                 src={post.author.avatar}
                 alt={post.author.name}
                 className="w-14 h-14 rounded-full object-cover"
