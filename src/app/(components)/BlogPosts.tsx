@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Calendar, Clock } from 'lucide-react';
 import { blogPosts } from './blogData';
+import Image from 'next/image';
 
 export default function BlogPosts() {
   // Get all non-featured posts
@@ -17,7 +18,7 @@ export default function BlogPosts() {
               <div className="bg-purple-900/30 backdrop-blur-sm rounded-2xl overflow-hidden border border-purple-700/30 hover:border-purple-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/20 group flex flex-col cursor-pointer">
                 {/* Image Container */}
                 <div className="relative overflow-hidden h-48">
-                  <img
+                  <Image
                     src={post.image}
                     alt={post.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
