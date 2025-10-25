@@ -61,7 +61,7 @@ export default function ServiceCard() {
         return (
           <div
             key={index}
-            className="group relative bg-secondary backdrop-blur rounded-2xl transition-all duration-300 hover:scale-105 overflow-hidden flex flex-col"
+            className="group relative bg-[#685885] backdrop-blur rounded-2xl transition-all duration-300 hover:scale-105 overflow-hidden flex flex-col"
           >
             {/* Top image with fixed height for consistent cards */}
             <div className="w-full h-44 md:h-48 lg:h-48 relative">
@@ -77,7 +77,7 @@ export default function ServiceCard() {
             <div className="p-4 md:p-6 flex-1 flex flex-col">
               {/* Icon + Title */}
               <div className="mb-4 flex items-center gap-3 justify-center"> 
-                <div className="h-12 w-12 bg-accent rounded-lg flex items-center justify-center">
+                <div className="h-12 w-12 bg-[#b5a6d0] rounded-lg flex items-center justify-center">
                  <Icon className="w-6 h-6 text-white" strokeWidth={1.5} />
                   </div>               
                 <h3 className="text-lg md:text-xl font-bold text-white">
@@ -91,7 +91,7 @@ export default function ServiceCard() {
               </p>
 
               <div className="mt-auto">
-                <button className="bg-accent w-full p-3 rounded-full text-sm font-medium">
+                <button className="bg-[#b5a6d0] w-full p-3 rounded-full text-sm font-medium">
                   Learn More
                 </button>
               </div>
