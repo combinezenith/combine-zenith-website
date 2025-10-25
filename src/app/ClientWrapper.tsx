@@ -6,19 +6,17 @@ import CursorSpark from "@/app/(components)/CursorSpark";
 import Footer from "@/app/(components)/Footer";
 import WhatsAppFloat from "@/app/(components)/WhatsAppFloat";
 import Agent from "@/app/(components)/Agent";
-export default function Layout({ children }: { children: React.ReactNode }) {  
+export default function Layout({ children }: { children: React.ReactNode }) {
 const pathname = usePathname()
   const isAdmin = pathname.startsWith('/admin')
   return (
-    <html lang="en">
-      <body>
-        {!isAdmin && <Header />}
-        {!isAdmin && <CursorSpark />}
-        {children}
-        {!isAdmin && <WhatsAppFloat />}
-        {!isAdmin && <Agent />}
-        {!isAdmin && <Footer />}
-      </body>
-    </html>
+    <>
+      {!isAdmin && <Header />}
+      {!isAdmin && <CursorSpark />}
+      {children}
+      {!isAdmin && <WhatsAppFloat />}
+      {!isAdmin && <Agent />}
+      {!isAdmin && <Footer />}
+    </>
   );
 }
