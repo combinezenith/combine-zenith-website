@@ -1,3 +1,5 @@
+import React from 'react';
+import Link from 'next/link';
 import ProfileHeroSection from '@/app/(components)/ProfileHero';
 import AboutMeSection from '@/app/(components)/TeamAbout';
 import SkillsExpertiseSection from '@/app/(components)/TeamSkills';
@@ -5,6 +7,9 @@ import TeamInfo from '@/app/(components)/TeamInfo';
 import NotableAccomplishments from '@/app/(components)/NotableAccomplishments';
 import Jibran from "../../../../../public/Jibran.png"
 import Waqas from "../../../../../public/Waqas.jpg"
+import Hamza from "../../../../../public/Hamza.jpeg"
+import Umer from "../../../../../public/Umer.jpeg"
+import Esha from "../../../../../public/Esha.png"
 import { StaticImageData } from 'next/image'; 
 
 // Define the accomplishment type
@@ -104,17 +109,17 @@ export default async function TeamMemberPage({ params }: PageProps) {
         }
       ]
     },
-    'esther-howard': {
-      name: "Esther Howard",
+    'Hamza-Ali': {
+      name: "Hamza Ali",
       role: "Strategy Lead",
       tagline: "Crafting strategic roadmaps that turn visions into victories.",
-      image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=1200&h=600&fit=crop",
-      bio: "Esther Howard is a strategic mastermind with 10+ years of experience in developing comprehensive marketing strategies for leading brands. Her expertise lies in competitive analysis, market positioning, and long-term growth planning. Esther has guided numerous companies through successful brand transformations and market expansions. She excels at identifying untapped opportunities and translating insights into actionable strategies. Her work has helped clients achieve significant market share gains and establish strong competitive advantages in crowded marketplaces.",
+      image: Hamza,
+      bio: "Hamza Ali is a strategic mastermind with 10+ years of experience in developing comprehensive marketing strategies for leading brands. Her expertise lies in competitive analysis, market positioning, and long-term growth planning. Esther has guided numerous companies through successful brand transformations and market expansions. She excels at identifying untapped opportunities and translating insights into actionable strategies. Her work has helped clients achieve significant market share gains and establish strong competitive advantages in crowded marketplaces.",
       philosophy: "Strategy is the bridge between aspiration and achievement. I believe in creating roadmaps that are both visionary and practical, balancing bold thinking with realistic execution. Success comes from deep market understanding, clear objectives, and the courage to challenge conventional wisdom when necessary.",
       skills: ["Strategic Planning", "Market Analysis", "Competitive Intelligence", "Brand Strategy", "Growth Planning", "Market Positioning", "Business Consulting", "Data-Driven Insights"],
       email: "esther.howard@combinezenith.com",
-      linkedin: "https://linkedin.com/in/esther-howard",
-      twitter: "https://twitter.com/esther_howard",
+      linkedin: "https://linkedin.com/in/Hamza-Ali",
+      twitter: "https://twitter.com/Hamza_Ali",
       accomplishments: [
         {
           title: "Market Expansion Strategy",
@@ -133,17 +138,17 @@ export default async function TeamMemberPage({ params }: PageProps) {
         }
       ]
     },
-    'brooklyn-simmons': {
-      name: "Brooklyn Simmons",
+    'Muhammad-Umer': {
+      name: "Muhammad Umer",
       role: "Creative Director",
       tagline: "Bringing bold creative visions to life with innovative design solutions.",
-      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=1200&h=600&fit=crop",
-      bio: "Brooklyn Simmons is an award-winning Creative Director with 8+ years of experience creating memorable brand experiences. Her portfolio spans digital campaigns, brand identities, and multimedia content that resonates across diverse audiences. Brooklyn's work has been recognized with multiple industry awards and has helped brands achieve viral success. She leads creative teams with a focus on innovation, inclusivity, and pushing design boundaries. Her approach combines artistic vision with strategic thinking to deliver work that is both beautiful and effective.",
+      image: Umer,
+      bio: "Muhammad Umer is an award-winning Creative Director with 8+ years of experience creating memorable brand experiences. Her portfolio spans digital campaigns, brand identities, and multimedia content that resonates across diverse audiences. Brooklyn's work has been recognized with multiple industry awards and has helped brands achieve viral success. She leads creative teams with a focus on innovation, inclusivity, and pushing design boundaries. Her approach combines artistic vision with strategic thinking to deliver work that is both beautiful and effective.",
       philosophy: "Creativity is not just about making things look good—it's about solving problems in unexpected ways. I believe every design decision should serve a purpose and contribute to the overall brand story. The best creative work challenges perceptions, sparks conversations, and leaves a lasting impression.",
       skills: ["Creative Direction", "Brand Identity", "Visual Design", "Art Direction", "Multimedia Content", "Team Leadership", "Design Strategy", "Creative Innovation"],
       email: "brooklyn.simmons@combinezenith.com",
-      linkedin: "https://linkedin.com/in/brooklyn-simmons",
-      twitter: "https://twitter.com/brooklyn_simmons",
+      linkedin: "https://linkedin.com/in/Muhammad-Umer",
+      twitter: "https://twitter.com/Muhammad_Umer",
       accomplishments: [
         {
           title: "Award-Winning Brand Identity",
@@ -191,17 +196,17 @@ export default async function TeamMemberPage({ params }: PageProps) {
         }
       ]
     },
-    'leslie-alexander': {
-      name: "Leslie Alexander",
+    'Esha': {
+      name: "Esha",
       role: "Client Relations Manager",
       tagline: "Building lasting partnerships through exceptional client experiences.",
-      image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=1200&h=600&fit=crop",
-      bio: "Leslie Alexander is an experienced Client Relations Manager with 11+ years of building and nurturing strategic partnerships. Her expertise includes account management, client retention, and relationship development. Leslie has consistently maintained a 95%+ client satisfaction rate and has been instrumental in securing long-term contracts with major brands. She excels at understanding client needs, anticipating challenges, and delivering solutions that exceed expectations. Her proactive communication style and problem-solving abilities have made her a trusted advisor to clients across industries.",
+      image: Esha,
+      bio: "Esha is an experienced Client Relations Manager with 11+ years of building and nurturing strategic partnerships. Her expertise includes account management, client retention, and relationship development. Leslie has consistently maintained a 95%+ client satisfaction rate and has been instrumental in securing long-term contracts with major brands. She excels at understanding client needs, anticipating challenges, and delivering solutions that exceed expectations. Her proactive communication style and problem-solving abilities have made her a trusted advisor to clients across industries.",
       philosophy: "Strong client relationships are built on trust, transparency, and consistent delivery. I believe in being a true partner to our clients—understanding their business challenges deeply and working collaboratively to achieve their goals. Success is measured not just by project completion, but by the lasting value we create together.",
       skills: ["Client Relations", "Account Management", "Relationship Building", "Client Retention", "Communication", "Problem Solving", "Strategic Partnership", "Customer Success"],
       email: "leslie.alexander@combinezenith.com",
-      linkedin: "https://linkedin.com/in/leslie-alexander",
-      twitter: "https://twitter.com/leslie_alexander",
+      linkedin: "https://linkedin.com/in/Esha",
+      twitter: "https://twitter.com/Esha",
       accomplishments: [
         {
           title: "Client Retention Excellence",
@@ -226,11 +231,75 @@ export default async function TeamMemberPage({ params }: PageProps) {
 
   if (!member) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4">
-        <div className="text-white text-xl md:text-2xl text-center">
-          Member not found
+    <div className="mt-30 min-h-screen bg-gradient-to-br from-black via-purple-950 to-purple-900 text-white relative overflow-hidden">
+
+      {/* Decorative Elements - Right Side */}
+      <div className="fixed right-8 top-1/2 -translate-y-1/2 flex flex-col items-center space-y-12 z-10">
+        <div className="w-3 h-3 rounded-full bg-white opacity-60"></div>
+        <div className="w-2 h-32 bg-purple-500 opacity-40"></div>
+        <div className="w-3 h-3 rounded-full border-2 border-white opacity-60"></div>
+        <div className="w-3 h-3 rounded-full border-2 border-white opacity-60"></div>
+      </div>
+
+      {/* Main Content */}
+      <div className="container mx-auto px-8 py-20 relative z-10">
+        <div className="max-w-2xl">
+          <h1 className="text-9xl font-bold mb-4">404</h1>
+          <h2 className="text-5xl font-light mb-6">Team Member Not Found</h2>
+          <p className="text-gray-300 mb-2">
+            Oops! The page {`you're`} looking {`doesn't`} exist or has moved.
+          </p>
+          <p className="text-gray-300 mb-8">
+            Please try navigating from the Team page or contact support.
+          </p>
+          
+          <Link 
+            href="/team"
+            className="inline-block px-8 py-3 border-2 border-white rounded-full hover:bg-white hover:text-purple-900 transition-all duration-300"
+          >
+            Go back to Team Page
+          </Link>
+          
+          <p className="mt-8 text-sm text-gray-400">
+            If you believe there is an error, please contact support.
+          </p>
         </div>
       </div>
+
+      {/* Geometric Shapes */}
+      <div className="fixed right-0 top-1/2 -translate-y-1/2 w-1/2 h-full flex items-center justify-center pointer-events-none">
+        {/* Large Triangle */}
+        <div className="relative w-full h-full flex items-center justify-center">
+          <div className="absolute" style={{ 
+            width: 0, 
+            height: 0, 
+            borderLeft: '300px solid transparent',
+            borderRight: '300px solid transparent',
+            borderBottom: '520px solid rgba(88, 28, 135, 0.5)',
+          }}></div>
+          
+          {/* Medium Triangle - Inverted */}
+          <div className="absolute" style={{ 
+            width: 0, 
+            height: 0, 
+            borderLeft: '120px solid transparent',
+            borderRight: '120px solid transparent',
+            borderTop: '208px solid rgba(88, 28, 135, 0.7)',
+            transform: 'translate(-80px, -180px)'
+          }}></div>
+          
+          {/* Star/Sparkle */}
+          <div className="absolute bottom-32 right-32">
+            <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+              <path d="M30 0L32 28L60 30L32 32L30 60L28 32L0 30L28 28L30 0Z" fill="rgba(255, 255, 255, 0.3)" />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      {/* Overlay gradient for depth */}
+      <div className="fixed inset-0 bg-gradient-to-r from-black via-transparent to-transparent pointer-events-none"></div>
+    </div>
     );
   }
 
