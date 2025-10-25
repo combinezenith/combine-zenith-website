@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import Header from "@/app/(components)/Header";
-import CursorSpark from "@/app/(components)/CursorSpark";
-import Footer from "@/app/(components)/Footer";
-import WhatsAppFloat from "@/app/(components)/WhatsAppFloat";
-import Agent from "@/app/(components)/Agent";
+import { Layout } from "./ClientWrapper";
+
 
 const surgena = localFont({
   src: [
@@ -64,12 +61,9 @@ export default function RootLayout({
       <body
         className={`${surgena.variable} ${glancyr.variable} ${montserrat.variable} antialiased bg-background text-foreground`}
       >
-        <Header/>
-        <CursorSpark />
+        <ClientWrapper>
         {children}
-         <WhatsAppFloat />
-         <Agent />
-        <Footer/>
+        </ClientWrapper>
       </body>
     </html>
   );
