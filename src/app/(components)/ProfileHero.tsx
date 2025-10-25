@@ -28,7 +28,7 @@ export default function ProfileHeroSection({ member }: ProfileHeroSectionProps) 
       <div className="absolute inset-0">
         {typeof member.image === 'string' ? (
           // For external URLs
-          <img
+          <Image
             src={member.image}
             alt={member.name}
             className="w-full h-full object-cover"
