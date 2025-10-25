@@ -1,9 +1,11 @@
+import Logo from "../../../public/logo.jpg"
+
 export const blogPosts = [
     {
         id: 1,
         slug: 'mastering-digital-transformation',
         tag: 'Featured Post',
-        image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&q=80',
+        image: Logo,
         title: 'Mastering Digital Transformation: A Strategic Blueprint for Success',
         description: 'Navigating the complexities of modern business requires agile strategies and cutting-edge technologies.',
         date: 'November 1, 2024',
@@ -34,14 +36,14 @@ export const blogPosts = [
         author: {
             name: "Maria Vasquez",
             role: "Head of Strategy, Combine Zenith",
-            avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80",
+            avatar: Logo,
             updatedAt: "June 12, 2024 at 3:45 pm"
         }
     },
     {
         id: 2,
         slug: 'innovation-unleashed-driving-growth',
-        image: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=800&q=80',
+        image: Logo,
         title: 'Innovation Unleashed: Driving Growth in a Competitive Market',
         description: 'Discover how continuous innovation can be your key differentiator. Learn to foster a culture of creativity and implement',
         date: 'October 26, 2024',
@@ -63,14 +65,14 @@ export const blogPosts = [
         author: {
             name: "John Anderson",
             role: "Innovation Director, Combine Zenith",
-            avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80",
+            avatar: Logo,
             updatedAt: "October 26, 2024"
         }
     },
     {
         id: 3,
         slug: 'brand-storytelling-connecting-audience',
-        image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80',
+        image: Logo,
         title: 'The Art of Brand Storytelling: Connecting with Your Audience',
         description: 'Craft compelling narratives that resonate deeply with your target audience. Understand the emotional triggers that',
         date: 'October 18, 2024',
@@ -92,14 +94,14 @@ export const blogPosts = [
         author: {
             name: "Sarah Chen",
             role: "Creative Director, Combine Zenith",
-            avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80",
+            avatar: Logo,
             updatedAt: "October 18, 2024"
         }
     },
     {
         id: 4,
         slug: 'leveraging-data-analytics',
-        image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80',
+        image: Logo,
         title: 'Leveraging Data Analytics for Strategic Business Decisions',
         description: 'Harness the power of data to drive informed decisions. This guide covers essential tools and techniques for',
         date: 'October 10, 2024',
@@ -121,14 +123,14 @@ export const blogPosts = [
         author: {
             name: "Michael Torres",
             role: "Data Strategist, Combine Zenith",
-            avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80",
+            avatar: Logo,
             updatedAt: "October 10, 2024"
         }
     },
     {
         id: 5,
         slug: 'enhancing-customer-experience',
-        image: 'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=80',
+        image: Logo,
         title: 'Enhancing Customer Experience: A Holistic Approach',
         description: 'Provide meaningful customer journeys at every touchpoint. Learn to design experiences that delight and retain your',
         date: 'September 30, 2024',
@@ -150,14 +152,14 @@ export const blogPosts = [
         author: {
             name: "Emily Rodriguez",
             role: "CX Specialist, Combine Zenith",
-            avatar: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=100&q=80",
+            avatar: Logo,
             updatedAt: "September 30, 2024"
         }
     },
     {
         id: 6,
         slug: 'ai-in-marketing',
-        image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80',
+        image: Logo,
         title: 'AI in Marketing: Revolutionizing Campaigns and Personalization',
         description: 'Explore the growing impact of Artificial Intelligence on marketing. From personalized campaigns to predictive',
         date: 'September 22, 2024',
@@ -179,14 +181,14 @@ export const blogPosts = [
         author: {
             name: "David Kim",
             role: "AI Marketing Lead, Combine Zenith",
-            avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80",
+            avatar: Logo,
             updatedAt: "September 22, 2024"
         }
     },
     {
         id: 7,
         slug: 'content-creation-that-converts',
-        image: 'https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?w=800&q=80',
+        image: Logo,
         title: 'Content Creation that Converts: Tips for Engaging Audiences',
         description: 'Learn strategies to creating content that not only attracts but also converts. Master the art of engagement through',
         date: 'September 15, 2024',
@@ -208,7 +210,7 @@ export const blogPosts = [
         author: {
             name: "Amanda Foster",
             role: "Content Strategist, Combine Zenith",
-            avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&q=80",
+            avatar: Logo,
             updatedAt: "September 15, 2024"
         }
     }
