@@ -1,0 +1,260 @@
+[
+  {
+    "slug": "branding-identity",
+    "name": "Branding Identity",
+    "description": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Totam, amet obcaecati ",
+    "image": "/logo.jpg",
+    "skills": [
+      "pillar-strategy-vision",
+      "pillar-customer-experience",
+      "pillar-process-optimization"
+    ],
+    "approach": [
+      {
+        "id": "discovery",
+        "title": "Discovery & Assessment",
+        "content": "We begin by thoroughly understanding your current state, challenges, and aspirations through in-depth analysis and stakeholder interviews."
+      },
+      {
+        "id": "strategy",
+        "title": "Strategy Formulation",
+        "content": "Based on insights, we craft a bespoke digital strategy, detailing technology roadmaps, process redesigns, and talent development plans."
+      },
+      {
+        "id": "implementation",
+        "title": "Implementation & Optimization",
+        "content": "We implement the roadmap, monitor KPIs, and continuously optimize to ensure sustainable value and measurable outcomes."
+      }
+    ]
+  },
+  {
+    "slug": "creative-strategy",
+    "name": "Creative Strategy",
+    "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
+    "image": "/logo.jpg",
+    "skills": [
+      "pillar-strategy-vision",
+      "pillar-technology-integration",
+      "pillar-customer-experience"
+    ],
+    "approach": [
+      {
+        "id": "discovery",
+        "title": "Discovery & Assessment",
+        "content": "We begin with stakeholder workshops to align objectives and identify creative opportunities that map to business goals."
+      },
+      {
+        "id": "strategy",
+        "title": "Strategy Formulation",
+        "content": "We translate insights into a creative strategy and channel plan that amplifies your brand and drives engagement."
+      },
+      {
+        "id": "implementation",
+        "title": "Implementation & Optimization",
+        "content": "We execute campaigns, measure performance, and iterate to improve reach, conversion, and ROI."
+      }
+    ]
+  },
+  {
+    "slug": "creative-work",
+    "name": "Creative Work",
+    "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
+    "image": "/logo.jpg",
+    "skills": [
+      "pillar-customer-experience",
+      "pillar-change-management",
+      "pillar-strategy-vision"
+    ],
+    "approach": [
+      {
+        "id": "discovery",
+        "title": "Discovery & Assessment",
+        "content": "We audit existing creative assets and user journeys to identify gaps and opportunities for stronger storytelling."
+      },
+      {
+        "id": "strategy",
+        "title": "Strategy Formulation",
+        "content": "We develop creative concepts, style guides, and production plans aligned to your audience needs."
+      },
+      {
+        "id": "implementation",
+        "title": "Implementation & Optimization",
+        "content": "We produce, test, and refine creative outputs to maximize clarity, engagement, and brand recall."
+      }
+    ]
+  },
+  {
+    "slug": "ai-videos",
+    "name": "Ai Videos",
+    "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
+    "image": "/logo.jpg",
+    "skills": [
+      "pillar-technology-integration",
+      "pillar-customer-experience"
+    ],
+    "approach": [
+      {
+        "id": "discovery",
+        "title": "Discovery & Assessment",
+        "content": "We identify use-cases where AI-generated video delivers impact and map content requirements."
+      },
+      {
+        "id": "strategy",
+        "title": "Strategy Formulation",
+        "content": "We design a video content strategy including formats, personalization rules, and performance metrics."
+      },
+      {
+        "id": "implementation",
+        "title": "Implementation & Optimization",
+        "content": "We produce scalable AI video assets, measure engagement, and optimize models and templates."
+      }
+    ]
+  },
+  {
+    "slug": "seo",
+    "name": "SEO",
+    "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
+    "image": "/logo.jpg",
+    "skills": [
+      "pillar-technology-integration",
+      "pillar-process-optimization",
+      "pillar-customer-experience"
+    ],
+    "approach": [
+      {
+        "id": "discovery",
+        "title": "Discovery & Assessment",
+        "content": "We perform technical and content audits to uncover visibility blockers and opportunities."
+      },
+      {
+        "id": "strategy",
+        "title": "Strategy Formulation",
+        "content": "We define a prioritized SEO roadmap including technical fixes, content strategy, and backlink campaigns."
+      },
+      {
+        "id": "implementation",
+        "title": "Implementation & Optimization",
+        "content": "We implement changes, monitor rankings and traffic, and iterate based on data."
+      }
+    ]
+  },
+  {
+    "slug": "performance-marketing",
+    "name": "Performance Marketing",
+    "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
+    "image": "/logo.jpg",
+    "skills": [
+      "pillar-customer-experience",
+      "pillar-process-optimization",
+      "pillar-technology-integration"
+    ],
+    "approach": [
+      {
+        "id": "discovery",
+        "title": "Discovery & Assessment",
+        "content": "We assess your current channels, tracking and attribution to identify leakage and scaling opportunities."
+      },
+      {
+        "id": "strategy",
+        "title": "Strategy Formulation",
+        "content": "We build channel strategies, bidding approaches, and test plans designed to hit CPA/ROAS targets."
+      },
+      {
+        "id": "implementation",
+        "title": "Implementation & Optimization",
+        "content": "We execute campaigns, analyze performance, and scale winning tactics while optimizing spend."
+      }
+    ]
+  },
+  {
+    "slug": "website-development",
+    "name": "Website Development",
+    "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
+    "image": "/logo.jpg",
+    "skills": [
+      "pillar-technology-integration",
+      "pillar-process-optimization",
+      "pillar-customer-experience"
+    ],
+    "approach": [
+      {
+        "id": "discovery",
+        "title": "Discovery & Assessment",
+        "content": "We map current architecture, integrations and user journeys to identify technical debt and priorities."
+      },
+      {
+        "id": "strategy",
+        "title": "Strategy Formulation",
+        "content": "We create technical roadmaps, platform choices, and migration plans aligned to business objectives."
+      },
+      {
+        "id": "implementation",
+        "title": "Implementation & Optimization",
+        "content": "We build, test, and deploy iteratively with performance, accessibility, and security best practices."
+      }
+    ]
+  },
+  {
+    "slug": "all-print-productions",
+    "name": "All Print Productions",
+    "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
+    "image": "/logo.jpg",
+    "skills": [
+      "pillar-process-optimization",
+      "pillar-change-management"
+    ],
+    "approach": [
+      {
+        "id": "discovery",
+        "title": "Discovery & Assessment",
+        "content": "We evaluate your print production processes, suppliers and timelines to identify efficiencies."
+      },
+      {
+        "id": "strategy",
+        "title": "Strategy Formulation",
+        "content": "We design a production strategy that reduces costs, improves quality and shortens lead times."
+      },
+      {
+        "id": "implementation",
+        "title": "Implementation & Optimization",
+        "content": "We coordinate production, implement process improvements and track KPIs for continuous improvement."
+      }
+    ]
+  }
+  ,
+  {
+    "slug": "pillar-strategy-vision",
+    "name": "Strategy & Vision",
+    "description": "Define a clear roadmap and strategic objectives for your digital journey.",
+    "type": "pillar",
+    "color": "#6B3FA5"
+  },
+  {
+    "slug": "pillar-technology-integration",
+    "name": "Technology Integration",
+    "description": "Implement cutting-edge solutions that seamlessly integrate with your existing infrastructure.",
+    "type": "pillar",
+    "color": "#5E2EA6"
+  },
+  {
+    "slug": "pillar-process-optimization",
+    "name": "Process Optimization",
+    "description": "Streamline workflows and enhance operational efficiency through automation.",
+    "type": "pillar",
+    "color": "#4A2A7A"
+  },
+  {
+    "slug": "pillar-change-management",
+    "name": "Change Management",
+    "description": "Empower your team with the skills and mindset for a successful digital transition.",
+    "type": "pillar",
+    "color": "#7A4FC2"
+  },
+  {
+    "slug": "pillar-customer-experience",
+    "name": "Customer Experience",
+    "description": "Design user-centric experiences that increase engagement and satisfaction.",
+    "type": "pillar",
+    "color": "#8B5FE6"
+  }
+]
