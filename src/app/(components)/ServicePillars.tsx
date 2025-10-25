@@ -15,7 +15,14 @@ type Props = {
 };
 
 export default function ServicePillars({ slugs }: Props) {
-  const allPillars = (services as any[]).filter((s) => s.type === 'pillar') as Pillar[];
+  // Type-guard to narrow unknown JSON entries to Pillar objects
+  const isPillar = (s: unknown): s is Pillar => {
+    if (typeof s !== 'object' || s === null) return false;
+    const maybe = s as { type?: unknown; slug?: unknown; name?: unknown; description?: unknown };
+    return maybe.type === 'pillar' && typeof maybe.slug === 'string' && typeof maybe.name === 'string' && typeof maybe.description === 'string';
+  };
+
+  const allPillars = (services as unknown[]).filter(isPillar);
 
   const pillars = slugs && slugs.length
     ? allPillars.filter((p) => slugs.includes(p.slug))

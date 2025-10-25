@@ -11,7 +11,17 @@ type Props = {
 
 export default function DynamicServices({ params }: Props) {
   const { id } = params;
-  const service = (services as any[]).find((s) => s.slug === id);
+  // Define a lightweight type for services we expect to render here
+  type ApproachStep = { id: string; title: string; content: string };
+  type Service = { slug: string; name: string; description?: string; image?: string; skills?: string[]; approach?: ApproachStep[] };
+
+  const isService = (s: unknown): s is Service => {
+    if (typeof s !== 'object' || s === null) return false;
+    const maybe = s as { slug?: unknown; name?: unknown };
+    return typeof maybe.slug === 'string' && typeof maybe.name === 'string';
+  };
+
+  const service = (services as unknown[]).find((s): s is Service => isService(s) && s.slug === id);
   if (!service) return notFound();
 
   return (
