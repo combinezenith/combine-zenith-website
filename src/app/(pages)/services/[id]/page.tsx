@@ -6,11 +6,12 @@ import ServiceApproach from '@/app/(components)/ServiceApproach';
 import CTASectionEnhanced from '@/app/(components)/CTASection';
 
 type Props = {
-  params: { id: string };
+  // params can be provided synchronously or as a Promise in some Next.js runtimes
+  params: { id: string } | Promise<{ id: string }>;
 };
 
-export default function DynamicServices({ params }: Props) {
-  const { id } = params;
+export default async function DynamicServices({ params }: Props) {
+  const { id } = (await params) as { id: string };
   // Define a lightweight type for services we expect to render here
   type ApproachStep = { id: string; title: string; content: string };
   type Service = { slug: string; name: string; description?: string; image?: string; skills?: string[]; approach?: ApproachStep[] };
