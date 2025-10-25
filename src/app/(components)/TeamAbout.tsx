@@ -4,7 +4,7 @@ interface AboutMeSectionProps {
   philosophy: string;
 }
 
-export default function AboutMeSection({ name, bio, philosophy }: AboutMeSectionProps) {
+export default function AboutMeSection({ bio, philosophy }: AboutMeSectionProps) {
   return (
     <div className="w-full bg-[#685885] rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 border border-purple-300/30">
       <div className="space-y-8 sm:space-y-10 lg:space-y-12">
