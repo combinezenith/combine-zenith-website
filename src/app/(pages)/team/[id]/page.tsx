@@ -19,7 +19,7 @@ type TeamMember = {
   name: string;
   role: string;
   tagline: string;
-  image: string | StaticImageData; // Now properly typed
+  image: string | StaticImageData;
   bio: string;
   philosophy: string;
   skills: string[];
@@ -226,17 +226,19 @@ export default async function TeamMemberPage({ params }: PageProps) {
 
   if (!member) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-white text-2xl">Member not found</div>
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <div className="text-white text-xl md:text-2xl text-center">
+          Member not found
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen p-8">
+    <div className="min-h-screen mt-20 p-4 sm:p-6 lg:p-8">
       <ProfileHeroSection member={member} />
       
-      <div className="max-w-6xl mx-auto mt-12 space-y-8">
+      <div className="max-w-6xl mx-auto mt-8 sm:mt-10 lg:mt-12 space-y-6 sm:space-y-8 lg:space-y-12">
         <AboutMeSection 
           name={member.name}
           bio={member.bio}
@@ -245,13 +247,13 @@ export default async function TeamMemberPage({ params }: PageProps) {
 
         <SkillsExpertiseSection skills={member.skills} />
 
-        <NotableAccomplishments accomplishments={member.accomplishments} />
-
         <TeamInfo 
           email={member.email}
           linkedin={member.linkedin}
           twitter={member.twitter}
         />
+        <NotableAccomplishments accomplishments={member.accomplishments} />
+
       </div>
     </div>
   );

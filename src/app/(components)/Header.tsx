@@ -13,17 +13,18 @@ export default function Header() {
       <nav className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo on the left */}
-          <Link href="/" className="flex items-center">
-            <div className="relative w-40 h-12">
-              <Image
-                src="/logo-white.png"
-                fill
-                className="object-contain"
-                alt="COMBINE ZENITH LOGO"
-                priority
-              />
-            </div>
-          </Link>
+<Link href="/" className="flex items-center">
+  <div className="relative w-40 h-12">
+    <Image
+      src="/logo-white.png"
+      fill
+      className="object-contain"
+      alt="COMBINE ZENITH LOGO"
+      priority
+      sizes="(max-width: 768px) 100px, (max-width: 1200px) 150px, 160px"
+    />
+  </div>
+</Link>
 
           {/* Navigation links in the middle - hidden on mobile */}
           <div className="hidden lg:flex items-center justify-center flex-1 mx-8">
