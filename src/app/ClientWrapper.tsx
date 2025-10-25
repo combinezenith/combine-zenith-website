@@ -1,3 +1,4 @@
+'use client';
 import { usePathname } from 'next/navigation'
 import Header from "@/app/(components)/Header";
 import CursorSpark from "@/app/(components)/CursorSpark";
@@ -9,9 +10,7 @@ const pathname = usePathname()
   const isAdmin = pathname.startsWith('/admin')
   return (
     <html lang="en">
-      <body
-        className='bg-background text-foreground'
-      >
+      <body>
         {!isAdmin && <Header />}
         {!isAdmin && <CursorSpark />}
         {children}

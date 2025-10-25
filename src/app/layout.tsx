@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { Layout } from "./ClientWrapper";
+import Layout from "./ClientWrapper";
 
 
 const surgena = localFont({
@@ -61,9 +61,9 @@ export default function RootLayout({
       <body
         className={`${surgena.variable} ${glancyr.variable} ${montserrat.variable} antialiased bg-background text-foreground`}
       >
-        <ClientWrapper>
+        <Layout>
         {children}
-        </ClientWrapper>
+        </Layout>
       </body>
     </html>
   );
