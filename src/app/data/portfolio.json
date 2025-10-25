@@ -1,0 +1,20 @@
+[
+  {
+    "slug": "project-alpha",
+    "name": "Project Alpha",
+    "description": "A cutting-edge web application designed to streamline business operations and enhance user experience.",
+    "image": "/logo.jpg"
+  },
+  {
+    "slug": "project-beta",
+    "name": "Project Beta",
+    "description": "An innovative mobile app that leverages AI to provide personalized recommendations and insights.",
+    "image": "/logo.jpg"
+  },
+  {
+    "slug": "project-gamma",
+    "name": "Project Gamma",
+    "description": "A comprehensive e-commerce platform with advanced analytics and seamless integration capabilities.",
+    "image": "/logo.jpg"
+  }
+]

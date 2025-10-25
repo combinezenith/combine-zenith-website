@@ -2,7 +2,7 @@ import Image from 'next/image';
 import services from '@/app/data/services.json';
 import { notFound } from 'next/navigation';
 import ServicePillars from '@/app/(components)/ServicePillars';
-import ServiceApproach from '@/app/(components)/ServiceApproach';
+import ServiceApproach from '@/app/(components)/FAQ';
 import CTASectionEnhanced from '@/app/(components)/CTASection';
 
 type Props = {

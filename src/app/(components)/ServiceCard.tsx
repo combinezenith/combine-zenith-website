@@ -32,7 +32,7 @@ export default function ServiceCard() {
         return (
           <div
             key={service.slug || index}
-            className="group relative bg-[#685885] backdrop-blur rounded-2xl transition-all duration-300 hover:scale-105 overflow-hidden flex flex-col"
+            className="group relative bg-[#685885] backdrop-blur-2xl bg-blend-multiply rounded-2xl transition-all duration-300 hover:scale-105 overflow-hidden flex flex-col"
           >
             <div className="w-full h-44 md:h-48 lg:h-48 relative">
               <Image
