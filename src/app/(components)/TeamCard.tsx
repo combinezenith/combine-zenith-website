@@ -1,6 +1,9 @@
 import Link from 'next/link';
 import Jibran from "../../../public/Jibran.png"
 import Waqas from "../../../public/Waqas.jpg"
+import Hamza from "../../../public/Hamza.jpeg"
+import Umer from "../../../public/Umer.jpeg"
+import Esha from "../../../public/Esha.png"
 import Image from 'next/image';
 
 export default function TeamCard() {
@@ -18,16 +21,16 @@ export default function TeamCard() {
       image: Waqas
     },
     {
-      id: "esther-howard",
+      id: "Hamza-Ali",
       name: "Hamza Ali",
       role: "Strategy Lead",
-      image: "PIC"
+      image: Hamza
     },
     {
-      id: "brooklyn-simmons",
+      id: "Muhammad-Umer",
       name: "Muhammad Umer",
       role: "Creative Director",
-      image: "PIC"
+      image: Umer
     },
     {
       id: "cameron-williamson",
@@ -36,10 +39,10 @@ export default function TeamCard() {
       image: "PIC"
     },
     {
-      id: "leslie-alexander",
-      name: "Esha Ahmed",
+      id: "Esha",
+      name: "Esha",
       role: "Client Relations Manager",
-      image: "PIC"
+      image: Esha
     }
   ];
 
