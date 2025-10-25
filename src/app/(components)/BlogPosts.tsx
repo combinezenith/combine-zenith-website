@@ -15,15 +15,16 @@ export default function BlogPosts() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {posts.map((post) => (
             <Link key={post.id} href={`/blog/${post.slug}`}>
-              <div className="bg-purple-900/30 backdrop-blur-sm rounded-2xl overflow-hidden border border-purple-700/30 hover:border-purple-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/20 group flex flex-col cursor-pointer">
+              <div className="bg-[#685885] rounded-2xl overflow-hidden border border-purple-700/30 hover:border-purple-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/20 group flex flex-col cursor-pointer h-full">
                 {/* Image Container */}
-                <div className="relative overflow-hidden h-48">
+                <div className="relative overflow-hidden h-48 w-full">
                   <Image
                     src={post.image}
                     alt={post.title}
+                    width={400}
+                    height={192}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-purple-900/50 to-transparent"></div>
                 </div>
 
                 {/* Content Container */}
