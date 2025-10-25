@@ -23,7 +23,7 @@ export default function CTASectionEnhanced() {
           <div className="pt-4">
 <Link
               href="/contact"
-              className="inline-block px-8 py-4 bg-[#b5a6d0] text-primary hover:text-white font-semibold rounded-lg hover:bg-secondary transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-purple-500/50"
+              className="inline-block px-8 py-4 bg-[#b5a6d0] text-[#200053] hover:text-white font-semibold rounded-lg hover:bg-[#685885] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-purple-500/50"
             >
               Get a Free Consultation
             </Link>

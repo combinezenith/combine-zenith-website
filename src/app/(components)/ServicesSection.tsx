@@ -59,7 +59,7 @@ export default function ServicesSection() {
               return (
                 <div
                   key={`service-${index}`}
-                  className="group relative min-w-[320px] bg-[#685885] backdrop-blur-sm rounded-2xl p-8 hover:bg-primary hover:border-accent transition-all duration-500 hover:transform hover:scale-105 flex-shrink-0"
+                  className="group relative min-w-[320px] bg-[#685885] backdrop-blur-sm rounded-2xl p-8 hover:bg-[#200053] hover:border-[#b5a6d0] transition-all duration-500 hover:transform hover:scale-105 flex-shrink-0"
                 >
                   {/* Hover Glow Effect */}
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl group-hover:blur-0" />
@@ -103,7 +103,7 @@ export default function ServicesSection() {
               return (
                 <div
                   key={`service-copy-${index}`}
-                  className="group relative min-w-[320px] bg-[#685885] backdrop-blur-sm rounded-2xl p-8 hover:bg-primary hover:border-accent transition-all duration-500 hover:transform hover:scale-105 flex-shrink-0"
+                  className="group relative min-w-[320px] bg-[#685885] backdrop-blur-sm rounded-2xl p-8 hover:bg-[#200053] hover:border-[#b5a6d0] transition-all duration-500 hover:transform hover:scale-105 flex-shrink-0"
                 >
                   {/* Hover Glow Effect */}
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl group-hover:blur-0" />
