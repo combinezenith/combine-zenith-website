@@ -1,20 +1,62 @@
 [
   {
     "slug": "project-alpha",
-    "name": "Project Alpha",
-    "description": "A cutting-edge web application designed to streamline business operations and enhance user experience.",
-    "image": "/logo.jpg"
+    "name": "Digital Transformation Suite",
+    "description": "A comprehensive digital transformation initiative that revolutionized internal operations and customer experience through innovative technology solutions.",
+    "overview": "Elevating Digital Presence through strategic and creative execution of modern web technologies, resulting in significant improvements in user engagement and business metrics.",
+    "image": "/logo.jpg",
+    "client": {
+      "name": "TechCorp Solutions Inc.",
+      "industry": "Enterprise Software",
+      "location": "San Francisco, CA"
+    },
+    "highlights": [
+      "Complete overhaul of legacy systems into modern architecture",
+      "Implementation of AI-driven customer service platform",
+      "Enhanced security protocols with blockchain integration"
+    ],
+    "technologies": [
+      "React.js",
+      "Node.js",
+      "TypeScript",
+      "AWS",
+      "Docker",
+      "MongoDB"
+    ],
+    "metrics": {
+      "efficiency": "85%",
+      "satisfaction": "25%",
+      "rating": "4.7/5"
+    }
   },
   {
     "slug": "project-beta",
-    "name": "Project Beta",
-    "description": "An innovative mobile app that leverages AI to provide personalized recommendations and insights.",
-    "image": "/logo.jpg"
-  },
-  {
-    "slug": "project-gamma",
-    "name": "Project Gamma",
-    "description": "A comprehensive e-commerce platform with advanced analytics and seamless integration capabilities.",
-    "image": "/logo.jpg"
+    "name": "E-Commerce Revolution",
+    "description": "An innovative e-commerce platform that transformed online shopping experience with AI-powered recommendations and real-time inventory management.",
+    "overview": "Reimagining online retail through cutting-edge technology and user-centric design, delivering unprecedented growth and customer satisfaction.",
+    "image": "/logo.jpg",
+    "client": {
+      "name": "Global Retail Solutions",
+      "industry": "Retail Technology",
+      "location": "New York, NY"
+    },
+    "highlights": [
+      "AI-powered product recommendations",
+      "Real-time inventory management system",
+      "Seamless multi-platform integration"
+    ],
+    "technologies": [
+      "Next.js",
+      "Python",
+      "TensorFlow",
+      "PostgreSQL",
+      "Redis",
+      "Kubernetes"
+    ],
+    "metrics": {
+      "efficiency": "92%",
+      "satisfaction": "35%",
+      "rating": "4.9/5"
+    }
   }
 ]
