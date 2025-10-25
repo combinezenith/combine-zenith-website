@@ -105,7 +105,7 @@ const handleSendMessage = async () => {
             <div className="flex justify-between items-center">
               <div>
                 <h3 className="font-bold text-lg text-white">Combine Zenith Agent</h3>
-                <p className="text-gray-400 text-xs">Powered by AI • Online</p>
+                <p className="text-gray-400 text-xs">Powered by Combine Zenith <span className="text-green-500">• Online</span> </p>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
