@@ -66,7 +66,7 @@ export default function ServiceCard() {
             {/* Top image with fixed height for consistent cards */}
             <div className="w-full h-44 md:h-48 lg:h-48 relative">
               <Image
-                src={service.image || '/logo.jpg'}
+                src={service.image || '/logo.png'}
                 alt={service.name}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
