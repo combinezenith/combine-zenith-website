@@ -53,7 +53,12 @@ export default {
                 }
             },
             animation: {
-                rock: 'rock 2s ease-in-out infinite'
+                rock: 'rock 2s ease-in-out infinite',
+                fadeIn: 'fadeIn 0.6s ease-out forwards',
+                slideUp: 'slideUp 0.8s ease-out forwards',
+                slideInLeft: 'slideInLeft 0.8s ease-out forwards',
+                slideInRight: 'slideInRight 0.8s ease-out forwards',
+                scaleIn: 'scaleIn 0.5s ease-out forwards'
             },
             keyframes: {
                 rock: {
@@ -66,6 +71,26 @@ export default {
                     '75%': {
                         transform: 'rotate(30deg)'
                     }
+                },
+                fadeIn: {
+                    '0%': { opacity: '0' },
+                    '100%': { opacity: '1' }
+                },
+                slideUp: {
+                    '0%': { transform: 'translateY(50px)', opacity: '0' },
+                    '100%': { transform: 'translateY(0)', opacity: '1' }
+                },
+                slideInLeft: {
+                    '0%': { transform: 'translateX(-50px)', opacity: '0' },
+                    '100%': { transform: 'translateX(0)', opacity: '1' }
+                },
+                slideInRight: {
+                    '0%': { transform: 'translateX(50px)', opacity: '0' },
+                    '100%': { transform: 'translateX(0)', opacity: '1' }
+                },
+                scaleIn: {
+                    '0%': { transform: 'scale(0.9)', opacity: '0' },
+                    '100%': { transform: 'scale(1)', opacity: '1' }
                 }
             },
             borderRadius: {
