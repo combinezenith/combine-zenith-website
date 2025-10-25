@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 interface Accomplishment {
   title: string;
   description: string;
@@ -23,7 +25,7 @@ export default function NotableAccomplishments({ accomplishments }: NotableAccom
           >
             {/* Image Section */}
             <div className="h-40 sm:h-44 lg:h-48 overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900">
-              <img
+              <Image
                 src={item.image}
                 alt={item.title}
                 className="w-full h-full object-cover"

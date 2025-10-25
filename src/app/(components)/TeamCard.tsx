@@ -65,7 +65,7 @@ export default function TeamCard() {
             >
               {/* Team Member Image - Use Next.js Image for local, img for external */}
               {typeof member.image === 'string' ? (
-                <img
+                <Image
                   src={member.image}
                   alt={member.name}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
