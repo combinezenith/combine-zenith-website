@@ -1,11 +1,12 @@
 import React from "react";
+import FeaturedPost from "@/app/(components)/FeaturedPost";
+import BlogPosts from "@/app/(components)/BlogPosts";
 
-const Blog = () => {
+export default function Blog() {
   return (
-    <div>
-      <h1>This is Blog Page</h1>
+    <div className="">
+      <FeaturedPost />
+      <BlogPosts />
     </div>
   );
-};
-
-export default Blog;
+}

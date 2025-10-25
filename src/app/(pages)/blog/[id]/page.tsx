@@ -1,11 +1,18 @@
 import React from "react";
+import BlogPostDetail from "@/app/(components)/BlogDetail";
 
-const DynamicBlog = () => {
+interface PageProps {
+  params: Promise<{
+    id: string;
+  }>;
+}
+
+export default async function DynamicBlog({ params }: PageProps) {
+  const { id } = await params;
+  
   return (
     <div>
-      <h1>This is Dynamic Blog Page</h1>
+      <BlogPostDetail slug={id} />
     </div>
   );
-};
-
-export default DynamicBlog;
+}
