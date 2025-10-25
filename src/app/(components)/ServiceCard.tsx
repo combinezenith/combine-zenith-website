@@ -51,7 +51,7 @@ const services: Service[] = [
     icon: LuPrinter,
   },
 ];
-
+ 
 export default function ServiceCard() {
   return (
     // Use 1 column on small screens and 3 columns on large (laptop/desktop)
