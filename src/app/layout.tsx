@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import Script from "next/script";
 import "./globals.css";
-import Layout from "./(components)/ClientWrapper";
-
+import CursorSpark from "@/app/(components)/CursorSpark";
+import NextAuthProvider from "@/app/context/NextAuthProvider";
+import { Toaster } from "react-hot-toast";
 
 const surgena = localFont({
   src: [
@@ -25,45 +27,69 @@ const glancyr = localFont({
 const montserrat = localFont({
   src: [
     { path: "./fonts/Montserrat-Thin.woff2", weight: "100" },
-    { path: "./fonts/Montserrat-ThinItalic.woff2", weight: "100", style: "italic" },
-    { path: "./fonts/Montserrat-ExtraLight.woff2", weight: "200" },
-    { path: "./fonts/Montserrat-ExtraLightItalic.woff2", weight: "200", style: "italic" },
-    { path: "./fonts/Montserrat-Light.woff2", weight: "300" },
-    { path: "./fonts/Montserrat-LightItalic.woff2", weight: "300", style: "italic" },
+    {
+      path: "./fonts/Montserrat-ThinItalic.woff2",
+      weight: "100",
+      style: "italic",
+    },
     { path: "./fonts/Montserrat-Regular.woff2", weight: "400" },
-    { path: "./fonts/Montserrat-Italic.woff2", weight: "400", style: "italic" },
-    { path: "./fonts/Montserrat-Medium.woff2", weight: "500" },
-    { path: "./fonts/Montserrat-MediumItalic.woff2", weight: "500", style: "italic" },
-    { path: "./fonts/Montserrat-SemiBold.woff2", weight: "600" },
-    { path: "./fonts/Montserrat-SemiBoldItalic.woff2", weight: "600", style: "italic" },
     { path: "./fonts/Montserrat-Bold.woff2", weight: "700" },
-    { path: "./fonts/Montserrat-BoldItalic.woff2", weight: "700", style: "italic" },
-    { path: "./fonts/Montserrat-ExtraBold.woff2", weight: "800" },
-    { path: "./fonts/Montserrat-ExtraBoldItalic.woff2", weight: "800", style: "italic" },
-    { path: "./fonts/Montserrat-Black.woff2", weight: "900" },
-    { path: "./fonts/Montserrat-BlackItalic.woff2", weight: "900", style: "italic" },
   ],
   variable: "--font-montserrat",
 });
 
 export const metadata: Metadata = {
   title: "Combine Zenith",
-  description: "Where Creativity Meets Digital Strategy.",
+  description: "Combine Zenith website",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
+  const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+
   return (
     <html lang="en">
       <body
         className={`${surgena.variable} ${glancyr.variable} ${montserrat.variable} antialiased bg-background text-foreground`}
       >
-        <Layout>
-        {children}
-        </Layout>
+        <NextAuthProvider>
+          <CursorSpark />
+          {children}
+        </NextAuthProvider>
+
+        {/* ✅ Global Toasts */}
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            style: {
+              background: "#2a2250",
+              color: "#fff",
+              borderRadius: "10px",
+              padding: "12px 16px",
+            },
+          }}
+        />
+
+        {/* ✅ Google Analytics Scripts */}
+        {GA_ID && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="ga-init" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${GA_ID}');
+              `}
+            </Script>
+          </>
+        )}
       </body>
     </html>
   );
