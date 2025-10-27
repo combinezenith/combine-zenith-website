@@ -131,7 +131,6 @@ export default function PortfolioDetail({ params }: Params) {
           </div>
         </div>
 
-        {/* Back Button */}
         <div className="mt-12 animate-fadeIn">
           <Link
             href="/portfolio"
