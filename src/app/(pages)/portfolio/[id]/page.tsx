@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import portfolio from '../../../data/portfolio.json';
 import Image from 'next/image';
+import Link from 'next/link';
 
 type PortfolioItem = {
   slug: string;
