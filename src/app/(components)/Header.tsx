@@ -13,18 +13,18 @@ export default function Header() {
       <nav className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo on the left */}
-<Link href="/" className="flex items-center">
-  <div className="relative w-40 h-12">
-    <Image
-      src="/logo-white.png"
-      fill
-      className="object-contain"
-      alt="COMBINE ZENITH LOGO"
-      priority
-      sizes="(max-width: 768px) 100px, (max-width: 1200px) 150px, 160px"
-    />
-  </div>
-</Link>
+          <Link href="/" className="flex items-center">
+            <div className="relative w-40 h-12">
+              <Image
+                src="/logo-white.png"
+                fill
+                className="object-contain"
+                alt="COMBINE ZENITH LOGO"
+                priority
+                sizes="(max-width: 768px) 100px, (max-width: 1200px) 150px, 160px"
+              />
+            </div>
+          </Link>
 
           {/* Navigation links in the middle - hidden on mobile */}
           <div className="hidden lg:flex items-center justify-center flex-1 mx-8">
@@ -54,12 +54,14 @@ export default function Header() {
           </div>
 
           {/* Explore Services button with icon on the right */}
-          <div className="hidden lg:flex items-center">
-            <button className="flex items-center space-x-2 p-2 bg-white text-purple-900 rounded-lg hover:bg-purple-100 transition-colors duration-200 font-semibold">
-              <BiUser/>
-              <span>Explore Services</span>
-            </button>
-          </div>
+          <Link href="/services" className="hidden lg:flex items-center mr-4">
+            <div className="hidden lg:flex items-center">
+              <button className="flex items-center space-x-2 p-2 bg-white text-purple-900 rounded-lg hover:bg-purple-100 transition-colors duration-200 font-semibold">
+                <BiUser />
+                <span>Explore Services</span>
+              </button>
+            </div>
+          </Link>
 
           {/* Mobile menu button */}
           <button
@@ -76,63 +78,62 @@ export default function Header() {
         {isMenuOpen && (
           <div className="lg:hidden mt-4 pb-4 border-t border-purple-700 pt-4">
             <div className="flex flex-col space-y-4">
-              <Link 
-                href="/" 
+              <Link
+                href="/"
                 className="text-white hover:text-purple-300 transition-colors duration-200 py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Home
               </Link>
-              <Link 
-                href="/about" 
+              <Link
+                href="/about"
                 className="text-white hover:text-purple-300 transition-colors duration-200 py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 About
               </Link>
-              <Link 
-                href="/services" 
+              <Link
+                href="/services"
                 className="text-white hover:text-purple-300 transition-colors duration-200 py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Services
               </Link>
-              <Link 
-                href="/team" 
+              <Link
+                href="/team"
                 className="text-white hover:text-purple-300 transition-colors duration-200 py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Team
               </Link>
-              <Link 
-                href="/portfolio" 
+              <Link
+                href="/portfolio"
                 className="text-white hover:text-purple-300 transition-colors duration-200 py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Portfolio
               </Link>
-              <Link 
-                href="/blog" 
+              <Link
+                href="/blog"
                 className="text-white hover:text-purple-300 transition-colors duration-200 py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Blog
               </Link>
-              <Link 
-                href="/contact" 
+              <Link
+                href="/contact"
                 className="text-white hover:text-purple-300 transition-colors duration-200 py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Contact
               </Link>
-              <Link
-              href="/services">
-              <button className="flex items-center justify-center space-x-2 w-full px-6 py-3 bg-white text-purple-900 rounded-lg hover:bg-purple-100 transition-colors duration-200 font-semibold mt-4">
-                <span>Explore Services</span>
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </button>
+              <Link href="/services">
+                <button className="flex items-center justify-center space-x-2 w-full px-6 py-3 bg-white text-purple-900 rounded-lg hover:bg-purple-100 transition-colors duration-200 font-semibold mt-4">
+                  <span>Explore Services</span>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </button>
               </Link>
             </div>
           </div>
