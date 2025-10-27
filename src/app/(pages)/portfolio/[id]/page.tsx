@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import portfolio from '../../../data/portfolio.json';
 import Image from 'next/image';
+import Link from 'next/link';
 
 type PortfolioItem = {
   slug: string;
@@ -133,12 +134,12 @@ export default function PortfolioDetail({ params }: Params) {
 
         {/* Back Button */}
         <div className="mt-12 animate-fadeIn">
-          <a
+          <Link
             href="/portfolio"
             className="inline-flex items-center px-6 py-3 bg-purple-900 hover:bg-purple-700 rounded-lg text-white transition-colors duration-300 hover:scale-105"
           >
             ← Back to Portfolio
-          </a>
+          </Link>
         </div>
       </div>
     </div>

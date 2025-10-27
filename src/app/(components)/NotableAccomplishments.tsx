@@ -28,6 +28,8 @@ export default function NotableAccomplishments({ accomplishments }: NotableAccom
               <Image
                 src={item.image}
                 alt={item.title}
+                width={400}
+                height={300}
                 className="w-full h-full object-cover"
               />
             </div>

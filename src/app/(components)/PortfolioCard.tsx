@@ -1,5 +1,4 @@
 import Image, { StaticImageData } from 'next/image';
-import { IconType } from 'react-icons';
 import { LuFolder } from 'react-icons/lu';
 import Link from 'next/link';
 import portfolioData from '@/app/data/portfolio.json';
