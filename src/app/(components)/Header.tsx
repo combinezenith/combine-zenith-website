@@ -53,7 +53,7 @@ export default function Header() {
             </div>
           </div>
 
-          {/* Explore Services button with icon on the right */}
+          {/* Explore Services button */}
           <Link href="/services" className="hidden lg:flex items-center mr-4">
             <div className="hidden lg:flex items-center">
               <button className="flex items-center space-x-2 p-2 bg-white text-purple-900 rounded-lg hover:bg-purple-100 transition-colors duration-200 font-semibold">
