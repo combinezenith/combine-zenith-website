@@ -1,10 +1,17 @@
+import CTASectionEnhanced from "@/app/(components)/CTASection";
+import ContactDetails from "@/app/(components)/ContactDetails";
+import ContactForm from "@/app/(components)/ContactForm";
 import React from "react";
 
 const Contact = () => {
   return (
-    <div>
-      <h1>This is Contact Page</h1>
-    </div>
+<div className="">
+    <ContactForm/>
+  <ContactDetails/>
+
+  <CTASectionEnhanced/>
+
+</div>
   );
 };
 

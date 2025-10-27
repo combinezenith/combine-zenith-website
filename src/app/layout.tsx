@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import Layout from "./ClientWrapper";
+import Layout from "./(components)/ClientWrapper";
 
 
 const surgena = localFont({

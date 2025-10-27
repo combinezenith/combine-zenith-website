@@ -33,12 +33,6 @@ export default function TeamCard() {
       image: Umer
     },
     {
-      id: "cameron-williamson",
-      name: "Muhammad Shabbir Sabir",
-      role: "Creative Director",
-      image: "PIC"
-    },
-    {
       id: "Esha",
       name: "Esha",
       role: "Client Relations Manager",
@@ -66,6 +60,8 @@ export default function TeamCard() {
               {/* Team Member Image - Use Next.js Image for local, img for external */}
               {typeof member.image === 'string' ? (
                 <Image
+                  width={900}
+                  height={1200}
                   src={member.image}
                   alt={member.name}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
@@ -74,6 +70,8 @@ export default function TeamCard() {
                 <Image
                   src={member.image}
                   alt={member.name}
+                  width={900}
+                  height={900}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   placeholder="blur"
                 />
