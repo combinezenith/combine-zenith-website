@@ -17,7 +17,7 @@ export default function HeroSection() {
 
             <div aria-label="Description" className="space-y-4">
               <p className="text-gray-300 text-lg leading-relaxed max-w-lg">
-                At Combine Zenith, we don't just market brands we partner with dreamers, creators, and changemakers. Every idea starts as a spark we turn that spark into a story that connects, inspires, and drives real growth. Through creativity, strategy, and innovation, we help your brand not just stand out but truly stand for something.
+                At Combine Zenith, we don&apos;t just market brands we partner with dreamers, creators, and changemakers. Every idea starts as a spark we turn that spark into a story that connects, inspires, and drives real growth. Through creativity, strategy, and innovation, we help your brand not just stand out but truly stand for something.
               </p>
             </div>
 

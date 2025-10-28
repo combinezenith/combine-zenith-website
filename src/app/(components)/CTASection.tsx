@@ -10,12 +10,12 @@ export default function CTASectionEnhanced() {
         <div aria-label="CTA Text Content" className="text-center space-y-8">
           {/* Heading */}
           <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
-            Our Clients Don't Just Work With Us They Grow With Us.
+            Our Clients Don&apos;t Just Work With Us They Grow With Us.
           </h2>
 
           {/* Description */}
           <p className="text-purple-200 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto">
-            Every collaboration at Combine Zenith begins with trust and grows through shared vision. We see our clients not as projects, but as partners in purpose. Their goals become our goals, their challenges our mission. Each success story we create together is built on open communication, mutual respect, and genuine passion for making something meaningful. When our clients thrive, we thrive because every brand we help build is a reflection of the relationships we nurture with honesty and heart. At Combine Zenith, it's never just about campaigns or designs it's about creating impact, celebrating growth, and walking the journey together.
+            Every collaboration at Combine Zenith begins with trust and grows through shared vision. We see our clients not as projects, but as partners in purpose. Their goals become our goals, their challenges our mission. Each success story we create together is built on open communication, mutual respect, and genuine passion for making something meaningful. When our clients thrive, we thrive because every brand we help build is a reflection of the relationships we nurture with honesty and heart. At Combine Zenith, it&apos;s never just about campaigns or designs it&apos;s about creating impact, celebrating growth, and walking the journey together.
           </p>
 
           {/* CTA Button */}
