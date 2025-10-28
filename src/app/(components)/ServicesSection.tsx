@@ -50,10 +50,10 @@ const services: Service[] = [
 
 export default function ServicesSection() {
   return (
-    <section className="py-20 px-4 sm:px-6">
-      <div className="container mx-auto max-w-7xl">
+    <section aria-label='' className="py-20 px-4 sm:px-6">
+      <div aria-label='' className="container mx-auto max-w-7xl">
         {/* Header */}
-        <div className="text-center mb-12 sm:mb-16">
+        <div aria-label='' className="text-center mb-12 sm:mb-16">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
             Our Expertise, Your Growth.
           </h2>
@@ -64,10 +64,10 @@ export default function ServicesSection() {
         </div>
 
         {/* Mobile Layout - Two Rows */}
-        <div className="block lg:hidden space-y-6">
+        <div aria-label='' className="block lg:hidden space-y-6">
           {/* First Row - Scroll Left to Right */}
-          <div className="relative overflow-hidden">
-            <div className="flex animate-marquee-mobile gap-4 py-2">
+          <div aria-label='' className="relative overflow-hidden">
+            <div aria-label='' className="flex animate-marquee-mobile gap-4 py-2">
               {services.slice(0, 3).map((service, index) => (
                 <ServiceCard key={`mobile-1-${index}`} service={service} mobile />
               ))}
@@ -79,8 +79,8 @@ export default function ServicesSection() {
           </div>
 
           {/* Second Row - Scroll Right to Left */}
-          <div className="relative overflow-hidden">
-            <div className="flex animate-marquee-mobile-reverse gap-4 py-2">
+          <div aria-label='' className="relative overflow-hidden">
+            <div aria-label='' className="flex animate-marquee-mobile-reverse gap-4 py-2">
               {services.slice(3).map((service, index) => (
                 <ServiceCard key={`mobile-2-${index}`} service={service} mobile />
               ))}
@@ -93,8 +93,8 @@ export default function ServicesSection() {
         </div>
 
         {/* Desktop Layout - Single Row */}
-        <div className="hidden lg:block relative overflow-hidden">
-          <div className="flex animate-marquee-smooth gap-6 py-2">
+        <div aria-label='' className="hidden lg:block relative overflow-hidden">
+          <div aria-label='' className="flex animate-marquee-smooth gap-6 py-2">
             {services.map((service, index) => (
               <ServiceCard key={`desktop-${index}`} service={service} />
             ))}
@@ -167,10 +167,10 @@ function ServiceCard({ service, mobile = false }: ServiceCardProps) {
       } bg-[#685885] backdrop-blur-sm rounded-2xl p-6 sm:p-8 flex-shrink-0`}
     >
       {/* Content Container */}
-      <div className="relative z-10">
+      <div aria-label='' className="relative z-10">
         {/* Icon */}
-        <div className="mb-4 sm:mb-6 flex justify-center">
-          <div className="w-12 h-12 sm:w-16 sm:h-16 bg-[#b5a6d0] rounded-lg flex items-center justify-center">
+        <div aria-label='' className="mb-4 sm:mb-6 flex justify-center">
+          <div aria-label='' className="w-12 h-12 sm:w-16 sm:h-16 bg-[#b5a6d0] rounded-lg flex items-center justify-center">
             <Icon 
               className="w-6 h-6 sm:w-8 sm:h-8 text-white" 
               strokeWidth={1.5} 
@@ -190,7 +190,7 @@ function ServiceCard({ service, mobile = false }: ServiceCardProps) {
       </div>
 
       {/* Border Effect */}
-      <div className="absolute inset-0 rounded-2xl border-2 border-white/10 shadow-lg shadow-purple-500/10" />
+      <div aria-label='' className="absolute inset-0 rounded-2xl border-2 border-white/10 shadow-lg shadow-purple-500/10" />
     </div>
   );
 }

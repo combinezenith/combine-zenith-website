@@ -59,37 +59,37 @@ export default function CoreValues() {
   ];
 
   return (
-    <section className="relative py-20 overflow-hidden">
+    <section aria-label="" className="relative py-20 overflow-hidden">
       {/* Background Elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-32 -left-32 w-64 h-64 rounded-full blur-3xl" />
-        <div className="absolute -bottom-32 -right-32 w-64 h-64 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
+      <div aria-label="" className="absolute inset-0 overflow-hidden">
+        <div aria-label="" className="absolute -top-32 -left-32 w-64 h-64 rounded-full blur-3xl" />
+        <div aria-label="" className="absolute -bottom-32 -right-32 w-64 h-64 rounded-full blur-3xl" />
+        <div aria-label="" className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
       </div>
 
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="max-w-6xl mx-auto">
+      <div aria-label="" className="container mx-auto px-6 relative z-10">
+        <div aria-label="" className="max-w-6xl mx-auto">
           {/* Header Section */}
-          <div className="text-center mb-16">
+          <div aria-label="" className="text-center mb-16">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
               Our Core Values
             </h1>
             </div>
 
           {/* Values Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div aria-label="" className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {values.map((value, index) => (
               <div
                 key={index}
                 className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:border-purple-400/30 transition-all duration-300 hover:transform hover:scale-105 group"
               >
-                <div className="flex items-start space-x-4">
-                  <div className="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center group-hover:from-purple-600 group-hover:to-pink-600 transition-all duration-300">
-                    <div className="text-white">
+                <div aria-label="" className="flex items-start space-x-4">
+                  <div aria-label="" className="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center group-hover:from-purple-600 group-hover:to-pink-600 transition-all duration-300">
+                    <div aria-label="" className="text-white">
                       {value.icon}
                     </div>
                   </div>
-                  <div className="flex-1">
+                  <div aria-label="" className="flex-1">
                     <h3 className="text-xl font-bold text-white mb-3 transition-all duration-300">
                       {value.title}
                     </h3>
