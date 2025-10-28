@@ -206,10 +206,6 @@ export default function DarkThemeAgent() {
                 <Send size={16} />
               </button>
             </div>
-            
-            <p className="text-xs text-gray-500 text-center mt-2 antialiased">
-              Combine Zenith • AI-Powered Digital Solutions
-            </p>
           </div>
         </div>
       )}
