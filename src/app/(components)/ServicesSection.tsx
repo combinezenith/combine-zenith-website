@@ -1,8 +1,21 @@
 'use client';
 
 import { Rocket, Pencil, Search, MessageCircle, Palette, Globe } from 'lucide-react';
+import { LucideIcon } from 'lucide-react';
 
-const services = [
+// Define proper TypeScript interfaces
+interface Service {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+}
+
+interface ServiceCardProps {
+  service: Service;
+  mobile?: boolean;
+}
+
+const services: Service[] = [
   {
     icon: Rocket,
     title: 'Digital Strategy',
@@ -141,8 +154,8 @@ export default function ServicesSection() {
   );
 }
 
-// Separate Service Card Component for reusability
-function ServiceCard({ service, mobile = false }: { service: any; mobile?: boolean }) {
+// Separate Service Card Component with proper TypeScript types
+function ServiceCard({ service, mobile = false }: ServiceCardProps) {
   const Icon = service.icon;
   
   return (
