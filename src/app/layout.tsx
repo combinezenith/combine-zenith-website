@@ -3,6 +3,8 @@ import localFont from "next/font/local";
 import Script from "next/script";
 import "./globals.css";
 import Header from "@/app/(components)/Header";
+import Agent from "./(components)/Agent";
+import Whatsapp from "./(components)/WhatsAppFloat";
 import Footer from "./(components)/Footer";
 import CursorSpark from "@/app/(components)/CursorSpark";
 import NextAuthProvider from "@/app/context/NextAuthProvider";
@@ -75,6 +77,8 @@ export default function RootLayout({
             },
           }}
         />
+        <Agent />
+        <Whatsapp />
         <Footer />
 
         {/* ✅ Google Analytics Scripts */}
