@@ -4,10 +4,10 @@ import Link from 'next/link';
 
 export default function CTASectionEnhanced() {
   return (
-    <section className="relative py-20 px-6 overflow-hidden">
+    <section aria-label='' className="relative py-20 px-6 overflow-hidden">
 
-      <div className="container mx-auto max-w-4xl relative z-10">
-        <div className="text-center space-y-8">
+      <div aria-label='' className="container mx-auto max-w-4xl relative z-10">
+        <div aria-label='' className="text-center space-y-8">
           {/* Heading */}
           <h2 className="text-4xl md:text-5xl font-bold text-white leading-tight">
             Ready to Transform Your Digital Presence?
@@ -20,7 +20,7 @@ export default function CTASectionEnhanced() {
           </p>
 
           {/* CTA Button */}
-          <div className="pt-4">
+          <div aria-label='' className="pt-4">
 <Link
               href="/contact"
               className="inline-block px-8 py-4 bg-[#b5a6d0] text-[#200053] hover:text-white font-semibold rounded-lg hover:bg-[#685885] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-purple-500/50"
