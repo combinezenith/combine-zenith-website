@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Script from "next/script";
 import "./globals.css";
+import Header from "@/app/(components)/Header";
+import Footer from "./(components)/Footer";
 import CursorSpark from "@/app/(components)/CursorSpark";
 import NextAuthProvider from "@/app/context/NextAuthProvider";
 import { Toaster } from "react-hot-toast";
@@ -55,6 +57,7 @@ export default function RootLayout({
       <body
         className={`${surgena.variable} ${glancyr.variable} ${montserrat.variable} antialiased bg-background text-foreground`}
       >
+        <Header />
         <NextAuthProvider>
           <CursorSpark />
           {children}
@@ -72,6 +75,7 @@ export default function RootLayout({
             },
           }}
         />
+        <Footer />
 
         {/* ✅ Google Analytics Scripts */}
         {GA_ID && (
