@@ -105,7 +105,7 @@ export default function MeetTheTeam() {
     Ready to Transform Your Brand?
   </h2>
   <p className="text-gray-300 text-lg mb-6 max-w-2xl mx-auto leading-relaxed">
-    Let Combine Zenith be your strategic partner in navigating the complexities of the modern market. We're here to help you achieve unprecedented success.
+    Let Combine Zenith be your strategic partner in navigating the complexities of the modern market. We&apos;re here to help you achieve unprecedented success.
   </p>
   <button className="px-8 py-3 bg-[#685885] text-white rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-purple-500/25 font-semibold">
     <a href="/contact">

@@ -22,16 +22,16 @@ export default function AboutStory() {
           {/* Content Section */}
 <div aria-label="About Description" className="space-y-8 text-center max-w-3xl mx-auto text-bold">
   <p className="text-lg text-gray-300 leading-relaxed">
-    At Combine Zenith, creativity isn't just about colors, shapes, or visuals it's about people, emotions, and purpose. We believe every brand has a story worth telling a story that deserves honesty, heart, and imagination.
+    At Combine Zenith, creativity isn&apos;t just about colors, shapes, or visuals it&apos;s about people, emotions, and purpose. We believe every brand has a story worth telling a story that deserves honesty, heart, and imagination.
   </p>
   <p className="text-lg text-gray-300 leading-relaxed">
-    We don't just build campaigns; we build meaningful connections. Before creating, we listen to your ideas, challenges, and dreams because behind every brand lies a purpose waiting to shine.
+    We don&apos;t just build campaigns; we build meaningful connections. Before creating, we listen to your ideas, challenges, and dreams because behind every brand lies a purpose waiting to shine.
   </p>
   <p className="text-lg text-gray-300 leading-relaxed">
-    Our team of dreamers, thinkers, and creators blends strategy with imagination and design with emotion to craft experiences that not only look extraordinary but feel authentic. We don't see clients as projects we see them as partners. Every logo, campaign, and concept we craft carries a piece of your story and our promise of passion and precision.
+    Our team of dreamers, thinkers, and creators blends strategy with imagination and design with emotion to craft experiences that not only look extraordinary but feel authentic. We don&apos;t see clients as projects we see them as partners. Every logo, campaign, and concept we craft carries a piece of your story and our promise of passion and precision.
   </p>
   <p className="text-lg text-gray-300 leading-relaxed">
-    We work with brands that dare to dream, grow, and make an impact because we believe great work happens when passion meets purpose. Our goal isn't just to make you visible it's to elevate our clients to the peak of their market success and make their presence unforgettable.
+    We work with brands that dare to dream, grow, and make an impact because we believe great work happens when passion meets purpose. Our goal isn&apos;t just to make you visible it&apos;s to elevate our clients to the peak of their market success and make their presence unforgettable.
   </p>
 </div>
         </div>
