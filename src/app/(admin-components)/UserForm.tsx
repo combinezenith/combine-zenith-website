@@ -45,7 +45,7 @@ export default function UserForm({
     }));
   };
 
-  // ✅ Handle form submission
+  // Handle form submission
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
