@@ -19,10 +19,26 @@ import Image from "next/image";
 // ✅ Define a proper interface for portfolios
 interface Portfolio {
   id?: string;
-  title?: string;
-  category?: string;
+  slug?: string;
+  name?: string;
   description?: string;
-  imageUrl?: string;
+  image?: string;
+  overview?: string;
+  creativeApproach?: string;
+  challenges?: string;
+  clientWords?: string;
+  client?: {
+    name?: string;
+    industry?: string;
+    location?: string;
+  };
+  highlights?: string[];
+  technologies?: string[];
+  metrics?: {
+    efficiency?: string;
+    satisfaction?: string;
+    rating?: string;
+  };
 }
 
 export default function PortfolioPage() {
@@ -61,7 +77,7 @@ export default function PortfolioPage() {
       (t) => (
         <div className="text-white">
           <p>
-            Delete <b>{portfolioToDelete.title}</b>?
+            Delete <b>{portfolioToDelete.name}</b>?
           </p>
           <div className="flex gap-2 mt-2">
             <button
@@ -166,10 +182,10 @@ export default function PortfolioPage() {
                   flex-col
                 "
               >
-                {item.imageUrl && (
+                {item.image && (
                   <Image
-                    src={item.imageUrl}
-                    alt={item.title || "Portfolio image"}
+                    src={item.image}
+                    alt={item.name || "Portfolio image"}
                     width={400}
                     height={300}
                     className="w-full h-44 sm:h-48 md:h-52 object-cover rounded-lg mb-4"
@@ -177,11 +193,11 @@ export default function PortfolioPage() {
                 )}
 
                 <h3 className="text-lg sm:text-xl font-semibold mb-1 wrap-break-words">
-                  {item.title}
+                  {item.name}
                 </h3>
 
                 <p className="text-sm text-gray-400 mb-2">
-                  {item.category || "No category"}
+                  {item.client?.industry || "No industry"}
                 </p>
 
                 <p className="text-gray-300 text-sm mb-4 line-clamp-3">

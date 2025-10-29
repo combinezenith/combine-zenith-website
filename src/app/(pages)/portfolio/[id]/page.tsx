@@ -1,32 +1,35 @@
 import { notFound } from 'next/navigation';
 import { collection, getDocs, doc, getDoc, DocumentData } from 'firebase/firestore';
-import { db } from '../../../config/firebase';
+import { db } from '@/app/config/firebase';
 import Image from 'next/image';
 import Link from 'next/link';
 
 type PortfolioItem = {
   id: string;
-  title: string;
-  category?: string;
-  description: string;
-  imageUrl: string;
+  slug?: string;
+  name?: string;
+  description?: string;
+  image?: string;
   overview?: string;
+  creativeApproach?: string;
+  challenges?: string;
+  clientWords?: string;
   client?: {
-    name: string;
-    industry: string;
-    location: string;
+    name?: string;
+    industry?: string;
+    location?: string;
   };
   highlights?: string[];
   technologies?: string[];
   metrics?: {
-    efficiency: string;
-    satisfaction: string;
-    rating: string;
+    efficiency?: string;
+    satisfaction?: string;
+    rating?: string;
   };
 };
 
 type Params = {
-  params: { id: string };
+  params: { id: string }
 };
 
 export async function generateStaticParams() {
@@ -40,7 +43,7 @@ export async function generateStaticParams() {
 }
 
 export default async function PortfolioDetail({ params }: Params) {
-  const id = params.id;
+  const { id } = await params;
   let item: PortfolioItem | null = null;
 
   try {
@@ -61,8 +64,8 @@ export default async function PortfolioDetail({ params }: Params) {
       <div className="w-full mb-12">
         <div className="relative animate-fadeIn">
           <Image
-            src={item.imageUrl || '/logo.jpg'}
-            alt={item.title}
+            src={item.image || '/logo.jpg'}
+            alt={item.name || 'Portfolio'}
             width={1600}
             height={600}
             className="w-full h-64 sm:h-80 md:h-96 object-cover rounded-xl"
@@ -73,7 +76,7 @@ export default async function PortfolioDetail({ params }: Params) {
                 <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold leading-tight text-white/95 animate-slideInLeft">Project Details</h2>
               </div>
               <div className="w-full md:w-1/2 px-6 py-8 text-center md:text-left animate-slideInRight">
-                <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-100">{item.title}</h1>
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-100">{item.name}</h1>
                 <p className="mt-4 text-gray-300 text-sm sm:text-base">{item.overview || item.description}</p>
               </div>
             </div>
@@ -112,6 +115,30 @@ export default async function PortfolioDetail({ params }: Params) {
                     </li>
                   ))}
                 </ul>
+              </div>
+            )}
+
+            {/* Creative Approach */}
+            {item.creativeApproach && (
+              <div className="bg-[#685885] bg-opacity-50 rounded-xl p-4 md:p-6 animate-scaleIn">
+                <h2 className="text-xl md:text-2xl font-semibold mb-4">Creative Approach</h2>
+                <p className="text-gray-100">{item.creativeApproach}</p>
+              </div>
+            )}
+
+            {/* Challenges */}
+            {item.challenges && (
+              <div className="bg-[#685885] bg-opacity-50 rounded-xl p-4 md:p-6 animate-scaleIn">
+                <h2 className="text-xl md:text-2xl font-semibold mb-4">Challenges</h2>
+                <p className="text-gray-100">{item.challenges}</p>
+              </div>
+            )}
+
+            {/* Client Words */}
+            {item.clientWords && (
+              <div className="bg-[#685885] bg-opacity-50 rounded-xl p-4 md:p-6 animate-scaleIn">
+                <h2 className="text-xl md:text-2xl font-semibold mb-4">Client Words</h2>
+                <p className="text-gray-100 italic">"{item.clientWords}"</p>
               </div>
             )}
           </div>

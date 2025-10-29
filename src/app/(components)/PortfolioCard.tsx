@@ -9,10 +9,13 @@ import { db } from '../config/firebase';
 
 interface Portfolio {
   id: string;
-  title: string;
-  category?: string;
-  description: string;
-  imageUrl: string;
+  slug?: string;
+  name?: string;
+  description?: string;
+  image?: string;
+  creativeApproach?: string;
+  challenges?: string;
+  clientWords?: string;
 }
 
 export default function PortfolioCard() {
@@ -51,8 +54,8 @@ export default function PortfolioCard() {
           >
             <div className="w-full h-44 md:h-48 lg:h-48 relative">
               <Image
-                src={portfolio.imageUrl || '/logo.jpg'}
-                alt={portfolio.title}
+                src={portfolio.image || '/logo.jpg'}
+                alt={portfolio.name || 'Portfolio'}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 className="object-cover"
@@ -65,7 +68,7 @@ export default function PortfolioCard() {
                   <Icon className="w-6 h-6 text-white" strokeWidth={1.5} />
                 </div>
                 <h3 className="text-lg md:text-xl font-bold text-white">
-                  {portfolio.title}
+                  {portfolio.name}
                 </h3>
               </div>
 
