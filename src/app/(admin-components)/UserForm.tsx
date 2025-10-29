@@ -4,7 +4,7 @@ import { useState, ChangeEvent, FormEvent } from "react";
 import { db } from "../config/firebase";
 import { addDoc, updateDoc, collection, doc } from "firebase/firestore";
 
-// ✅ Strongly typed user data structure
+//  Strongly typed user data structure
 interface UserData {
   id?: string;
   name?: string;
