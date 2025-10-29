@@ -15,11 +15,27 @@ import { motion } from "framer-motion";
 // ✅ Strongly typed Portfolio interface
 interface Portfolio {
   id?: string;
-  title?: string;
-  category?: string;
+  slug?: string;
+  name?: string;
   description?: string;
-  imageUrl?: string;
-  createdAt?: Timestamp; // ✅ Replace 'any' with 'Timestamp'
+  overview?: string;
+  image?: string;
+  creativeApproach?: string;
+  challenges?: string;
+  clientWords?: string;
+  client?: {
+    name?: string;
+    industry?: string;
+    location?: string;
+  };
+  highlights?: string[]; // Array of strings
+  technologies?: string[]; // Array of strings
+  metrics?: {
+    efficiency?: string;
+    satisfaction?: string;
+    rating?: string;
+  };
+  createdAt?: Timestamp;
 }
 
 interface PortfolioFormProps {
@@ -35,10 +51,26 @@ export default function PortfolioForm({
 }: PortfolioFormProps) {
   const [formData, setFormData] = useState<Omit<Portfolio, "id" | "createdAt">>(
     {
-      title: editPortfolio?.title || "",
-      category: editPortfolio?.category || "",
+      slug: editPortfolio?.slug || "",
+      name: editPortfolio?.name || "",
       description: editPortfolio?.description || "",
-      imageUrl: editPortfolio?.imageUrl || "",
+      overview: editPortfolio?.overview || "",
+      image: editPortfolio?.image || "",
+      creativeApproach: editPortfolio?.creativeApproach || "",
+      challenges: editPortfolio?.challenges || "",
+      clientWords: editPortfolio?.clientWords || "",
+      client: {
+        name: editPortfolio?.client?.name || "",
+        industry: editPortfolio?.client?.industry || "",
+        location: editPortfolio?.client?.location || "",
+      },
+      highlights: editPortfolio?.highlights || [],
+      technologies: editPortfolio?.technologies || [],
+      metrics: {
+        efficiency: editPortfolio?.metrics?.efficiency || "",
+        satisfaction: editPortfolio?.metrics?.satisfaction || "",
+        rating: editPortfolio?.metrics?.rating || "",
+      },
     }
   );
 
@@ -48,7 +80,22 @@ export default function PortfolioForm({
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const keys = name.split('.');
+    setFormData((prev) => {
+      if (keys.length === 1) {
+        return { ...prev, [name]: value };
+      } else if (keys.length === 2) {
+        const [parent, child] = keys;
+        return {
+          ...prev,
+          [parent]: {
+            ...(prev as any)[parent],
+            [child]: value,
+          },
+        };
+      }
+      return prev;
+    });
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -56,18 +103,24 @@ export default function PortfolioForm({
     setLoading(true);
 
     try {
+      const dataToSave = {
+        ...formData,
+        highlights: formData.highlights?.length ? formData.highlights : undefined,
+        technologies: formData.technologies?.length ? formData.technologies : undefined,
+      };
+
       if (editPortfolio && editPortfolio.id) {
         // ✅ Update existing portfolio
         const docRef = doc(db, "portfolios", editPortfolio.id);
-        await updateDoc(docRef, { ...formData });
-        onSuccess({ ...editPortfolio, ...formData });
+        await updateDoc(docRef, dataToSave);
+        onSuccess({ ...editPortfolio, ...dataToSave });
       } else {
         // ✅ Add new portfolio
         const docRef = await addDoc(collection(db, "portfolios"), {
-          ...formData,
+          ...dataToSave,
           createdAt: serverTimestamp(),
         });
-        onSuccess({ id: docRef.id, ...formData });
+        onSuccess({ id: docRef.id, ...dataToSave });
       }
     } catch (error) {
       console.error("Error saving portfolio:", error);
@@ -81,7 +134,7 @@ export default function PortfolioForm({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-[#2a2250] rounded-xl p-6 w-[400px] shadow-lg text-white"
+        className="bg-[#2a2250] rounded-xl p-6 w-[500px] max-h-[80vh] overflow-y-auto shadow-lg text-white"
       >
         <h2 className="text-xl font-semibold mb-4">
           {editPortfolio ? "Edit Portfolio" : "Add New Portfolio"}
@@ -89,38 +142,153 @@ export default function PortfolioForm({
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
-            name="title"
-            placeholder="Project Title"
-            value={formData.title}
+            name="slug"
+            placeholder="Project Slug"
+            value={formData.slug}
             onChange={handleChange}
             className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
             required
           />
 
           <input
-            name="category"
-            placeholder="Category"
-            value={formData.category}
+            name="name"
+            placeholder="Project Name"
+            value={formData.name}
             onChange={handleChange}
             className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
+            required
           />
 
           <textarea
             name="description"
-            placeholder="Short Description"
+            placeholder="Description"
             value={formData.description}
             onChange={handleChange}
             rows={3}
             className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none resize-none"
           />
 
+          <textarea
+            name="overview"
+            placeholder="Overview"
+            value={formData.overview}
+            onChange={handleChange}
+            rows={3}
+            className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none resize-none"
+          />
+
+          <textarea
+            name="creativeApproach"
+            placeholder="Creative Approach"
+            value={formData.creativeApproach}
+            onChange={handleChange}
+            rows={3}
+            className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none resize-none"
+          />
+
+          <textarea
+            name="challenges"
+            placeholder="Challenges"
+            value={formData.challenges}
+            onChange={handleChange}
+            rows={3}
+            className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none resize-none"
+          />
+
+          <textarea
+            name="clientWords"
+            placeholder="Client Words"
+            value={formData.clientWords}
+            onChange={handleChange}
+            rows={3}
+            className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none resize-none"
+          />
+
           <input
-            name="imageUrl"
-            placeholder="Image path (e.g. /portfolio-images/project1.jpg)"
-            value={formData.imageUrl}
+            name="image"
+            placeholder="Image path (e.g. /logo.jpg)"
+            value={formData.image}
             onChange={handleChange}
             className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
             required
+          />
+
+          <input
+            name="client.name"
+            placeholder="Client Name"
+            value={formData.client?.name}
+            onChange={handleChange}
+            className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
+          />
+
+          <input
+            name="client.industry"
+            placeholder="Client Industry"
+            value={formData.client?.industry}
+            onChange={handleChange}
+            className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
+          />
+
+          <input
+            name="client.location"
+            placeholder="Client Location"
+            value={formData.client?.location}
+            onChange={handleChange}
+            className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
+          />
+
+          <textarea
+            name="highlights"
+            placeholder="Highlights (comma-separated)"
+            value={formData.highlights?.join(', ')}
+            onChange={(e) => {
+              const value = e.target.value;
+              setFormData((prev) => ({
+                ...prev,
+                highlights: value ? value.split(',').map(s => s.trim()) : [],
+              }));
+            }}
+            rows={2}
+            className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none resize-none"
+          />
+
+          <textarea
+            name="technologies"
+            placeholder="Technologies (comma-separated)"
+            value={formData.technologies?.join(', ')}
+            onChange={(e) => {
+              const value = e.target.value;
+              setFormData((prev) => ({
+                ...prev,
+                technologies: value ? value.split(',').map(s => s.trim()) : [],
+              }));
+            }}
+            rows={2}
+            className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none resize-none"
+          />
+
+          <input
+            name="metrics.efficiency"
+            placeholder="Efficiency Metric (e.g. 85%)"
+            value={formData.metrics?.efficiency}
+            onChange={handleChange}
+            className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
+          />
+
+          <input
+            name="metrics.satisfaction"
+            placeholder="Satisfaction Metric (e.g. 25%)"
+            value={formData.metrics?.satisfaction}
+            onChange={handleChange}
+            className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
+          />
+
+          <input
+            name="metrics.rating"
+            placeholder="Rating (e.g. 4.7/5)"
+            value={formData.metrics?.rating}
+            onChange={handleChange}
+            className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
           />
 
           <div className="flex justify-end gap-2 pt-2">
