@@ -48,8 +48,8 @@ const ContactForm: React.FC = () => {
   };
 
   return (
-    <section className="py-20 px-6">
-      <div className="max-w-3xl mx-auto rounded-2xl bg-secondary/50 p-10 shadow-lg">
+    <section aria-label='Call to Action Section' className="py-20 px-6">
+      <div aria-label='Call to Action Section' className="max-w-3xl mx-auto rounded-2xl bg-secondary/50 p-10 shadow-lg">
         <h2 className="text-3xl font-bold text-white text-center mb-4">Get In Touch</h2>
         <p className="text-center text-white/70 mb-8">
           Have a question or want to work together? Send us a message and we&#39;ll get back to you.
