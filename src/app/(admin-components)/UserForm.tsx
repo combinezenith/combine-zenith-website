@@ -14,7 +14,7 @@ interface UserData {
   lastLogin?: string;
 }
 
-// ✅ Props definition
+// Props definition
 interface UserFormProps {
   onClose: () => void;
   editUser?: UserData;
