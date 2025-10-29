@@ -89,7 +89,7 @@ export default function PortfolioForm({
         return {
           ...prev,
           [parent]: {
-            ...(prev as any)[parent],
+            ...(prev as Record<string, unknown>)[parent] as Record<string, unknown>,
             [child]: value,
           },
         };

@@ -138,7 +138,7 @@ export default async function PortfolioDetail({ params }: Params) {
             {item.clientWords && (
               <div className="bg-[#685885] bg-opacity-50 rounded-xl p-4 md:p-6 animate-scaleIn">
                 <h2 className="text-xl md:text-2xl font-semibold mb-4">Client Words</h2>
-                <p className="text-gray-100 italic">"{item.clientWords}"</p>
+                <p className="text-gray-100 italic">&ldquo;{item.clientWords}&rdquo;</p>
               </div>
             )}
           </div>
