@@ -6,7 +6,9 @@ const Portfolio = () => {
     <div className="min-h-screen flex flex-col pt-30 justify-center">
       <div className="text-center px-4">
         <h1 className="text-3xl sm:text-4xl font-bold mb-2">Our Strategic Masterpieces</h1>
-        <p className="text-gray-600 max-w-2xl mx-auto">Explore a curated selection of projects that define our expertise and commitment to innovation.</p>
+        <p className="text-gray-600 max-w-2xl mx-auto">At Combine Zenith, we believe success isn’t a destination it’s a peak we climb together. Every project we create is a step toward that summit where imagination meets innovation and creativity meets measurable impact. 
+Here’s a glimpse of the journeys we’ve crafted each a reflection of passion, precision, and our promise to take your brand to <span className="font-bold italic">the peak of success. </span>
+</p>
       </div>
       <div className="">
         <PortfolioCard />

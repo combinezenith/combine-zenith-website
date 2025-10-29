@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Script from "next/script";
 import "./globals.css";
-import CursorSpark from "@/app/(components)/CursorSpark";
 import NextAuthProvider from "@/app/context/NextAuthProvider";
 import { Toaster } from "react-hot-toast";
+import Layout from "@/app/(components)/ClientWrapper";
 
 const surgena = localFont({
   src: [
@@ -55,10 +55,11 @@ export default function RootLayout({
       <body
         className={`${surgena.variable} ${glancyr.variable} ${montserrat.variable} antialiased bg-background text-foreground`}
       >
+        <Layout>
         <NextAuthProvider>
-          <CursorSpark />
           {children}
         </NextAuthProvider>
+        </Layout>
 
         {/* ✅ Global Toasts */}
         <Toaster
