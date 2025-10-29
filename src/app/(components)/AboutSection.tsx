@@ -2,30 +2,27 @@
 
 export default function AboutSection() {
   return (
-    <section className="py-20 px-6">
-      <div className="container mx-auto max-w-6xl">
+    <section aria-label="About Section" className="py-20 px-6">
+      <div aria-label="About Container" className="container mx-auto max-w-6xl">
         {/* About Content */}
-        <div className="text-center mb-20">
+        <div aria-label="About Content" className="text-center mb-20">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
-            Innovating Marketing, Inspiring Growth.
+            Driven by Creativity. Defined by Connection.
           </h2>
           <p className="text-purple-200 text-lg md:text-xl leading-relaxed max-w-4xl mx-auto">
-            At Combine Zenith, we believe in the transformative power of data-driven creativity. Our
-            expert team leverages cutting-edge technology and strategic insights to help businesses
-            thrive in the dynamic digital landscape. We are more than just an agency; we are your
-            dedicated partner in achieving sustained growth and measurable success.
+            At Combine Zenith, we&apos;re more than just a creative agency we&apos;re a collective of dreamers, thinkers, and makers who believe that every brand has a story worth telling. We listen deeply, think boldly, and create passionately blending imagination with strategy to turn ideas into powerful experiences. Our work goes beyond visuals and campaigns it&apos;s about building meaning, trust, and impact that last. From shaping your identity to creating measurable growth, we walk beside you as true partners crafting stories that inspire, connect, and make a difference.
           </p>
         </div>
 
         {/* Trusted By Section */}
-        <div className="bg-purple-800/30 backdrop-blur-sm rounded-3xl p-12 md:p-16 overflow-hidden">
+        <div aria-label="Trusted Companies" className="bg-purple-800/30 backdrop-blur-sm rounded-3xl p-12 md:p-16 overflow-hidden">
           <h3 className="text-3xl md:text-4xl font-bold text-white text-center mb-12">
             Trusted by Industry Leaders.
           </h3>
 
           {/* Row 1 - moves left */}
-          <div className="relative overflow-hidden">
-            <div className="flex animate-marquee-left gap-12">
+          <div aria-label="Logo Row 1" className="relative overflow-hidden">
+            <div aria-label="Scrolling Logos" className="flex animate-marquee-left gap-12">
               {[...Array(6)].map((_, index) => (
                 <div
                   key={`row1-${index}`}
@@ -47,8 +44,8 @@ export default function AboutSection() {
           </div>
 
           {/* Row 2 - moves right */}
-          <div className="relative overflow-hidden mt-12">
-            <div className="flex animate-marquee-right gap-12">
+          <div aria-label="Logo Row 2" className="relative overflow-hidden mt-12">
+            <div aria-label="Scrolling Logos Reverse" className="flex animate-marquee-right gap-12">
               {[...Array(6)].map((_, index) => (
                 <div
                   key={`row2-${index}`}

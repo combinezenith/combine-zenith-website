@@ -15,8 +15,8 @@ export default function BlogPostDetail({ slug }: BlogPostDetailProps) {
   // If no post found, show error
   if (!post) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4">
-        <div className="text-center">
+      <div aria-label="" className="min-h-screen flex items-center justify-center px-4">
+        <div aria-label="" className="text-center">
           <h1 className="text-2xl md:text-4xl font-bold text-white mb-4">Post Not Found</h1>
           <p className="text-purple-300 mb-6 text-sm md:text-base">The blog post you&apos;re looking for doesn&apos;t exist.</p>
           <Link href="/blog" className="text-purple-300 hover:text-white underline text-sm md:text-base">
@@ -28,9 +28,9 @@ export default function BlogPostDetail({ slug }: BlogPostDetailProps) {
   }
 
   return (
-    <div className="min-h-screen">
+    <div aria-label="" className="min-h-screen">
       {/* Hero Image Section */}
-      <div className="relative w-full h-[300px] md:h-[400px] overflow-hidden">
+      <div aria-label="" className="relative w-full h-[300px] md:h-[400px] overflow-hidden">
         <Image
           src={post.image}
           alt={post.title}
@@ -38,11 +38,11 @@ export default function BlogPostDetail({ slug }: BlogPostDetailProps) {
           height={400}
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-950/50 to-indigo-950"></div>
+        <div aria-label="" className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-950/50 to-indigo-950"></div>
       </div>
 
       {/* Content Section */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 md:py-12 -mt-20 md:-mt-32 relative z-10">
+      <div aria-label="" className="max-w-4xl mx-auto px-4 sm:px-6 py-8 md:py-12 -mt-20 md:-mt-32 relative z-10">
         {/* Back Button */}
         <Link href="/blog" className="mt-35 flex items-center">
           <button className="flex items-center gap-2 text-purple-300 hover:text-white transition-colors group">
@@ -65,7 +65,7 @@ export default function BlogPostDetail({ slug }: BlogPostDetailProps) {
 
           {/* Introduction Paragraph */}
           {post.content?.introduction && (
-            <div className="mb-8 md:mb-12">
+            <div aria-label="" className="mb-8 md:mb-12">
               <p className="text-purple-100/80 leading-relaxed text-base md:text-lg">
                 {post.content.introduction}
               </p>
@@ -74,7 +74,7 @@ export default function BlogPostDetail({ slug }: BlogPostDetailProps) {
 
           {/* Dynamic Sections */}
           {post.content?.sections && post.content.sections.map((section, index) => (
-            <div key={index} className="mb-8 md:mb-10">
+            <div aria-label="" key={index} className="mb-8 md:mb-10">
               <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-3 md:mb-4">
                 {section.heading}
               </h2>
@@ -84,7 +84,7 @@ export default function BlogPostDetail({ slug }: BlogPostDetailProps) {
               
               {/* Add quote after second section if it exists */}
               {index === 1 && post.content?.quote && (
-                <div className="bg-purple-800/30 border-l-4 border-purple-400 pl-4 md:pl-6 py-4 my-6 md:my-8">
+                <div aria-label="" className="bg-purple-800/30 border-l-4 border-purple-400 pl-4 md:pl-6 py-4 my-6 md:my-8">
                   <p className="text-purple-100 italic text-base md:text-lg leading-relaxed mb-2">
                     &apos;{post.content.quote.text}&apos;
                   </p>
@@ -98,7 +98,7 @@ export default function BlogPostDetail({ slug }: BlogPostDetailProps) {
 
           {/* Conclusion */}
           {post.content?.conclusion && (
-            <div className="mb-8 md:mb-12">
+            <div aria-label="" className="mb-8 md:mb-12">
               <p className="text-purple-100/80 leading-relaxed text-base md:text-lg">
                 {post.content.conclusion}
               </p>
@@ -107,7 +107,7 @@ export default function BlogPostDetail({ slug }: BlogPostDetailProps) {
 
           {/* Author Section */}
           {post.author && (
-            <div className="flex items-center gap-3 md:gap-4 pt-6 md:pt-8 border-t border-purple-700/30">
+            <div aria-label="" className="flex items-center gap-3 md:gap-4 pt-6 md:pt-8 border-t border-purple-700/30">
               <Image
                 src={post.author.avatar}
                 alt={post.author.name}

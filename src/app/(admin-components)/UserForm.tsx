@@ -14,7 +14,7 @@ interface UserData {
   lastLogin?: string;
 }
 
-// ✅ Props definition
+// Props definition
 interface UserFormProps {
   onClose: () => void;
   editUser?: UserData;
@@ -45,7 +45,7 @@ export default function UserForm({
     }));
   };
 
-  // ✅ Handle form submission
+  // Handle form submission
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
