@@ -1,7 +1,8 @@
 'use client';
 
-import React from 'react';
-import services from '@/app/data/services.json';
+import React, { useEffect, useState } from 'react';
+import { collection, getDocs, DocumentData } from 'firebase/firestore';
+import { db } from '../config/firebase';
 
 type Pillar = {
   slug: string;
@@ -15,19 +16,29 @@ type Props = {
 };
 
 export default function ServicePillars({ slugs }: Props) {
-  // Type-guard to narrow unknown JSON entries to Pillar objects
-  const isPillar = (s: unknown): s is Pillar => {
-    if (typeof s !== 'object' || s === null) return false;
-    const maybe = s as { type?: unknown; slug?: unknown; name?: unknown; description?: unknown };
-    return maybe.type === 'pillar' && typeof maybe.slug === 'string' && typeof maybe.name === 'string' && typeof maybe.description === 'string';
-  };
+  const [pillars, setPillars] = useState<Pillar[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const allPillars = (services as unknown[]).filter(isPillar);
+  useEffect(() => {
+    const fetchPillars = async () => {
+      try {
+        const snapshot = await getDocs(collection(db, "services"));
+        const allServices = snapshot.docs.map((d) => ({ id: d.id, ...(d.data() as DocumentData) } as any));
+        const allPillars = allServices.filter((s: any) => s.type === 'pillar');
+        const filteredPillars = slugs && slugs.length
+          ? allPillars.filter((p: Pillar) => slugs.includes(p.slug))
+          : allPillars;
+        setPillars(filteredPillars);
+      } catch (error) {
+        console.error("Failed to fetch pillars:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPillars();
+  }, [slugs]);
 
-  const pillars = slugs && slugs.length
-    ? allPillars.filter((p) => slugs.includes(p.slug))
-    : allPillars;
-
+  if (loading) return <p className="text-center py-10 text-gray-300">Loading pillars...</p>;
   if (!pillars.length) return null;
 
   return (

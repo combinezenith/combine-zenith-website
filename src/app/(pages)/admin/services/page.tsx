@@ -14,6 +14,9 @@ interface Service {
   id?: string;
   title?: string;
   description?: string;
+  image?: string;
+  skills?: string[];
+  approach?: string[];
   status?: "Active" | "Inactive";
 }
 
@@ -190,6 +193,15 @@ export default function ServiceManagementPage() {
                   <p className="text-gray-300 text-sm mb-4 line-clamp-3">
                     {service.description || "No description available."}
                   </p>
+                  {service.image && (
+                    <p className="text-gray-400 text-xs mb-2">Image: {service.image}</p>
+                  )}
+                  {service.skills && service.skills.length > 0 && (
+                    <p className="text-gray-400 text-xs mb-2">Skills: {service.skills.join(', ')}</p>
+                  )}
+                  {service.approach && service.approach.length > 0 && (
+                    <p className="text-gray-400 text-xs mb-2">Approach: {service.approach.length} steps</p>
+                  )}
                 </div>
 
                 <div>

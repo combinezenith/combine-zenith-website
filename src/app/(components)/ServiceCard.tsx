@@ -12,6 +12,9 @@ interface Service {
   id: string;
   title: string;
   description: string;
+  image?: string;
+  skills?: string[];
+  approach?: string[];
   status?: string;
 }
 
@@ -62,7 +65,7 @@ export default function ServiceCard() {
           >
             <div className="w-full h-44 md:h-48 lg:h-48 relative">
               <Image
-                src={'/logo.jpg'}
+                src={service.image || '/logo.jpg'}
                 alt={service.title}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
