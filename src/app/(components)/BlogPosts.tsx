@@ -1,12 +1,25 @@
-import React from 'react';
+"use client";
+
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Calendar, Clock } from 'lucide-react';
-import { blogPosts } from './blogData';
+import { getBlogs, Blog } from '../lib/blogApi';
 import Image from 'next/image';
 
 export default function BlogPosts() {
-  // Get all non-featured posts
-  const posts = blogPosts.filter(post => !post.featured);
+  const [posts, setPosts] = useState<Blog[]>([]);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const blogs = await getBlogs();
+      // Find the most recent featured blog
+      const featured = blogs.find(post => post.featured);
+      // Exclude the most recent featured blog from the list
+      const nonFeaturedPosts = blogs.filter(post => post.id !== featured?.id);
+      setPosts(nonFeaturedPosts);
+    };
+    fetchPosts();
+  }, []);
 
   return (
     <div aria-label='' className="min-h-screen py-16 px-4">
@@ -19,8 +32,8 @@ export default function BlogPosts() {
                 {/* Image Container */}
                 <div aria-label='' className="relative overflow-hidden h-48 w-full">
                   <Image
-                    src={post.image}
-                    alt={post.title}
+                    src={post.image || "/placeholder-image.jpg"}
+                    alt={post.title || "Blog post"}
                     width={400}
                     height={192}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"

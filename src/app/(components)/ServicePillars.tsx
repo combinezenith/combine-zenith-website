@@ -22,12 +22,16 @@ export default function ServicePillars({ slugs }: Props) {
   useEffect(() => {
     const fetchPillars = async () => {
       try {
+        console.log("Fetching pillars for slugs:", slugs);
         const snapshot = await getDocs(collection(db, "services"));
-        const allServices = snapshot.docs.map((d) => ({ id: d.id, ...(d.data() as DocumentData) } as any));
-        const allPillars = allServices.filter((s: any) => s.type === 'pillar');
+        const allServices = snapshot.docs.map((d) => ({ id: d.id, ...(d.data() as DocumentData) } as Record<string, unknown>));
+        console.log("All services:", allServices);
+        const allPillars = allServices.filter((s: Record<string, unknown>) => s.type === 'pillar') as Pillar[];
+        console.log("All pillars:", allPillars);
         const filteredPillars = slugs && slugs.length
           ? allPillars.filter((p: Pillar) => slugs.includes(p.slug))
           : allPillars;
+        console.log("Filtered pillars:", filteredPillars);
         setPillars(filteredPillars);
       } catch (error) {
         console.error("Failed to fetch pillars:", error);
