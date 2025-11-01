@@ -17,6 +17,9 @@ interface Service {
   id?: string;
   title?: string;
   description?: string;
+  image?: string;
+  skills?: string[];
+  approach?: string[];
   status?: "Active" | "Inactive";
   createdAt?: Timestamp; // ✅ Replaced 'any' with Firestore Timestamp
 }
@@ -37,6 +40,9 @@ export default function ServiceForm({
   const [formData, setFormData] = useState<Omit<Service, "id" | "createdAt">>({
     title: editService?.title || "",
     description: editService?.description || "",
+    image: editService?.image || "",
+    skills: editService?.skills || [],
+    approach: editService?.approach || [],
     status: editService?.status || "Active",
   });
 
@@ -46,7 +52,21 @@ export default function ServiceForm({
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name === 'skills') {
+      setFormData((prev) => ({ ...prev, [name]: value.split(',').map(s => s.trim()) }));
+    } else if (name === 'approach') {
+      if (value.trim() === '') {
+        setFormData((prev) => ({ ...prev, [name]: [] }));
+      } else {
+        try {
+          setFormData((prev) => ({ ...prev, [name]: JSON.parse(value) }));
+        } catch {
+          setFormData((prev) => ({ ...prev, [name]: [] }));
+        }
+      }
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -79,7 +99,7 @@ export default function ServiceForm({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-[#2a2250] rounded-xl p-6 w-[400px] shadow-lg text-white"
+        className="bg-[#2a2250] rounded-xl p-6 w-[600px] max-h-[80vh] overflow-y-auto shadow-lg text-white"
       >
         <h2 className="text-xl font-semibold mb-4">
           {editService ? "Edit Service" : "Add New Service"}
@@ -101,6 +121,32 @@ export default function ServiceForm({
             value={formData.description}
             onChange={handleChange}
             rows={3}
+            className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none resize-none"
+          />
+
+          <input
+            name="image"
+            placeholder="Image URL"
+            value={formData.image}
+            onChange={handleChange}
+            className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
+          />
+
+          <textarea
+            name="skills"
+            placeholder="Skills (comma-separated)"
+            value={formData.skills?.join(', ')}
+            onChange={handleChange}
+            rows={2}
+            className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none resize-none"
+          />
+
+          <textarea
+            name="approach"
+            placeholder="Approach (JSON array)"
+            value={JSON.stringify(formData.approach, null, 2)}
+            onChange={handleChange}
+            rows={5}
             className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none resize-none"
           />
 

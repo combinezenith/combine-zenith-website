@@ -24,8 +24,7 @@ export async function generateStaticParams() {
 export default async function DynamicServices({ params }: Props) {
   const { id } = (await params) as { id: string };
   // Define a lightweight type for services we expect to render here
-  type ApproachStep = { id: string; title: string; content: string };
-  type Service = { id: string; title: string; description?: string; image?: string; skills?: string[]; approach?: ApproachStep[] };
+  type Service = { id: string; title: string; description?: string; image?: string; skills?: string[]; approach?: string[] };
 
   let service: Service | null = null;
 
