@@ -2,8 +2,14 @@
 
 import React, { useState } from 'react';
 
+type ApproachStep = {
+  id: string;
+  title: string;
+  content: string;
+};
+
 type Props = {
-  approach?: string[];
+  approach?: ApproachStep[];
 };
 
 export default function ServiceApproach({ approach }: Props) {
@@ -20,9 +26,10 @@ export default function ServiceApproach({ approach }: Props) {
 
         <div className="space-y-4">
           {steps.map((step, index) => (
-            <div key={index} className="bg-white/5 rounded-lg overflow-hidden">
+            <div key={step.id || index} className="bg-white/5 rounded-lg overflow-hidden">
               <div className="p-4">
-                <span className="text-white font-medium">{step}</span>
+                <h3 className="text-white font-semibold mb-2">{step.title}</h3>
+                <p className="text-white/80">{step.content}</p>
               </div>
             </div>
           ))}

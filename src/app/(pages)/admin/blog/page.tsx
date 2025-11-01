@@ -21,9 +21,14 @@ interface Blog {
   id?: string;
   title?: string;
   description?: string;
-  author?: string;
+  author?: {
+    name?: string;
+    role?: string;
+    avatar?: string;
+    updatedAt?: string;
+  };
   date?: string;
-  imageUrl?: string;
+  image?: string;
   status?: "draft" | "published";
 }
 
@@ -137,7 +142,7 @@ export default function BlogPage() {
 
         {/* Blog Grid */}
         {blogs.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
             {blogs.map((blog) => (
               <motion.div
                 key={blog.id}
@@ -148,7 +153,7 @@ export default function BlogPage() {
               >
                 <div>
                   <Image
-                    src={blog.imageUrl || "/placeholder.jpg"}
+                    src={blog.image || "/placeholder.jpg"}
                     alt={blog.title || "Blog image"}
                     width={400}
                     height={250}
@@ -158,7 +163,7 @@ export default function BlogPage() {
                     {blog.title}
                   </h2>
                   <p className="text-gray-400 text-sm mb-2">
-                    By {blog.author || "Unknown"} on {blog.date || "No date"}
+                    By {blog.author?.name || "Unknown"} on {blog.date || "No date"}
                   </p>
                   <p className="text-gray-300 text-sm line-clamp-3 mb-3">
                     {blog.description || "No description available."}

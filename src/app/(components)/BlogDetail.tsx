@@ -1,16 +1,28 @@
+"use client";
+
 import Link from "next/link";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
-import { blogPosts } from './blogData';
+import { getBlogBySlug, Blog } from '../lib/blogApi';
 import Image from "next/image";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 
 interface BlogPostDetailProps {
   slug: string;
 }
 
 export default function BlogPostDetail({ slug }: BlogPostDetailProps) {
-  // Find the blog post by slug
-  const post = blogPosts.find(p => p.slug === slug);
+  const [post, setPost] = useState<Blog | null>(null);
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      const fetchedPost = await getBlogBySlug(slug);
+      setPost(fetchedPost);
+    };
+    fetchPost();
+  }, [slug]);
 
   // If no post found, show error
   if (!post) {
@@ -32,8 +44,8 @@ export default function BlogPostDetail({ slug }: BlogPostDetailProps) {
       {/* Hero Image Section */}
       <div aria-label="" className="relative w-full h-[300px] md:h-[400px] overflow-hidden">
         <Image
-          src={post.image}
-          alt={post.title}
+          src={post.image || "/placeholder-image.jpg"}
+          alt={post.title || "Blog post"}
           width={1200}
           height={400}
           className="w-full h-full object-cover"
@@ -65,9 +77,28 @@ export default function BlogPostDetail({ slug }: BlogPostDetailProps) {
 
           {/* Introduction Paragraph */}
           {post.content?.introduction && (
-            <div aria-label="" className="mb-8 md:mb-12">
-              <p className="text-purple-100/80 leading-relaxed text-base md:text-lg">
+            <div aria-label={post.title} className="mb-8 md:mb-12 prose prose-invert prose-purple max-w-none">
+              <div className="text-purple-100 text-base md:text-lg leading-relaxed space-y-4 [&>h1]:text-xl [&>h1]:font-bold [&>h2]:text-lg [&>h2]:font-semibold [&>h3]:text-base [&>h3]:font-semibold [&>ul]:list-disc [&>ul]:pl-6 [&>ol]:list-decimal [&>ol]:pl-6 [&>blockquote]:border-l-4 [&>blockquote]:border-purple-400 [&>blockquote]:pl-4 [&>blockquote]:italic [&>p]:mb-4">
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeRaw]}
+              >
                 {post.content.introduction}
+              </ReactMarkdown>
+            </div>
+            </div>
+          )}
+
+          {/* Quote Section */}
+          {post.content?.quote && post.content.quote.text && (
+            <div aria-label="" className="bg-purple-800/30 border-l-4 border-purple-400 pl-4 md:pl-6 py-4 my-6 md:my-8">
+              <div className="prose prose-invert prose-purple max-w-none">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {post.content.quote.text}
+                </ReactMarkdown>
+              </div>
+              <p className="text-purple-300 text-sm md:text-base mt-2">
+                - {post.content.quote.author}
               </p>
             </div>
           )}
@@ -81,27 +112,15 @@ export default function BlogPostDetail({ slug }: BlogPostDetailProps) {
               <p className="text-purple-100/80 leading-relaxed text-base md:text-lg mb-4 md:mb-6">
                 {section.content}
               </p>
-              
-              {/* Add quote after second section if it exists */}
-              {index === 1 && post.content?.quote && (
-                <div aria-label="" className="bg-purple-800/30 border-l-4 border-purple-400 pl-4 md:pl-6 py-4 my-6 md:my-8">
-                  <p className="text-purple-100 italic text-base md:text-lg leading-relaxed mb-2">
-                    &apos;{post.content.quote.text}&apos;
-                  </p>
-                  <p className="text-purple-300 text-sm md:text-base">
-                    - {post.content.quote.author}
-                  </p>
-                </div>
-              )}
             </div>
           ))}
 
           {/* Conclusion */}
           {post.content?.conclusion && (
-            <div aria-label="" className="mb-8 md:mb-12">
-              <p className="text-purple-100/80 leading-relaxed text-base md:text-lg">
+            <div aria-label="" className="mb-8 md:mb-12 prose prose-invert prose-purple max-w-none">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
                 {post.content.conclusion}
-              </p>
+              </ReactMarkdown>
             </div>
           )}
 
@@ -109,8 +128,8 @@ export default function BlogPostDetail({ slug }: BlogPostDetailProps) {
           {post.author && (
             <div aria-label="" className="flex items-center gap-3 md:gap-4 pt-6 md:pt-8 border-t border-purple-700/30">
               <Image
-                src={post.author.avatar}
-                alt={post.author.name}
+                src={post.author.avatar || "/placeholder-avatar.jpg"}
+                alt={post.author.name || "Author"}
                 width={56}
                 height={56}
                 className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover"
@@ -118,7 +137,7 @@ export default function BlogPostDetail({ slug }: BlogPostDetailProps) {
               <div>
                 <h3 className="text-white font-semibold text-sm md:text-base">{post.author.name}</h3>
                 <p className="text-purple-300 text-xs md:text-sm">{post.author.role}</p>
-                <p className="text-purple-400 text-xs mt-1">Updated on {post.author.updatedAt}</p>
+                <p className="text-purple-400 text-xs mt-1">Updated on {post.author?.updatedAt || "Unknown"}</p>
               </div>
             </div>
           )}

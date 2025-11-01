@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 // ✅ Define a proper type for service
 interface Service {
   id?: string;
-  title?: string;
+  name?: string;
   description?: string;
   image?: string;
   skills?: string[];
@@ -61,7 +61,7 @@ export default function ServiceManagementPage() {
       () => (
         <div className="text-white p-3">
           <p>
-            Delete <b>{serviceToDelete.title}</b>?
+            Delete <b>{serviceToDelete.name}</b>?
           </p>
           <div className="flex gap-2 mt-2">
             <button
@@ -112,7 +112,7 @@ export default function ServiceManagementPage() {
   };
 
   const filteredServices = services.filter((s) =>
-    s.title?.toLowerCase().includes(search.toLowerCase())
+    s.name?.toLowerCase().includes(search.toLowerCase())
   );
 
   if (loading)
@@ -188,7 +188,7 @@ export default function ServiceManagementPage() {
                   <div className="text-3xl mb-3">💡</div>
 
                   <h2 className="text-lg sm:text-xl font-semibold mb-2 wrap-break-words">
-                    {service.title || "Untitled Service"}
+                    {service.name || "Untitled Service"}
                   </h2>
                   <p className="text-gray-300 text-sm mb-4 line-clamp-3">
                     {service.description || "No description available."}

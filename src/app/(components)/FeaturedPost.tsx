@@ -1,26 +1,30 @@
-import React from 'react';
+"use client";
+
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Calendar, Clock } from 'lucide-react';
-import { blogPosts } from './blogData';
+import { getBlogs, Blog } from '../lib/blogApi';
 import Image from 'next/image';
 
 export default function FeaturedPost() {
-  const featuredPost = blogPosts.find(post => post.featured);
+  const [featuredPost, setFeaturedPost] = useState<Blog | null>(null);
+
+  useEffect(() => {
+    const fetchFeaturedPost = async () => {
+      const blogs = await getBlogs();
+      // Find the most recent blog that is featured
+      const featured = blogs.find(post => post.featured);
+      setFeaturedPost(featured || null);
+    };
+    fetchFeaturedPost();
+  }, []);
 
   if (!featuredPost) return null;
 
   return (
     <div className="min-h-screen py-8 md:py-16 px-4">
       <div className="max-w-4xl mx-auto mt-8 md:mt-10">
-        {/* Header Section */}
-        <div className="text-center mb-8 md:mb-12">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
-            Our Latest Insights
-          </h1>
-          <p className="text-purple-200 text-base md:text-lg max-w-2xl mx-auto">
-            Stay informed with Combine Zenith&apos;s expertise. Explore articles, strategies, and industry news crafted to elevate your business.
-          </p>
-        </div>
+
 
         {/* Featured Card */}
         <Link href={`/blog/${featuredPost.slug}`}>
@@ -28,8 +32,8 @@ export default function FeaturedPost() {
             {/* Image Container */}
             <div className="relative overflow-hidden">
               <Image
-                src={featuredPost.image}
-                alt={featuredPost.title}
+                src={featuredPost.image || "/placeholder-image.jpg"}
+                alt={featuredPost.title || "Featured blog post"}
                 width={800}
                 height={400}
                 className="w-full h-48 md:h-64 lg:h-80 object-cover group-hover:scale-105 transition-transform duration-500"

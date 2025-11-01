@@ -8,6 +8,18 @@ export default {
     ],
     theme: {
         extend: {
+            typography: {
+                DEFAULT: {
+                    css: {
+                        fontFamily: 'var(--font-montsterrat)', // use your site font variable
+                        color: 'inherit',
+                        h1: { fontFamily: 'var(--font-surgena)' },
+                        h2: { fontFamily: 'var(--font-glancyr)' },
+                        h3: { fontFamily: 'var(--font-glancyr)' },
+                        p: { fontFamily: 'var(--font-montsterrat)' },
+                    },
+                },
+            },
             colors: {
                 primary: {
                     DEFAULT: 'hsl(var(--primary))',
@@ -100,5 +112,5 @@ export default {
             }
         }
     },
-    plugins: [require("tailwindcss-animate")],
+    plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 } satisfies Config;

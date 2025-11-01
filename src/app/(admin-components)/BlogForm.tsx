@@ -11,16 +11,35 @@ import {
 } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
+
+// Dynamically import the markdown editor to avoid SSR issues
+const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 interface Blog {
   id?: string;
+  slug?: string;
+  tag?: string;
+  image?: string;
   title?: string;
-  author?: string;
-  status?: "published" | "draft";
-  date?: string;
-  imageUrl?: string;
   description?: string;
-  createdAt?: Timestamp; // ✅ Fixed type
+  date?: string;
+  readTime?: string;
+  featured?: boolean;
+  content?: {
+    introduction?: string;
+    sections?: { heading: string; content: string }[];
+    quote?: { text: string; author: string };
+    conclusion?: string;
+  };
+  author?: {
+    name?: string;
+    role?: string;
+    avatar?: string;
+    updatedAt?: string;
+  };
+  status?: "published" | "draft";
+  createdAt?: Timestamp;
 }
 
 interface BlogFormProps {
@@ -36,11 +55,16 @@ export default function BlogForm({
 }: BlogFormProps) {
   const [formData, setFormData] = useState<Partial<Blog>>({
     title: editBlog?.title || "",
-    author: editBlog?.author || "",
-    status: editBlog?.status || "draft",
-    date: editBlog?.date || new Date().toISOString().split("T")[0],
-    imageUrl: editBlog?.imageUrl || "",
+    slug: editBlog?.slug || "",
+    tag: editBlog?.tag || "",
+    image: editBlog?.image || "",
     description: editBlog?.description || "",
+    date: editBlog?.date || new Date().toISOString().split("T")[0],
+    readTime: editBlog?.readTime || "",
+    featured: editBlog?.featured || false,
+    content: editBlog?.content || { introduction: "", sections: [], quote: { text: "", author: "" }, conclusion: "" },
+    author: editBlog?.author || { name: "", role: "", avatar: "", updatedAt: "" },
+    status: editBlog?.status || "draft",
   });
 
   const [loading, setLoading] = useState(false);
@@ -48,8 +72,46 @@ export default function BlogForm({
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type } = e.target;
+    if (type === 'checkbox') {
+      setFormData((prev) => ({ ...prev, [name]: (e.target as HTMLInputElement).checked }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
+  };
+
+  const handleNestedChange = (field: keyof Blog, subField: string, value: string) => {
+    setFormData((prev) => {
+      const keys = subField.split('.');
+      const updateNested = (obj: any, keys: string[], val: string): any => {
+        if (keys.length === 1) {
+          return { ...obj, [keys[0]]: val };
+        }
+        const [first, ...rest] = keys;
+        return { ...obj, [first]: updateNested(obj[first] || {}, rest, val) };
+      };
+      return { ...prev, [field]: updateNested(prev[field] as any, keys, value) };
+    });
+  };
+
+  const handleContentChange = (subField: string, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      content: {
+        ...prev.content,
+        [subField]: value,
+      },
+    }));
+  };
+
+  const handleAuthorChange = (subField: string, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      author: {
+        ...prev.author,
+        [subField]: value,
+      },
+    }));
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -88,7 +150,7 @@ export default function BlogForm({
           {editBlog ? "Edit Blog" : "Add New Blog"}
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 max-h-[70vh] overflow-y-auto">
           <input
             name="title"
             placeholder="Blog Title"
@@ -98,12 +160,35 @@ export default function BlogForm({
             required
           />
           <input
-            name="author"
-            placeholder="Author Name"
-            value={formData.author}
+            name="slug"
+            placeholder="Slug (e.g. mastering-digital-transformation)"
+            value={formData.slug}
             onChange={handleChange}
             className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
             required
+          />
+          <input
+            name="tag"
+            placeholder="Tag (e.g. Featured Post)"
+            value={formData.tag}
+            onChange={handleChange}
+            className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
+          />
+          <input
+            name="image"
+            placeholder="Image path (e.g. /logo.jpg)"
+            value={formData.image}
+            onChange={handleChange}
+            className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
+            required
+          />
+          <textarea
+            name="description"
+            placeholder="Short Description"
+            value={formData.description}
+            onChange={handleChange}
+            rows={3}
+            className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none resize-none"
           />
           <input
             type="date"
@@ -112,6 +197,23 @@ export default function BlogForm({
             onChange={handleChange}
             className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
           />
+          <input
+            name="readTime"
+            placeholder="Read Time (e.g. 7 min read)"
+            value={formData.readTime}
+            onChange={handleChange}
+            className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
+          />
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              name="featured"
+              checked={formData.featured}
+              onChange={handleChange}
+              className="rounded bg-[#3b2e65] text-white"
+            />
+            Featured Post
+          </label>
           <select
             name="status"
             value={formData.status}
@@ -122,22 +224,73 @@ export default function BlogForm({
             <option value="draft">Draft</option>
           </select>
 
-          <textarea
-            name="description"
-            placeholder="Short Description"
-            value={formData.description}
-            onChange={handleChange}
-            rows={3}
-            className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none resize-none"
+          {/* Content Fields */}
+          <h3 className="text-lg font-semibold">Content</h3>
+          <div className="space-y-2">
+            <label className="block text-sm font-medium">Introduction (Markdown)</label>
+            <MDEditor
+              value={formData.content?.introduction || ""}
+              onChange={(value) => handleContentChange("introduction", value || "")}
+              preview="edit"
+              hideToolbar={false}
+              className="bg-[#3b2e65] rounded"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="block text-sm font-medium">Quote Text (Markdown)</label>
+            <MDEditor
+              value={formData.content?.quote?.text || ""}
+              onChange={(value) => handleNestedChange("content", "quote.text", value || "")}
+              preview="edit"
+              hideToolbar={false}
+              className="bg-[#3b2e65] rounded"
+            />
+          </div>
+          <input
+            placeholder="Quote Author"
+            value={formData.content?.quote?.author || ""}
+            onChange={(e) => handleNestedChange("content", "quote.author", e.target.value)}
+            className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
           />
 
+          <div className="space-y-2">
+            <label className="block text-sm font-medium">Conclusion (Markdown)</label>
+            <MDEditor
+              value={formData.content?.conclusion || ""}
+              onChange={(value) => handleContentChange("conclusion", value || "")}
+              preview="edit"
+              hideToolbar={false}
+              className="bg-[#3b2e65] rounded"
+            />
+          </div>
+
+          {/* Author Fields */}
+          <h3 className="text-lg font-semibold">Author</h3>
           <input
-            name="imageUrl"
-            placeholder="Image path (e.g. /blog-images/post1.jpg)"
-            value={formData.imageUrl}
-            onChange={handleChange}
+            placeholder="Author Name"
+            value={formData.author?.name || ""}
+            onChange={(e) => handleAuthorChange("name", e.target.value)}
             className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
             required
+          />
+          <input
+            placeholder="Author Role"
+            value={formData.author?.role || ""}
+            onChange={(e) => handleAuthorChange("role", e.target.value)}
+            className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
+          />
+          <input
+            placeholder="Author Avatar (e.g. /logo.jpg)"
+            value={formData.author?.avatar || ""}
+            onChange={(e) => handleAuthorChange("avatar", e.target.value)}
+            className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
+          />
+          <input
+            placeholder="Updated At (e.g. June 12, 2024 at 3:45 pm)"
+            value={formData.author?.updatedAt || new Date().toLocaleString()}
+            onChange={(e) => handleAuthorChange("updatedAt", e.target.value)}
+            className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
           />
 
           <div className="flex justify-end gap-2 pt-2">

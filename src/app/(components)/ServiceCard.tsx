@@ -10,7 +10,7 @@ import { db } from '../config/firebase';
 
 interface Service {
   id: string;
-  title: string;
+  name: string;
   description: string;
   image?: string;
   skills?: string[];
@@ -57,7 +57,7 @@ export default function ServiceCard() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mx-4 md:mx-8 lg:mx-12 my-8 p-4 md:p-6 text-center justify-center items-center ">
       {services.map((service) => {
-        const Icon = iconsMap[service.title] || LuLightbulb;
+        const Icon = iconsMap[service.name] || LuLightbulb;
         return (
           <div
             key={service.id}
@@ -66,7 +66,7 @@ export default function ServiceCard() {
             <div className="w-full h-44 md:h-48 lg:h-48 relative">
               <Image
                 src={service.image || '/logo.jpg'}
-                alt={service.title}
+                alt={service.name || 'Service Image'}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 className="object-cover"
@@ -79,11 +79,11 @@ export default function ServiceCard() {
                   <Icon className="w-6 h-6 text-white" strokeWidth={1.5} />
                 </div>
                 <h3 className="text-lg md:text-xl font-bold text-white">
-                  {service.title}
+                  {service.name}
                 </h3>
               </div>
 
-              <p className="text-purple-200 text-sm leading-relaxed mb-6">
+              <p className="text-purple-200 text-sm leading-relaxed mb-6 line-clamp-3">
                 {service.description}
               </p>
 
