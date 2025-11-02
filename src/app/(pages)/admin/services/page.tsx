@@ -9,14 +9,15 @@ import Sidebar from "@/app/(admin-components)/Sidebar";
 import ServiceForm from "../../../(admin-components)/ServiceForm";
 import toast from "react-hot-toast";
 
-// ✅ Define a proper type for service
+// ✅ Define a proper type for service (matching ServiceForm)
 interface Service {
   id?: string;
   name?: string;
   description?: string;
   image?: string;
   skills?: string[];
-  approach?: string[];
+  pillars?: { id: string; title: string; content: string }[];
+  approach?: { id: string; title: string; content: string }[];
   status?: "Active" | "Inactive";
 }
 
@@ -194,13 +195,19 @@ export default function ServiceManagementPage() {
                     {service.description || "No description available."}
                   </p>
                   {service.image && (
-                    <p className="text-gray-400 text-xs mb-2">Image: {service.image}</p>
+                    <p className="text-gray-400 text-xs mb-2">
+                      Image: {service.image}
+                    </p>
                   )}
                   {service.skills && service.skills.length > 0 && (
-                    <p className="text-gray-400 text-xs mb-2">Skills: {service.skills.join(', ')}</p>
+                    <p className="text-gray-400 text-xs mb-2">
+                      Skills: {service.skills.join(", ")}
+                    </p>
                   )}
                   {service.approach && service.approach.length > 0 && (
-                    <p className="text-gray-400 text-xs mb-2">Approach: {service.approach.length} steps</p>
+                    <p className="text-gray-400 text-xs mb-2">
+                      Approach: {service.approach.length} steps
+                    </p>
                   )}
                 </div>
 
