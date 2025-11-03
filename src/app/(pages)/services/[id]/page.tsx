@@ -30,7 +30,7 @@ export async function generateStaticParams() {
 export default async function DynamicServices({ params }: Props) {
   const { id } = (await params) as { id: string };
   // Define a lightweight type for services we expect to render here
-  type Service = { id: string; name: string; description?: string; image?: string; skills?: string[]; approach?: ApproachStep[] };
+  type Service = { id: string; name: string; description?: string; image?: string; skills?: string[]; approach?: ApproachStep[]; pillars?: ApproachStep[] };
 
   let service: Service | null = null;
 
@@ -71,7 +71,7 @@ export default async function DynamicServices({ params }: Props) {
         </div>
 
       {/* Service-specific pillars */}
-      <ServicePillars slugs={service.skills} />
+      <ServicePillars pillars={service.pillars} />
 
   {/* Proven approach / accordion */}
   <ServiceApproach approach={service.approach} />
