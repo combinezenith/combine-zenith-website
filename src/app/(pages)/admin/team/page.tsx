@@ -12,14 +12,16 @@ import { db } from "../../../config/firebase";
 import TeamForm from "../../../(admin-components)/TeamForm";
 import { Edit, Delete, FilterList, Close } from "@mui/icons-material";
 import Sidebar from "@/app/(admin-components)/Sidebar";
+import Image from "next/image";
 
 // ✅ Team interface
 interface Team {
   id: string;
   name: string;
-  members: string;
+  image: string;
   role: string;
-  status: "Active" | "Inactive" | "Pending" | string;
+  bio: string;
+  linkedin: string;
   createdAt?: Timestamp;
 }
 
@@ -30,7 +32,7 @@ export default function TeamPage() {
   const [loading, setLoading] = useState(false);
 
   const fetchTeams = async () => {
-    const querySnapshot = await getDocs(collection(db, "teamsCollection"));
+    const querySnapshot = await getDocs(collection(db, "teamMembers"));
     const data: Team[] = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...(doc.data() as Omit<Team, "id">),
@@ -43,7 +45,7 @@ export default function TeamPage() {
   }, [refresh]);
 
   const handleDelete = async (id: string) => {
-    await deleteDoc(doc(db, "teamsCollection", id));
+    await deleteDoc(doc(db, "teamMembers", id));
     setRefresh(!refresh);
   };
 
@@ -51,26 +53,21 @@ export default function TeamPage() {
     if (!updatedTeam.id) return;
     setLoading(true);
     try {
-      const docRef = doc(db, "teamsCollection", updatedTeam.id);
+      const docRef = doc(db, "teamMembers", updatedTeam.id);
       await updateDoc(docRef, {
         name: updatedTeam.name,
-        members: updatedTeam.members,
+        image: updatedTeam.image,
         role: updatedTeam.role,
-        status: updatedTeam.status,
+        bio: updatedTeam.bio,
+        linkedin: updatedTeam.linkedin,
       });
       setEditingTeam(null);
       setRefresh(!refresh);
     } catch (error) {
-      console.error("Error updating team:", error);
+      console.error("Error updating team member:", error);
     } finally {
       setLoading(false);
     }
-  };
-
-  const statusColor: Record<string, string> = {
-    Active: "bg-green-500/20 text-green-400",
-    Inactive: "bg-red-500/20 text-red-400",
-    Pending: "bg-yellow-500/20 text-yellow-400",
   };
 
   return (
@@ -106,10 +103,11 @@ export default function TeamPage() {
           <table className="min-w-full border-collapse text-sm">
             <thead>
               <tr className="bg-[#2E2058] text-gray-300">
-                <th className="py-3 px-4 text-left font-medium">Team Name</th>
-                <th className="py-3 px-4 text-left font-medium">Members</th>
+                <th className="py-3 px-4 text-left font-medium">Member Name</th>
+                <th className="py-3 px-4 text-left font-medium">Image</th>
                 <th className="py-3 px-4 text-left font-medium">Role</th>
-                <th className="py-3 px-4 text-left font-medium">Status</th>
+                <th className="py-3 px-4 text-left font-medium">Bio</th>
+                <th className="py-3 px-4 text-left font-medium">LinkedIn</th>
                 <th className="py-3 px-4 text-left font-medium">Created On</th>
                 <th className="py-3 px-4 text-center font-medium">Actions</th>
               </tr>
@@ -121,17 +119,26 @@ export default function TeamPage() {
                   className="border-t border-[#4B3A80] hover:bg-[#4A3B80]/50 transition"
                 >
                   <td className="py-3 px-4 font-medium">{team.name}</td>
-                  <td className="py-3 px-4">{team.members}</td>
-                  <td className="py-3 px-4">{team.role}</td>
                   <td className="py-3 px-4">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                        statusColor[team.status] ||
-                        "bg-gray-500/20 text-gray-300"
-                      }`}
+                    <Image
+                      src={team.image || ''}
+                      alt={team.name}
+                      width={40}
+                      height={40}
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+                  </td>
+                  <td className="py-3 px-4">{team.role}</td>
+                  <td className="py-3 px-4 max-w-xs truncate">{team.bio}</td>
+                  <td className="py-3 px-4">
+                    <a
+                      href={team.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-400 hover:underline"
                     >
-                      {team.status}
-                    </span>
+                      LinkedIn
+                    </a>
                   </td>
                   <td className="py-3 px-4 text-gray-400 whitespace-nowrap">
                     {team.createdAt?.toDate
@@ -159,10 +166,10 @@ export default function TeamPage() {
               {teams.length === 0 && (
                 <tr>
                   <td
-                    colSpan={6}
+                    colSpan={7}
                     className="text-center py-5 text-gray-400 text-sm"
                   >
-                    No teams added yet.
+                    No team members added yet.
                   </td>
                 </tr>
               )}
@@ -196,7 +203,7 @@ function EditTeamModal({ team, onClose, onSave, loading }: EditModalProps) {
   const [formData, setFormData] = useState<Team>(team);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -211,7 +218,7 @@ function EditTeamModal({ team, onClose, onSave, loading }: EditModalProps) {
         >
           <Close />
         </button>
-        <h2 className="text-xl font-semibold mb-4">Edit Team</h2>
+        <h2 className="text-xl font-semibold mb-4">Edit Team Member</h2>
 
         <div className="space-y-3">
           <input
@@ -219,15 +226,15 @@ function EditTeamModal({ team, onClose, onSave, loading }: EditModalProps) {
             name="name"
             value={formData.name}
             onChange={handleChange}
-            placeholder="Team Name"
+            placeholder="Member Name"
             className="w-full bg-[#2E2058] rounded-lg px-3 py-2 outline-none"
           />
           <input
-            type="text"
-            name="members"
-            value={formData.members}
+            type="url"
+            name="image"
+            value={formData.image}
             onChange={handleChange}
-            placeholder="Members"
+            placeholder="Image URL"
             className="w-full bg-[#2E2058] rounded-lg px-3 py-2 outline-none"
           />
           <input
@@ -238,16 +245,22 @@ function EditTeamModal({ team, onClose, onSave, loading }: EditModalProps) {
             placeholder="Role"
             className="w-full bg-[#2E2058] rounded-lg px-3 py-2 outline-none"
           />
-          <select
-            name="status"
-            value={formData.status}
+          <textarea
+            name="bio"
+            value={formData.bio}
             onChange={handleChange}
+            placeholder="Bio"
+            rows={3}
+            className="w-full bg-[#2E2058] rounded-lg px-3 py-2 outline-none resize-none"
+          />
+          <input
+            type="url"
+            name="linkedin"
+            value={formData.linkedin}
+            onChange={handleChange}
+            placeholder="LinkedIn Link"
             className="w-full bg-[#2E2058] rounded-lg px-3 py-2 outline-none"
-          >
-            <option value="Active">Active</option>
-            <option value="Inactive">Inactive</option>
-            <option value="Pending">Pending</option>
-          </select>
+          />
 
           <button
             onClick={() => onSave(formData)}
