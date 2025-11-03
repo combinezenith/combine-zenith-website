@@ -1,6 +1,4 @@
-'use client';
-
-import React, { useState } from 'react';
+"use client";
 
 type ApproachStep = {
   id: string;
@@ -20,13 +18,19 @@ export default function ServiceApproach({ approach }: Props) {
   return (
     <section aria-labelledby="approach-title" className="py-12">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 id="approach-title" className="text-center text-white text-2xl sm:text-3xl font-semibold mb-8">
+        <h2
+          id="approach-title"
+          className="text-center text-white text-2xl sm:text-3xl font-semibold mb-8"
+        >
           Our Proven Transformation Approach
         </h2>
 
         <div className="space-y-4">
           {steps.map((step, index) => (
-            <div key={step.id || index} className="bg-white/5 rounded-lg overflow-hidden">
+            <div
+              key={step.id || index}
+              className="bg-white/5 rounded-lg overflow-hidden"
+            >
               <div className="p-4">
                 <h3 className="text-white font-semibold mb-2">{step.title}</h3>
                 <p className="text-white/80">{step.content}</p>

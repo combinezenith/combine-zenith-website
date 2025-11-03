@@ -62,8 +62,18 @@ export default function BlogForm({
     date: editBlog?.date || new Date().toISOString().split("T")[0],
     readTime: editBlog?.readTime || "",
     featured: editBlog?.featured || false,
-    content: editBlog?.content || { introduction: "", sections: [], quote: { text: "", author: "" }, conclusion: "" },
-    author: editBlog?.author || { name: "", role: "", avatar: "", updatedAt: "" },
+    content: editBlog?.content || {
+      introduction: "",
+      sections: [],
+      quote: { text: "", author: "" },
+      conclusion: "",
+    },
+    author: editBlog?.author || {
+      name: "",
+      role: "",
+      avatar: "",
+      updatedAt: "",
+    },
     status: editBlog?.status || "draft",
   });
 
@@ -73,24 +83,48 @@ export default function BlogForm({
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value, type } = e.target;
-    if (type === 'checkbox') {
-      setFormData((prev) => ({ ...prev, [name]: (e.target as HTMLInputElement).checked }));
+    if (type === "checkbox") {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: (e.target as HTMLInputElement).checked,
+      }));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
 
-  const handleNestedChange = (field: keyof Blog, subField: string, value: string) => {
+  const handleNestedChange = (
+    field: keyof Blog,
+    subField: string,
+    value: string
+  ) => {
     setFormData((prev) => {
-      const keys = subField.split('.');
-      const updateNested = (obj: any, keys: string[], val: string): any => {
+      type NestedObject = Record<string, unknown>;
+
+      const updateNested = <T extends NestedObject>(
+        obj: T,
+        keys: string[],
+        val: string
+      ): T => {
         if (keys.length === 1) {
-          return { ...obj, [keys[0]]: val };
+          return { ...obj, [keys[0]]: val } as T;
         }
+
         const [first, ...rest] = keys;
-        return { ...obj, [first]: updateNested(obj[first] || {}, rest, val) };
+        return {
+          ...obj,
+          [first]: updateNested((obj[first] as NestedObject) || {}, rest, val),
+        } as T;
       };
-      return { ...prev, [field]: updateNested(prev[field] as any, keys, value) };
+
+      return {
+        ...prev,
+        [field]: updateNested(
+          (prev[field] as NestedObject) || {},
+          subField.split("."),
+          value
+        ),
+      };
     });
   };
 
@@ -150,7 +184,10 @@ export default function BlogForm({
           {editBlog ? "Edit Blog" : "Add New Blog"}
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-4 max-h-[70vh] overflow-y-auto">
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-4 max-h-[70vh] overflow-y-auto"
+        >
           <input
             name="title"
             placeholder="Blog Title"
@@ -227,10 +264,14 @@ export default function BlogForm({
           {/* Content Fields */}
           <h3 className="text-lg font-semibold">Content</h3>
           <div className="space-y-2">
-            <label className="block text-sm font-medium">Introduction (Markdown)</label>
+            <label className="block text-sm font-medium">
+              Introduction (Markdown)
+            </label>
             <MDEditor
               value={formData.content?.introduction || ""}
-              onChange={(value) => handleContentChange("introduction", value || "")}
+              onChange={(value) =>
+                handleContentChange("introduction", value || "")
+              }
               preview="edit"
               hideToolbar={false}
               className="bg-[#3b2e65] rounded"
@@ -238,10 +279,14 @@ export default function BlogForm({
           </div>
 
           <div className="space-y-2">
-            <label className="block text-sm font-medium">Quote Text (Markdown)</label>
+            <label className="block text-sm font-medium">
+              Quote Text (Markdown)
+            </label>
             <MDEditor
               value={formData.content?.quote?.text || ""}
-              onChange={(value) => handleNestedChange("content", "quote.text", value || "")}
+              onChange={(value) =>
+                handleNestedChange("content", "quote.text", value || "")
+              }
               preview="edit"
               hideToolbar={false}
               className="bg-[#3b2e65] rounded"
@@ -250,15 +295,21 @@ export default function BlogForm({
           <input
             placeholder="Quote Author"
             value={formData.content?.quote?.author || ""}
-            onChange={(e) => handleNestedChange("content", "quote.author", e.target.value)}
+            onChange={(e) =>
+              handleNestedChange("content", "quote.author", e.target.value)
+            }
             className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
           />
 
           <div className="space-y-2">
-            <label className="block text-sm font-medium">Conclusion (Markdown)</label>
+            <label className="block text-sm font-medium">
+              Conclusion (Markdown)
+            </label>
             <MDEditor
               value={formData.content?.conclusion || ""}
-              onChange={(value) => handleContentChange("conclusion", value || "")}
+              onChange={(value) =>
+                handleContentChange("conclusion", value || "")
+              }
               preview="edit"
               hideToolbar={false}
               className="bg-[#3b2e65] rounded"
