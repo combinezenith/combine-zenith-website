@@ -1,49 +1,21 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { collection, getDocs, DocumentData } from 'firebase/firestore';
-import { db } from '../config/firebase';
+import React from 'react';
 
 type Pillar = {
-  slug: string;
-  name: string;
-  description: string;
-  type?: string;
+  id: string;
+  title: string;
+  content: string;
 };
 
 type Props = {
-  slugs?: string[];
+  pillars?: Pillar[];
 };
 
-export default function ServicePillars({ slugs }: Props) {
-  const [pillars, setPillars] = useState<Pillar[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function ServicePillars({ pillars }: Props) {
+  const pillarList = pillars || [];
 
-  useEffect(() => {
-    const fetchPillars = async () => {
-      try {
-        console.log("Fetching pillars for slugs:", slugs);
-        const snapshot = await getDocs(collection(db, "services"));
-        const allServices = snapshot.docs.map((d) => ({ id: d.id, ...(d.data() as DocumentData) } as Record<string, unknown>));
-        console.log("All services:", allServices);
-        const allPillars = allServices.filter((s: Record<string, unknown>) => s.type === 'pillar') as Pillar[];
-        console.log("All pillars:", allPillars);
-        const filteredPillars = slugs && slugs.length
-          ? allPillars.filter((p: Pillar) => slugs.includes(p.slug))
-          : allPillars;
-        console.log("Filtered pillars:", filteredPillars);
-        setPillars(filteredPillars);
-      } catch (error) {
-        console.error("Failed to fetch pillars:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchPillars();
-  }, [slugs]);
-
-  if (loading) return <p className="text-center py-10 text-gray-300">Loading pillars...</p>;
-  if (!pillars.length) return null;
+  if (!pillarList.length) return null;
 
   return (
     <section aria-labelledby="pillars-title" className="py-12">
@@ -53,9 +25,9 @@ export default function ServicePillars({ slugs }: Props) {
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {pillars.map((p) => (
+          {pillarList.map((p) => (
             <div
-              key={p.slug}
+              key={p.id}
               className="p-6 rounded-lg shadow-md min-h-40 flex flex-col justify-center bg-[#685885]"
 
             >
@@ -67,8 +39,8 @@ export default function ServicePillars({ slugs }: Props) {
                 </div>
               </div>
 
-              <h3 className="text-white text-lg font-semibold mb-2">{p.name}</h3>
-              <p className="text-white/90 text-sm">{p.description}</p>
+              <h3 className="text-white text-lg font-semibold mb-2">{p.title}</h3>
+              <p className="text-white/90 text-sm">{p.content}</p>
             </div>
           ))}
         </div>
