@@ -7,14 +7,15 @@ import { Add } from "@mui/icons-material";
 export default function TeamForm({ onAdded }: { onAdded: () => void }) {
   const [formData, setFormData] = useState({
     name: "",
-    members: "",
+    image: "",
     role: "",
-    status: "Active",
+    bio: "",
+    linkedin: "",
   });
   const [loading, setLoading] = useState(false);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -24,15 +25,14 @@ export default function TeamForm({ onAdded }: { onAdded: () => void }) {
     setLoading(true);
 
     try {
-      await addDoc(collection(db, "teamsCollection"), {
+      await addDoc(collection(db, "teamMembers"), {
         ...formData,
-        members: Number(formData.members),
         createdAt: serverTimestamp(),
       });
       onAdded();
-      setFormData({ name: "", members: "", role: "", status: "Active" });
+      setFormData({ name: "", image: "", role: "", bio: "", linkedin: "" });
     } catch (error) {
-      console.error("Error adding team: ", error);
+      console.error("Error adding team member: ", error);
     } finally {
       setLoading(false);
     }
@@ -43,21 +43,21 @@ export default function TeamForm({ onAdded }: { onAdded: () => void }) {
       onSubmit={handleSubmit}
       className="bg-[#3D2F68] p-5 rounded-xl shadow-md text-white space-y-4"
     >
-      <h2 className="text-lg font-semibold mb-2">Add New Team</h2>
+      <h2 className="text-lg font-semibold mb-2">Add New Team Member</h2>
       <input
         type="text"
         name="name"
-        placeholder="Team Name"
+        placeholder="Member Name"
         value={formData.name}
         onChange={handleChange}
         required
         className="w-full px-3 py-2 bg-[#2E2058] rounded-md outline-none"
       />
       <input
-        type="number"
-        name="members"
-        placeholder="Members Count"
-        value={formData.members}
+        type="text"
+        name="image"
+        placeholder="Image URL"
+        value={formData.image}
         onChange={handleChange}
         required
         className="w-full px-3 py-2 bg-[#2E2058] rounded-md outline-none"
@@ -65,29 +65,37 @@ export default function TeamForm({ onAdded }: { onAdded: () => void }) {
       <input
         type="text"
         name="role"
-        placeholder="Role (Admin, Editor, Viewer)"
+        placeholder="Role (e.g., Admin, Editor, Viewer)"
         value={formData.role}
         onChange={handleChange}
         required
         className="w-full px-3 py-2 bg-[#2E2058] rounded-md outline-none"
       />
-      <select
-        name="status"
-        value={formData.status}
+      <textarea
+        name="bio"
+        placeholder="Bio"
+        value={formData.bio}
         onChange={handleChange}
+        required
+        rows={3}
+        className="w-full px-3 py-2 bg-[#2E2058] rounded-md outline-none resize-none"
+      />
+      <input
+        type="url"
+        name="linkedin"
+        placeholder="LinkedIn Link"
+        value={formData.linkedin}
+        onChange={handleChange}
+        required
         className="w-full px-3 py-2 bg-[#2E2058] rounded-md outline-none"
-      >
-        <option>Active</option>
-        <option>Inactive</option>
-        <option>Pending</option>
-      </select>
+      />
       <button
         type="submit"
         disabled={loading}
         className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full font-medium transition w-full"
       >
         <Add fontSize="small" />
-        {loading ? "Adding..." : "Add Team"}
+        {loading ? "Adding..." : "Add Member"}
       </button>
     </form>
   );

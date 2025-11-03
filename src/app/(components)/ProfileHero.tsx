@@ -31,6 +31,7 @@ export default function ProfileHeroSection({ member }: ProfileHeroSectionProps) 
           <Image
             src={member.image}
             alt={member.name}
+            layout="fill"
             className="w-full h-full object-cover"
           />
         ) : (
@@ -38,6 +39,8 @@ export default function ProfileHeroSection({ member }: ProfileHeroSectionProps) 
           <Image
             src={member.image}
             alt={member.name}
+            width={800}
+            height={800}
             className="w-full h-full object-cover"
             placeholder="blur"
             fill
