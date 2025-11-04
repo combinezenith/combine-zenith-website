@@ -14,9 +14,9 @@ interface TeamMember {
   bio: string;
   image: string;
   slug: string;
+  linkedin: string;
   social: {
     profile: string;
-    linkedin: string;
   };
 }
 
@@ -156,7 +156,7 @@ export default function MeetTheTeam() {
     </svg>
   </a>
   <a
-    href={member.social.linkedin}
+    href={member.linkedin}
     aria-label={`Visit ${member.name}'s LinkedIn`}
     target="_blank"
     rel="noopener noreferrer"
