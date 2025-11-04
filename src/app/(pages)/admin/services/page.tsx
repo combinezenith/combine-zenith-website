@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import Sidebar from "@/app/(admin-components)/Sidebar";
 import ServiceForm from "../../../(admin-components)/ServiceForm";
 import toast from "react-hot-toast";
+import SkeletonLoader from "../../../(components)/SkeletonLoader";
 
 // ✅ Define a proper type for service (matching ServiceForm)
 interface Service {
@@ -118,7 +119,14 @@ export default function ServiceManagementPage() {
 
   if (loading)
     return (
-      <p className="text-center py-10 text-gray-300">Loading services...</p>
+      <>
+        <Sidebar />
+        <div className="md:ml-64 p-4 sm:p-6 lg:p-8 text-white min-h-screen bg-[#1e183a] transition-all duration-300">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <SkeletonLoader count={8} className="h-80" />
+          </div>
+        </div>
+      </>
     );
 
   return (

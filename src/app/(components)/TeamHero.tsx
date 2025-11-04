@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function HeroSection() {
   return (
     <div className="min-h-screen flex items-center justify-center p-8">
@@ -13,9 +15,11 @@ export default function HeroSection() {
         </p>
         
         {/* CTA Button */}
+        <Link href="/services">
         <button className="bg-purple-800/60 hover:bg-purple-700/70 text-white font-medium px-8 py-3.5 rounded-full transition-all duration-300 hover:scale-105 backdrop-blur-sm border border-purple-700/50 shadow-lg hover:shadow-purple-500/30">
           Discover Our Services
         </button>
+        </Link>
       </div>
     </div>
   );

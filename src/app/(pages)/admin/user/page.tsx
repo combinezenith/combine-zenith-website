@@ -14,6 +14,7 @@ import UserForm from "../../../(admin-components)/UserForm";
 import { motion } from "framer-motion";
 import Sidebar from "@/app/(admin-components)/Sidebar";
 import toast from "react-hot-toast";
+import SkeletonLoader from "../../../(components)/SkeletonLoader";
 
 // ✅ Define a proper type for User
 export interface User {
@@ -127,7 +128,16 @@ export default function UserManagementPage() {
   const handlePageChange = (page: number) => setCurrentPage(page);
 
   if (loading)
-    return <p className="text-center text-white py-10">Loading users...</p>;
+    return (
+      <>
+        <Sidebar />
+        <div className="md:ml-64 p-4 sm:p-6 lg:p-8 text-white bg-[#1c1833] min-h-screen transition-all duration-300">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <SkeletonLoader count={6} className="h-64" />
+          </div>
+        </div>
+      </>
+    );
 
   return (
     <>

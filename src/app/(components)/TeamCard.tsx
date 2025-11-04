@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { db } from '../config/firebase';
 import { collection, getDocs } from 'firebase/firestore';
+import SkeletonLoader from './SkeletonLoader';
 
 interface TeamMember {
   id: string;
@@ -46,7 +47,9 @@ export default function TeamCard() {
         
         {/* Team Grid */}
         {loading ? (
-          <div className="text-center text-white">Loading team members...</div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <SkeletonLoader count={3} className="h-96" />
+          </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {teamMembers.map((member) => (
