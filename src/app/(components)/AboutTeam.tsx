@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../config/firebase';
+import Image from 'next/image';
+import Link from 'next/link';
 
 interface TeamMember {
   id: string;
@@ -112,9 +114,11 @@ export default function MeetTheTeam() {
               >
                 {/* Profile Image */}
                 {member.image ? (
-                  <img
+                  <Image
                     src={member.image}
                     alt={`${member.name} Profile Picture`}
+                    width={96}
+                    height={96}
                     className="w-24 h-24 mx-auto mb-6 rounded-full object-cover transition-all duration-300"
                   />
                 ) : (
@@ -169,12 +173,12 @@ export default function MeetTheTeam() {
 
           {/* View All Members Button */}
           <div className="text-center mt-12">
-            <a
+            <Link
               href="/team"
               className="inline-block px-8 py-3 bg-[#685885] text-white rounded-xl hover:bg-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-purple-500/25 font-semibold"
             >
               View All Members
-            </a>
+            </Link>
           </div>
 
 {/* Bottom CTA */}
