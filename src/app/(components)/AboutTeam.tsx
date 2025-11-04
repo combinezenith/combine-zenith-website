@@ -1,68 +1,51 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../config/firebase';
+
+interface TeamMember {
+  name: string;
+  position: string;
+  description: string;
+  image: string;
+  slug: string;
+  social: {
+    profile: string;
+    instagram: string;
+    linkedin: string;
+  };
+}
+
 export default function MeetTheTeam() {
-  const teamMembers = [
-    {
-      name: "Muhammad Jibran Rehan",
-      position: "Chief Executive Officer",
-      description: "Driving brand success through innovative and data-led strategies with 15+ years of experience in global brand development.",
-      image: "/team/jibran.jpg",
-      slug: "Muhammad-Jibran-Rehan",
-      social: {
-        profile: "/team/Muhammad-Jibran-Rehan",
-        instagram: "https://www.instagram.com/jibran.rehan",
-        linkedin: "https://www.linkedin.com/in/muhammad-jibran-rehan"
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTeamMembers = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'teamMembers'));
+        const members: TeamMember[] = [];
+        querySnapshot.forEach((doc) => {
+          const data = doc.data() as Omit<TeamMember, 'social'> & { social: Omit<TeamMember['social'], 'profile'> };
+          members.push({
+            ...data,
+            social: {
+              ...data.social,
+              profile: `/team/${doc.id}`
+            }
+          });
+        });
+        setTeamMembers(members);
+      } catch (error) {
+        console.error('Error fetching team members:', error);
+      } finally {
+        setLoading(false);
       }
-    },
-    {
-      name: "Waqas Ahmed",
-      position: "Head of Marketing",
-      description: "Transforming marketing campaigns into measurable business results through data-driven digital marketing strategies.",
-      image: "/team/waqas.jpg",
-      slug: "Waqas-Ahmed",
-      social: {
-        profile: "/team/Waqas-Ahmed",
-        instagram: "https://www.instagram.com/waqas.ahmed",
-        linkedin: "https://www.linkedin.com/in/waqas-ahmed"
-      }
-    },
-    {
-      name: "Hamza Ali",
-      position: "Strategy Lead",
-      description: "Crafting strategic roadmaps that turn visions into victories with expertise in market analysis and growth planning.",
-      image: "/team/hamza.jpg",
-      slug: "Hamza-Ali",
-      social: {
-        profile: "/team/Hamza-Ali",
-        instagram: "https://www.instagram.com/hamza.ali",
-        linkedin: "https://www.linkedin.com/in/hamza-ali"
-      }
-    },
-    {
-      name: "Muhammad Umer",
-      position: "Creative Director",
-      description: "Bringing bold creative visions to life with innovative design solutions and award-winning brand experiences.",
-      image: "/team/umer.jpg",
-      slug: "Muhammad-Umer",
-      social: {
-        profile: "/team/Muhammad-Umer",
-        instagram: "https://www.instagram.com/muhammad.umer",
-        linkedin: "https://www.linkedin.com/in/muhammad-umer"
-      }
-    },
-    {
-      name: "Esha",
-      position: "Client Relations Manager",
-      description: "Building lasting partnerships through exceptional client experiences with 11+ years in strategic relationship management.",
-      image: "/team/esha.jpg",
-      slug: "Esha",
-      social: {
-        profile: "/team/Esha",
-        instagram: "https://www.instagram.com/eshacrm",
-        linkedin: "https://www.linkedin.com/in/eshacrm"
-      }
-    },
-  ];
+    };
+
+    fetchTeamMembers();
+  }, []);
   
   return (
     <section aria-label="Meet The Team Section" className="relative py-20 overflow-hidden">
@@ -82,6 +65,13 @@ export default function MeetTheTeam() {
             </h1>
             <br />
             </div>
+
+          {/* Loading State */}
+          {loading && (
+            <div className="text-center py-12">
+              <p className="text-gray-300 text-lg">Loading team members...</p>
+            </div>
+          )}
 
           {/* Team Grid */}
           <div aria-label="Team Members Grid" className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -115,7 +105,7 @@ export default function MeetTheTeam() {
 
                 {/* Social Links */}
 <div aria-label="Social Media Links" className="flex justify-center space-x-3 mt-6 pt-6 border-t border-gray-700/50">
-  <a 
+  <a
     href={member.social.profile}
     aria-label={`View ${member.name}'s Profile`}
     className="text-gray-400 hover:text-purple-400 transition-colors duration-300"
@@ -124,10 +114,10 @@ export default function MeetTheTeam() {
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
     </svg>
   </a>
-  <a 
+  <a
     href={member.social.instagram}
     aria-label={`Visit ${member.name}'s Instagram`}
-    target="_blank" 
+    target="_blank"
     rel="noopener noreferrer"
     className="text-gray-400 hover:text-purple-400 transition-colors duration-300"
   >
@@ -135,10 +125,10 @@ export default function MeetTheTeam() {
       <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
     </svg>
   </a>
-  <a 
+  <a
     href={member.social.linkedin}
     aria-label={`Visit ${member.name}'s LinkedIn`}
-    target="_blank" 
+    target="_blank"
     rel="noopener noreferrer"
     className="text-gray-400 hover:text-purple-400 transition-colors duration-300"
   >

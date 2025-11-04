@@ -34,8 +34,8 @@ export default function FeaturedPost() {
               <Image
                 src={featuredPost.image || "/placeholder-image.jpg"}
                 alt={featuredPost.title || "Featured blog post"}
-                width={800}
-                height={400}
+                width={2000}
+                height={2000}
                 className="w-full h-48 md:h-64 lg:h-80 object-cover group-hover:scale-105 transition-transform duration-500"
               />
               {/* Featured Tag */}

@@ -26,26 +26,22 @@ export default function ProfileHeroSection({ member }: ProfileHeroSectionProps) 
     <div className="relative h-96 w-full overflow-hidden rounded-3xl">
       {/* Background Image */}
       <div className="absolute inset-0">
-        {typeof member.image === 'string' ? (
-          // For external URLs
+        {typeof member.image === 'string' && member.image ? (
+          // For image URLs
           <Image
             src={member.image}
             alt={member.name}
-            layout="fill"
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          // For local images (StaticImageData)
-          <Image
-            src={member.image}
-            alt={member.name}
-            width={800}
-            height={800}
-            className="w-full h-full object-cover"
-            placeholder="blur"
             fill
+            className="w-full h-full object-cover"
             sizes="100vw"
           />
+        ) : (
+          // Fallback to initials background
+          <div className="w-full h-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center">
+            <span className="text-white text-6xl font-bold">
+              {member.name.split(' ').map(n => n[0]).join('')}
+            </span>
+          </div>
         )}
         {/* Purple/Blue Overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-purple-800/80 via-indigo-800/70 to-blue-900/60"></div>
