@@ -42,20 +42,24 @@ interface GADataPoint {
   date: string;
   activeUsers: number;
   newUsers: number;
-  [key: string]: string | number | undefined; // optional for any future metrics
+  [key: string]: string | number | undefined;
 }
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
+
+  console.log(session);
+
   const [selectedRange, setSelectedRange] = useState("7 Days");
   const [gaData, setGaData] = useState<GADataPoint[]>([]);
   const [loadingGA, setLoadingGA] = useState(true);
 
-  console.log(session);
-
+  // ✅ Redirect if not authenticated
   useEffect(() => {
-    if (status === "unauthenticated") router.push("/admin/login");
+    if (status === "unauthenticated") {
+      router.push("/admin/login");
+    }
   }, [status, router]);
 
   useEffect(() => {
@@ -63,9 +67,7 @@ export default function DashboardPage() {
       try {
         const res = await fetch("/api/analytics");
         const json = await res.json();
-        if (json.success) {
-          setGaData(json.data);
-        }
+        if (json.success) setGaData(json.data);
       } catch (err) {
         console.error("Failed to load GA data:", err);
       } finally {
@@ -75,7 +77,17 @@ export default function DashboardPage() {
     fetchGA();
   }, []);
 
-  if (status === "loading") return <p className="text-white">Loading...</p>;
+  if (status === "loading") {
+    return (
+      <div className="flex justify-center items-center min-h-screen text-white">
+        Checking authentication...
+      </div>
+    );
+  }
+
+  if (status === "unauthenticated") {
+    return null; // Prevent UI flash before redirect
+  }
 
   const handleLogout = async () => {
     event({
@@ -86,7 +98,7 @@ export default function DashboardPage() {
     await signOut({ callbackUrl: "/admin/login" });
   };
 
-  // --- Metrics Cards (partly real GA data) ---
+  // --- Metrics ---
   const totalVisitors =
     gaData.reduce((sum, d) => sum + (d.activeUsers || 0), 0) || 0;
   const newUsers = gaData.reduce((sum, d) => sum + (d.newUsers || 0), 0) || 0;
@@ -137,9 +149,8 @@ export default function DashboardPage() {
     },
   ];
 
+  // --- Dummy data for charts ---
   const COLORS = ["#FFB703", "#8ECAE6", "#219EBC", "#FB8500"];
-
-  // Dummy charts remain until we expand GA integration
   const trafficData = [
     { name: "Organic", value: 400 },
     { name: "Social", value: 300 },
@@ -209,7 +220,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Metric Cards */}
+        {/* Metrics */}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
           {metrics.map((metric, index) => (
             <motion.div
@@ -242,9 +253,8 @@ export default function DashboardPage() {
           ))}
         </div>
 
-        {/* Charts Section */}
+        {/* Charts */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {/* Users Over Time (REAL GA DATA) */}
           <ChartCard title="Active Users Over Time (GA4)">
             <ResponsiveContainer width="100%" height={200}>
               <LineChart data={gaData}>
@@ -252,23 +262,12 @@ export default function DashboardPage() {
                 <XAxis dataKey="date" stroke="#ccc" />
                 <YAxis stroke="#ccc" />
                 <Tooltip />
-                <Line
-                  type="monotone"
-                  dataKey="activeUsers"
-                  stroke="#8ECAE6"
-                  name="Active Users"
-                />
-                <Line
-                  type="monotone"
-                  dataKey="newUsers"
-                  stroke="#FB8500"
-                  name="New Users"
-                />
+                <Line type="monotone" dataKey="activeUsers" stroke="#8ECAE6" />
+                <Line type="monotone" dataKey="newUsers" stroke="#FB8500" />
               </LineChart>
             </ResponsiveContainer>
           </ChartCard>
 
-          {/* Traffic Source Breakdown */}
           <ChartCard title="Traffic Source Breakdown">
             <ResponsiveContainer width="100%" height={200}>
               <PieChart>
@@ -287,7 +286,6 @@ export default function DashboardPage() {
             </ResponsiveContainer>
           </ChartCard>
 
-          {/* Top Pages by Views */}
           <ChartCard title="Top Pages by Views">
             <ResponsiveContainer width="100%" height={200}>
               <BarChart data={topPages}>
@@ -300,7 +298,6 @@ export default function DashboardPage() {
             </ResponsiveContainer>
           </ChartCard>
 
-          {/* User Geography */}
           <ChartCard title="User Geography">
             <ResponsiveContainer width="100%" height={200}>
               <BarChart data={userGeo}>
@@ -313,7 +310,6 @@ export default function DashboardPage() {
             </ResponsiveContainer>
           </ChartCard>
 
-          {/* Device Category Split */}
           <ChartCard title="Device Category Split">
             <ResponsiveContainer width="100%" height={200}>
               <PieChart>
@@ -321,9 +317,9 @@ export default function DashboardPage() {
                   data={deviceSplit}
                   innerRadius={50}
                   outerRadius={80}
-                  dataKey="value"
                   startAngle={180}
                   endAngle={0}
+                  dataKey="value"
                 >
                   {deviceSplit.map((entry, index) => (
                     <Cell key={index} fill={COLORS[index % COLORS.length]} />
@@ -333,7 +329,6 @@ export default function DashboardPage() {
             </ResponsiveContainer>
           </ChartCard>
 
-          {/* Conversion Funnel */}
           <ChartCard title="Conversion Funnel">
             <ResponsiveContainer width="100%" height={200}>
               <BarChart
@@ -355,7 +350,7 @@ export default function DashboardPage() {
   );
 }
 
-// Chart container component
+// Chart wrapper
 function ChartCard({
   title,
   children,
