@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import {
   collection,
   getDocs,
@@ -40,6 +42,18 @@ export default function UserManagementPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 6;
 
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  console.log(session);
+
+  // ✅ Route protection: redirect unauthenticated users
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/admin/login");
+    }
+  }, [status, router]);
+
   // ✅ Fetch users
   useEffect(() => {
     const fetchUsers = async () => {
@@ -58,6 +72,21 @@ export default function UserManagementPage() {
     };
     fetchUsers();
   }, []);
+
+  // ✅ Filter & search
+  const filteredUsers = useMemo(() => {
+    return users
+      .filter((user) => {
+        const matchesSearch =
+          user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          user.email?.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesRole = filterRole === "All" || user.role === filterRole;
+        const matchesStatus =
+          filterStatus === "All" || user.status === filterStatus;
+        return matchesSearch && matchesRole && matchesStatus;
+      })
+      .sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+  }, [users, searchTerm, filterRole, filterStatus]);
 
   // ✅ Delete user
   const handleDelete = async (id: string) => {
@@ -103,29 +132,26 @@ export default function UserManagementPage() {
     setShowForm(true);
   };
 
-  // ✅ Filter & search
-  const filteredUsers = useMemo(() => {
-    return users
-      .filter((user) => {
-        const matchesSearch =
-          user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          user.email?.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesRole = filterRole === "All" || user.role === filterRole;
-        const matchesStatus =
-          filterStatus === "All" || user.status === filterStatus;
-        return matchesSearch && matchesRole && matchesStatus;
-      })
-      .sort((a, b) => (a.name || "").localeCompare(b.name || ""));
-  }, [users, searchTerm, filterRole, filterStatus]);
-
   // ✅ Pagination
   const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
   const paginatedUsers = filteredUsers.slice(
     (currentPage - 1) * usersPerPage,
     currentPage * usersPerPage
   );
-
   const handlePageChange = (page: number) => setCurrentPage(page);
+
+  // ✅ Conditional rendering only AFTER hooks
+  if (status === "loading") {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-[#392C6A] text-white">
+        Checking authentication...
+      </div>
+    );
+  }
+
+  if (status === "unauthenticated") {
+    return null;
+  }
 
   if (loading)
     return (
@@ -139,6 +165,7 @@ export default function UserManagementPage() {
       </>
     );
 
+  // ✅ Main UI
   return (
     <>
       <Sidebar />
@@ -285,6 +312,7 @@ export default function UserManagementPage() {
           </div>
         )}
 
+        {/* Form Modal */}
         {showForm && (
           <UserForm
             onClose={() => setShowForm(false)}

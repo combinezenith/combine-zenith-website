@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { db } from "../../../config/firebase";
 import { Plus } from "lucide-react";
@@ -8,9 +10,8 @@ import { motion } from "framer-motion";
 import Sidebar from "@/app/(admin-components)/Sidebar";
 import ServiceForm from "../../../(admin-components)/ServiceForm";
 import toast from "react-hot-toast";
-import SkeletonLoader from "../../../(components)/SkeletonLoader";
 
-// ✅ Define a proper type for service (matching ServiceForm)
+// ✅ Define type for service
 interface Service {
   id?: string;
   name?: string;
@@ -32,7 +33,19 @@ export default function ServiceManagementPage() {
   const [search, setSearch] = useState("");
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  // ✅ Fetch from Firestore
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  console.log(session);
+
+  // ✅ 1. Always call useEffect — handle redirect after checking status
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/admin/login");
+    }
+  }, [status, router]);
+
+  // ✅ 2. Fetch data only when authenticated
   useEffect(() => {
     const fetchServices = async () => {
       try {
@@ -43,18 +56,32 @@ export default function ServiceManagementPage() {
         }));
         setServices(data);
       } catch (error) {
-        toast.error("Failed to fetch services.", {
-          position: "top-center",
-        });
+        toast.error("Failed to fetch services.", { position: "top-center" });
         console.error("Error fetching services:", error);
       } finally {
         setLoading(false);
       }
     };
-    fetchServices();
-  }, []);
 
-  // ✅ Delete with confirmation and toast
+    if (status === "authenticated") {
+      fetchServices();
+    }
+  }, [status]);
+
+  // ✅ 3. Loading or unauthenticated UI
+  if (status === "loading" || loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-[#1e183a] text-white">
+        Checking authentication...
+      </div>
+    );
+  }
+
+  if (status === "unauthenticated") {
+    return null;
+  }
+
+  // ✅ Delete handler
   const handleDelete = async (id: string) => {
     const serviceToDelete = services.find((s) => s.id === id);
     if (!serviceToDelete) return;
@@ -78,7 +105,7 @@ export default function ServiceManagementPage() {
                     position: "top-center",
                   });
                 } catch (e) {
-                  console.log(e);
+                  console.error("Error deleting service:", e);
                   toast.error("Failed to delete service.", {
                     duration: 2500,
                     position: "top-center",
@@ -117,18 +144,6 @@ export default function ServiceManagementPage() {
     s.name?.toLowerCase().includes(search.toLowerCase())
   );
 
-  if (loading)
-    return (
-      <>
-        <Sidebar />
-        <div className="md:ml-64 p-4 sm:p-6 lg:p-8 text-white min-h-screen bg-[#1e183a] transition-all duration-300">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            <SkeletonLoader count={8} className="h-80" />
-          </div>
-        </div>
-      </>
-    );
-
   return (
     <>
       <Sidebar />
@@ -164,59 +179,23 @@ export default function ServiceManagementPage() {
 
         {/* Services Grid */}
         {filteredServices.length > 0 ? (
-          <div
-            className="
-              grid
-              grid-cols-1
-              sm:grid-cols-2
-              lg:grid-cols-3
-              xl:grid-cols-4
-              gap-6
-            "
-          >
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredServices.map((service) => (
               <motion.div
                 key={service.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.2 }}
-                className="
-                  bg-[#2a2250]/80 
-                  rounded-2xl 
-                  p-5 
-                  shadow-md 
-                  hover:shadow-lg 
-                  hover:bg-[#3b2e65]/70 
-                  transition 
-                  flex 
-                  flex-col
-                  justify-between
-                "
+                className="bg-[#2a2250]/80 rounded-2xl p-5 shadow-md hover:shadow-lg hover:bg-[#3b2e65]/70 transition flex flex-col justify-between"
               >
                 <div>
                   <div className="text-3xl mb-3">💡</div>
-
                   <h2 className="text-lg sm:text-xl font-semibold mb-2 wrap-break-words">
                     {service.name || "Untitled Service"}
                   </h2>
                   <p className="text-gray-300 text-sm mb-4 line-clamp-3">
                     {service.description || "No description available."}
                   </p>
-                  {service.image && (
-                    <p className="text-gray-400 text-xs mb-2">
-                      Image: {service.image}
-                    </p>
-                  )}
-                  {service.skills && service.skills.length > 0 && (
-                    <p className="text-gray-400 text-xs mb-2">
-                      Skills: {service.skills.join(", ")}
-                    </p>
-                  )}
-                  {service.approach && service.approach.length > 0 && (
-                    <p className="text-gray-400 text-xs mb-2">
-                      Approach: {service.approach.length} steps
-                    </p>
-                  )}
                 </div>
 
                 <div>

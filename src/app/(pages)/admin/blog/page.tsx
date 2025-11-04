@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import {
   collection,
   getDocs,
@@ -16,7 +18,6 @@ import Sidebar from "@/app/(admin-components)/Sidebar";
 import toast from "react-hot-toast";
 import Image from "next/image";
 
-// ✅ Define a proper TypeScript interface for blogs
 interface Blog {
   id?: string;
   title?: string;
@@ -33,30 +34,57 @@ interface Blog {
 }
 
 export default function BlogPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  console.log(session);
+
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [editBlog, setEditBlog] = useState<Blog | undefined>(undefined);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
+  // ✅ Redirect if not logged in
   useEffect(() => {
-    const fetchBlogs = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "blogs"));
-        setBlogs(
-          querySnapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...(doc.data() as DocumentData),
-          })) as Blog[]
-        );
-      } catch {
-        toast.error("Failed to fetch blogs.", { position: "top-center" });
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchBlogs();
-  }, []);
+    if (status === "unauthenticated") {
+      router.push("/admin/login");
+    }
+  }, [status, router]);
+
+  // ✅ Load blogs only after authentication confirmed
+  useEffect(() => {
+    if (status === "authenticated") {
+      const fetchBlogs = async () => {
+        try {
+          const querySnapshot = await getDocs(collection(db, "blogs"));
+          setBlogs(
+            querySnapshot.docs.map((doc) => ({
+              id: doc.id,
+              ...(doc.data() as DocumentData),
+            })) as Blog[]
+          );
+        } catch {
+          toast.error("Failed to fetch blogs.", { position: "top-center" });
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchBlogs();
+    }
+  }, [status]);
+
+  if (status === "loading") {
+    return (
+      <div className="flex justify-center items-center h-screen text-gray-300">
+        Checking authentication...
+      </div>
+    );
+  }
+
+  if (status === "unauthenticated") {
+    return null; // prevent render before redirect
+  }
 
   // ✅ Delete with confirmation + toast
   const handleDelete = async (id: string) => {
@@ -163,7 +191,8 @@ export default function BlogPage() {
                     {blog.title}
                   </h2>
                   <p className="text-gray-400 text-sm mb-2">
-                    By {blog.author?.name || "Unknown"} on {blog.date || "No date"}
+                    By {blog.author?.name || "Unknown"} on{" "}
+                    {blog.date || "No date"}
                   </p>
                   <p className="text-gray-300 text-sm line-clamp-3 mb-3">
                     {blog.description || "No description available."}
