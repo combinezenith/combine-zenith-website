@@ -76,16 +76,6 @@ export default function ServicesSection() {
     fetchServices();
   }, []);
 
-  useEffect(() => {
-    if (services.length > 0) {
-      const interval = setInterval(() => {
-        setSelectedService(changeServiceCallback);
-      }, 30000); // 30 seconds
-
-      return () => clearInterval(interval);
-    }
-  }, [services]);
-
   const changeService = (newService: Service) => {
     setIsTransitioning(true);
     setTimeout(() => {
@@ -101,6 +91,16 @@ export default function ServicesSection() {
     changeService(nextService);
     return nextService;
   }, [services]);
+
+  useEffect(() => {
+    if (services.length > 0) {
+      const interval = setInterval(() => {
+        setSelectedService(changeServiceCallback);
+      }, 30000); // 30 seconds
+
+      return () => clearInterval(interval);
+    }
+  }, [services, changeServiceCallback]);
 
   const handleServiceClick = (service: Service) => {
     changeService(service);
