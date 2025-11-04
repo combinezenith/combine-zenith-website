@@ -2,7 +2,7 @@
 
 import { Rocket, Pencil, Search, MessageCircle, Palette, Globe, ArrowRight, Code, Printer, Target, Cpu, Zap, Users } from 'lucide-react';
 import { LucideIcon } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { db } from '../config/firebase';
 
@@ -94,13 +94,13 @@ export default function ServicesSection() {
     }, 300);
   };
 
-  const changeServiceCallback = (prev: Service | null) => {
+  const changeServiceCallback = useCallback((prev: Service | null) => {
     const currentIndex = prev ? services.findIndex(s => s.slug === prev.slug) : 0;
     const nextIndex = (currentIndex + 1) % services.length;
     const nextService = services[nextIndex];
     changeService(nextService);
     return nextService;
-  };
+  }, [services]);
 
   const handleServiceClick = (service: Service) => {
     changeService(service);
