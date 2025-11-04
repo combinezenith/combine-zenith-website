@@ -5,6 +5,7 @@ import "./globals.css";
 import NextAuthProvider from "@/app/context/NextAuthProvider";
 import { Toaster } from "react-hot-toast";
 import Layout from "@/app/(components)/ClientWrapper";
+import WebsiteLoader from "@/app/(components)/WebsiteLoader";
 
 const surgena = localFont({
   src: [
@@ -55,11 +56,13 @@ export default function RootLayout({
       <body
         className={`${surgena.variable} ${glancyr.variable} ${montserrat.variable} antialiased bg-background text-foreground`}
       >
-        <Layout>
-        <NextAuthProvider>
-          {children}
-        </NextAuthProvider>
-        </Layout>
+        <WebsiteLoader>
+          <Layout>
+            <NextAuthProvider>
+              {children}
+            </NextAuthProvider>
+          </Layout>
+        </WebsiteLoader>
 
         {/* ✅ Global Toasts */}
         <Toaster
