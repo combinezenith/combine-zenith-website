@@ -157,11 +157,11 @@ export default function AboutSection() {
           }
         }
         .animate-marquee-left {
-          animation: marquee-left 20s linear infinite;
+          animation: marquee-left 22s linear infinite;
           width: max-content;
         }
         .animate-marquee-right {
-          animation: marquee-right 20s linear infinite;
+          animation: marquee-right 22s linear infinite;
           width: max-content;
         }
       `}</style>
