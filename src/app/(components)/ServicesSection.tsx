@@ -144,7 +144,7 @@ export default function ServicesSection() {
 
         {/* Selected Service Card */}
         {selectedService && (
-          <div className={`bg-[#685885] backdrop-blur-sm rounded-2xl p-6 sm:p-8 shadow-lg shadow-purple-500/10 transition-all duration-500 ease-in-out ${
+          <div className={`bg-[#685885] backdrop-blur-sm rounded-2xl ml-45 mr-47 p-6 sm:p-8 shadow-lg shadow-purple-500/10 transition-all duration-500 ease-in-out ${
             isTransitioning ? 'opacity-0 transform translate-y-4' : 'opacity-100 transform translate-y-0'
           }`}>
             <div className="flex flex-col lg:flex-row gap-6">
