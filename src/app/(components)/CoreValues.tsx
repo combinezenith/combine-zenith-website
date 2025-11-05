@@ -3,8 +3,8 @@
 export default function CoreValues() {
   const values = [
     {
-      title: "Authenticity",
-      description: "We believe that true impact begins with honesty and heart. Every story we tell and every project we create is rooted in genuine purpose and human connection.",
+      title: "Integrated Action",
+      description: "We don't just work in silos; we fuse all disciplines (design, video, strategy) into one seamless effort. This value is about teamwork, synergy, and holistic problem-solving.",
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
@@ -12,8 +12,8 @@ export default function CoreValues() {
       )
     },
     {
-      title: "Creativity",
-      description: "Innovation begins with imagination. We explore every idea, reimagine boundaries, and transform visions into powerful creative realities.",
+      title: "Strategic Clarity",
+      description: "We simplify the complex. Every action, from the smallest design detail to the largest campaign, must be driven by a clear, measurable business objective. This ensures focus and transparency.",
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
@@ -21,8 +21,8 @@ export default function CoreValues() {
       )
     },
     {
-      title: "Collaboration",
-      description: "We don't just work for our clients we grow with them. Partnership, trust, and shared passion are at the core of everything we build together.",
+      title: "Zenith Standard",
+      description: "We are committed to the highest point of quality and delivery. This means chasing perfection in craft, analysis, and client service—we never settle for 'good enough.'",
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -30,29 +30,11 @@ export default function CoreValues() {
       )
     },
     {
-      title: "Integrity",
-      description: "Every decision we make is guided by trust, transparency, and responsibility. We value doing what's right not what's easy.",
+      title: "Accountable Growth",
+      description: "We are accountable not just for output, but for the client's outcome. Our success is measured by the client's growth and achieving their financial targets. This fosters ownership and measurable results.",
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-        </svg>
-      )
-    },
-    {
-      title: "Innovation",
-      description: "The world changes fast and we evolve faster. We embrace new technologies, ideas, and possibilities to keep your brand always ahead of the curve.",
-      icon: (
-        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-        </svg>
-      )
-    },
-    {
-      title: "Client-Centricity",
-      description: "Our clients are at the heart of everything we do. We listen, understand, and co-create building solutions that reflect their goals, values, and vision for growth.",
-      icon: (
-        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
         </svg>
       )
     }
@@ -74,10 +56,10 @@ export default function CoreValues() {
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
               Our Core Values
             </h1>
-            </div>
+          </div>
 
           {/* Values Grid */}
-          <div aria-label="Values Grid" className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div aria-label="Values Grid" className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
             {values.map((value, index) => (
               <div
                 key={index}
