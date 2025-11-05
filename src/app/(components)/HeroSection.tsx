@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import TextType from './TextType';
 
 export default function HeroSection() {
   return (
@@ -12,7 +13,13 @@ export default function HeroSection() {
           <div aria-label="Hero Text" className="space-y-8 text-left">
             <div aria-label="Headline" className="space-y-6">
               <h1 className="text-4xl md:text-5xl lg:text-7xl text-white mt-10">
-                From Ideas to Impact We Bring Your Vision to Life
+                <TextType 
+  text={["From Ideas to Impact", "We Bring Your Vision to Life"]}
+  typingSpeed={75}
+  pauseDuration={1500}
+  showCursor={true}
+  cursorCharacter="|"
+/>
               </h1>
             </div>
 

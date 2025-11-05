@@ -1,5 +1,7 @@
 'use client';
 
+import TextType from "./TextType";
+
 export default function AboutStory() {
   return (
     <section aria-label="About Story Section" className="mt-20 relative py-20 overflow-hidden">
@@ -15,7 +17,13 @@ export default function AboutStory() {
           {/* Header Section */}
           <div aria-label="About Header" className="text-center mb-16">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-              Where Creativity Meets Connection, Vision Turns Into Reality
+<TextType 
+  text={["Where Creativity Meets Connection,", "Vision Turns Into Reality"]}
+  typingSpeed={75}
+  pauseDuration={1000}
+  showCursor={true}
+  cursorCharacter="_"
+/>
             </h1>
           </div>
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import TextType from './TextType';
 
 export default function AboutSection() {
   // Array of logo image paths
@@ -53,7 +54,13 @@ export default function AboutSection() {
         {/* About Content */}
         <div aria-label="About Content" className="text-center mb-20">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
-            Driven by Creativity. Defined by Connection.
+<TextType 
+  text={["Driven by Creativity.", "Defined by Connection."]}
+  typingSpeed={75}
+  pauseDuration={1500}
+  showCursor={true}
+  cursorCharacter="|"
+/>
           </h2>
           <p className="text-purple-200 text-lg md:text-xl leading-relaxed max-w-4xl mx-auto">
             At Combine Zenith, we&apos;re more than just a creative agency we&apos;re a collective of dreamers, thinkers, and makers who believe that every brand has a story worth telling. We listen deeply, think boldly, and create passionately blending imagination with strategy to turn ideas into powerful experiences. Our work goes beyond visuals and campaigns it&apos;s about building meaning, trust, and impact that last. From shaping your identity to creating measurable growth, we walk beside you as true partners crafting stories that inspire, connect, and make a difference.

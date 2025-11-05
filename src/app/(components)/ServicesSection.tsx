@@ -8,6 +8,7 @@ import { db } from '../config/firebase';
 
 import { collection, getDocs } from 'firebase/firestore';
 import Image from 'next/image';
+import TextType from './TextType';
 
 // Define proper TypeScript interfaces
 interface Service {
@@ -116,7 +117,13 @@ export default function ServicesSection() {
         {/* Header */}
         <div aria-label="Services Header" className="text-center mb-12 sm:mb-16">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
-            Building Brands. Driving Growth. Creating Impact.
+<TextType 
+  text={["Building Brands.", "Driving Growth.", "Creating Impact."]}
+  typingSpeed={75}
+  pauseDuration={1500}
+  showCursor={true}
+  cursorCharacter="|"
+/>
           </h2>
           <p className="text-purple-200 text-base sm:text-lg md:text-xl max-w-3xl mx-auto px-2">
             We deliver integrated marketing solutions that combine creativity with intelligence ensuring every project speaks with purpose and performs with excellence. Our expertise blends creativity, strategy, and technology to turn ideas into stories, and stories into movements. Every brand we touch is built to inspire, engage, and lead with purpose.
