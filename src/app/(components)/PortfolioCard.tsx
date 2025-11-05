@@ -1,5 +1,4 @@
 "use client";
-
 import Image from 'next/image';
 import { LuFolder } from 'react-icons/lu';
 import Link from 'next/link';
@@ -14,6 +13,7 @@ interface Portfolio {
   name?: string;
   description?: string;
   image?: string;
+  services?: string[];
   creativeApproach?: string;
   challenges?: string;
   clientWords?: string;
@@ -46,11 +46,12 @@ export default function PortfolioCard() {
         <SkeletonLoader count={6} className="h-80" />
       ) : (
         portfolios.map((portfolio) => {
-          const Icon = LuFolder; // Default icon for portfolio items
+          const Icon = LuFolder;
           return (
-            <div
+            <Link
               key={portfolio.id}
-              className="group relative bg-[#685885] backdrop-blur rounded-2xl transition-all duration-300 hover:scale-105 overflow-hidden flex flex-col"
+              href={`/portfolio/${portfolio.id}`}
+              className="group relative bg-[#685885] backdrop-blur rounded-2xl transition-all duration-300 hover:scale-105 overflow-hidden flex flex-col cursor-pointer"
             >
               <div className="w-full h-44 md:h-48 lg:h-48 relative">
                 <Image
@@ -61,7 +62,6 @@ export default function PortfolioCard() {
                   className="object-cover"
                 />
               </div>
-
               <div className="p-4 md:p-6 flex-1 flex flex-col">
                 <div className="mb-4 flex items-center gap-3 justify-center">
                   <div className="h-12 w-12 bg-[#b5a6d0] rounded-lg flex items-center justify-center">
@@ -71,20 +71,22 @@ export default function PortfolioCard() {
                     {portfolio.name}
                   </h3>
                 </div>
-
-                <p className="text-purple-200 text-sm leading-relaxed mb-6">
-                  {portfolio.description}
-                </p>
-
-                <div className="mt-auto">
-                  <Link href={`/portfolio/${portfolio.id}`} className="block">
-                    <span className="bg-[#b5a6d0] w-full p-3 rounded-full text-sm font-medium inline-block text-center">
-                      View Project
+                
+                <div className="flex flex-wrap gap-2 justify-center">
+                  {(portfolio.services && portfolio.services.length > 0 
+                    ? portfolio.services 
+                    : ['BRANDING', 'CONTENT', 'DESIGN', 'SOCIAL MEDIA']
+                  ).map((service, index) => (
+                    <span
+                      key={index}
+                      className="px-3 py-1 bg-[#b5a6d0]/30 text-purple-200 text-xs rounded-full border border-purple-300/20"
+                    >
+                      {service}
                     </span>
-                  </Link>
+                  ))}
                 </div>
               </div>
-            </div>
+            </Link>
           );
         })
       )}
