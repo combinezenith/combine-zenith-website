@@ -15,7 +15,7 @@ export default function AboutStory() {
           {/* Header Section */}
           <div aria-label="About Header" className="text-center mb-16">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-              Where Creativity Meets Connection, and Vision Turns Into Reality
+              Where Creativity Meets Connection, Vision Turns Into Reality
             </h1>
             </div>
 
