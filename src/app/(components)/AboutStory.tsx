@@ -20,7 +20,7 @@ export default function AboutStory() {
           </div>
 
           {/* Content Section */}
-          <div aria-label="About Description" className="space-y-8 max-w-3xl mx-auto">
+          <div aria-label="About Description" className="space-y-8">
             <p className="text-lg text-gray-300 leading-relaxed text-left">
               At Combine Zenith, creativity isn&apos;t just about colors, shapes, or visuals it&apos;s about people, emotions, and purpose. We believe every brand has a story worth telling a story that deserves honesty, heart, and imagination.
             </p>
