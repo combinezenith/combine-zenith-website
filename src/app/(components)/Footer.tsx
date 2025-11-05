@@ -28,6 +28,12 @@ export default function Footer() {
                 Team
               </Link>
               </li>
+            </ul>
+          </div>
+
+                    <div>
+            <h3 className="text-white font-bold text-xl mb-4">Quick Links</h3>
+            <ul className="space-y-2">
               <li>
                 <Link href="/portfolio" className="text-purple-300 hover:text-white transition">
                   Portfolio
@@ -35,24 +41,18 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/blog" className="text-purple-300 hover:text-white transition">
-                Blog
-              </Link>
+                  Blog
+                </Link>
               </li>
               <li>
                 <Link href="/contact" className="text-purple-300 hover:text-white transition">
-                Contact
-              </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-white font-bold text-xl mb-4">Legal</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link href="/privacy" className="text-purple-300 hover:text-white transition">
-                  Privacy Policy
+                  Contact
                 </Link>
+              </li>
+              <li>
+              <Link href="/privacy" className="text-purple-300 hover:text-white transition">
+                Privacy Policy
+              </Link>
               </li>
             </ul>
           </div>
@@ -76,10 +76,19 @@ export default function Footer() {
                 </svg>
               </a>
             </div>
+            <br />
+              <a href="mailto:info@combinezenith.com" className="text-purple-300 hover:text-white transition">
+                info@combinezenith.com
+              </a>
+              <br />
+<a href="tel:+923193372277" className="text-purple-300 hover:text-white transition">
+  +92 319 3372277
+</a>
           </div>
         </div>
 
         <div className="mt-12 pt-8 border-t border-purple-800/30 text-center text-purple-300">
+          Powered By <a href="https://combinegrp.com/"><span className="text-purple-400 font-semibold underline">Combine Group</span><br/></a>
           <p>&copy; 2025 Combine Zenith. All rights reserved.</p>
         </div>
       </div>
