@@ -26,7 +26,41 @@ export default function TeamCard() {
         querySnapshot.forEach((doc) => {
           members.push({ id: doc.id, ...doc.data() } as TeamMember);
         });
-        setTeamMembers(members);
+        
+        // Define the desired role order based on your team structure
+        const roleOrder = [
+          'Founder & Creative Director',           // Waqas Ahmed
+          'Head of Marketing',                     // Muhammad Shabbir Sabir
+          'Operations Lead',                       // Muhammad Umar
+          'Lead Developer',                        // Esha
+          'Web Developer & R&D Specialist',        // Muhammad Jibran Rehan
+          'Backend Support Developer',             // Hamza Ali
+          'SEO & AI Support Specialist',           // Moeen
+          'Content Writer',                        // Maliha
+          'Social Media Executive'                 // Saim
+        ];
+        
+        // Sort members by role according to the defined order
+        const sortedMembers = members.sort((a, b) => {
+          const indexA = roleOrder.indexOf(a.role);
+          const indexB = roleOrder.indexOf(b.role);
+          
+          // If both roles are in the order array, sort by their position
+          if (indexA !== -1 && indexB !== -1) {
+            return indexA - indexB;
+          }
+          
+          // If only A is in the order array, A comes first
+          if (indexA !== -1) return -1;
+          
+          // If only B is in the order array, B comes first
+          if (indexB !== -1) return 1;
+          
+          // If neither role is in the order array, sort alphabetically
+          return a.role.localeCompare(b.role);
+        });
+        
+        setTeamMembers(sortedMembers);
       } catch (error) {
         console.error('Error fetching team members:', error);
       } finally {
