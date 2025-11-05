@@ -15,6 +15,8 @@ import { motion } from "framer-motion";
 import Sidebar from "@/app/(admin-components)/Sidebar";
 import toast from "react-hot-toast";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 // ✅ Define a proper interface for portfolios
 interface Portfolio {
@@ -42,6 +44,11 @@ interface Portfolio {
 }
 
 export default function PortfolioPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  console.log(session);
+
   const [portfolios, setPortfolios] = useState<Portfolio[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -50,23 +57,44 @@ export default function PortfolioPage() {
   );
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  // ✅ Fetch portfolios
+  // ✅ Redirect if not logged in
   useEffect(() => {
-    const fetchPortfolios = async () => {
-      try {
-        const snapshot = await getDocs(collection(db, "portfolios"));
-        const data = snapshot.docs.map(
-          (d) => ({ id: d.id, ...(d.data() as DocumentData) } as Portfolio)
-        );
-        setPortfolios(data);
-      } catch {
-        toast.error("Failed to fetch portfolios.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchPortfolios();
-  }, []);
+    if (status === "unauthenticated") {
+      router.push("/admin/login");
+    }
+  }, [status, router]);
+
+  // ✅ Fetch portfolios only when authenticated
+  useEffect(() => {
+    if (status === "authenticated") {
+      const fetchPortfolios = async () => {
+        try {
+          const snapshot = await getDocs(collection(db, "portfolios"));
+          const data = snapshot.docs.map(
+            (d) => ({ id: d.id, ...(d.data() as DocumentData) } as Portfolio)
+          );
+          setPortfolios(data);
+        } catch {
+          toast.error("Failed to fetch portfolios.");
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchPortfolios();
+    }
+  }, [status]);
+
+  if (status === "loading") {
+    return (
+      <div className="flex justify-center items-center h-screen text-gray-300">
+        Checking authentication...
+      </div>
+    );
+  }
+
+  if (status === "unauthenticated") {
+    return null; // prevent flash before redirect
+  }
 
   // ✅ Delete portfolio with confirmation
   const handleDelete = async (id: string) => {

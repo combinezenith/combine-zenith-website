@@ -1,22 +1,36 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
+import { useState, useEffect } from "react";
+import Image from "next/image";
 
-export default function WebsiteLoader({ children }: { children: React.ReactNode }) {
+export default function WebsiteLoader({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = useState(0);
+  const [particles, setParticles] = useState<
+    { left: number; top: number; delay: number; duration: number }[]
+  >([]);
 
   useEffect(() => {
-    // Check if user has visited before
-    const hasVisited = localStorage.getItem('hasVisited');
+    // Generate random particles only on the client (prevents SSR mismatch)
+    const generatedParticles = Array.from({ length: 20 }, () => ({
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      delay: Math.random() * 2,
+      duration: 2 + Math.random() * 2,
+    }));
+    setParticles(generatedParticles);
 
+    // Check if user has visited before
+    const hasVisited = localStorage.getItem("hasVisited");
     if (hasVisited) {
       setIsLoading(false);
       return;
     }
 
-    // Start loading animation for new visitors
     const startTime = Date.now();
     const duration = 5000; // 5 seconds
 
@@ -28,8 +42,7 @@ export default function WebsiteLoader({ children }: { children: React.ReactNode 
       if (elapsed < duration) {
         requestAnimationFrame(updateProgress);
       } else {
-        // Mark as visited and hide loader
-        localStorage.setItem('hasVisited', 'true');
+        localStorage.setItem("hasVisited", "true");
         setIsLoading(false);
       }
     };
@@ -37,31 +50,28 @@ export default function WebsiteLoader({ children }: { children: React.ReactNode 
     updateProgress();
   }, []);
 
-  if (!isLoading) {
-    return <>{children}</>;
-  }
+  if (!isLoading) return <>{children}</>;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* Animated background particles */}
+      {/* Background particles (hydration-safe) */}
       <div className="absolute inset-0 overflow-hidden">
-        {[...Array(20)].map((_, i) => (
+        {particles.map((p, i) => (
           <div
             key={i}
             className="absolute w-2 h-2 bg-purple-400 rounded-full opacity-30 animate-pulse"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 2}s`,
-              animationDuration: `${2 + Math.random() * 2}s`,
+              left: `${p.left}%`,
+              top: `${p.top}%`,
+              animationDelay: `${p.delay}s`,
+              animationDuration: `${p.duration}s`,
             }}
           />
         ))}
       </div>
 
-      {/* Main loader content */}
+      {/* Main loader */}
       <div className="relative z-10 flex flex-col items-center space-y-8">
-        {/* Spinning star logo */}
         <div className="relative">
           <div className="animate-spin-slow">
             <Image
@@ -72,11 +82,9 @@ export default function WebsiteLoader({ children }: { children: React.ReactNode 
               className="drop-shadow-2xl"
             />
           </div>
-          {/* Pulsing ring around star */}
           <div className="absolute inset-0 rounded-full border-4 border-purple-400 animate-ping opacity-20"></div>
         </div>
 
-        {/* Loading text with theme colors */}
         <div className="text-center space-y-4">
           <h1 className="text-4xl font-bold text-white font-surgena animate-pulse">
             Combine Zenith
@@ -86,21 +94,19 @@ export default function WebsiteLoader({ children }: { children: React.ReactNode 
           </p>
         </div>
 
-        {/* Progress bar */}
         <div className="w-80 h-1 bg-gray-700 rounded-full overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-purple-500 to-purple-300 transition-all duration-100 ease-out rounded-full"
+            className="h-full bg-linear-to-r from-purple-500 to-purple-300 transition-all duration-100 ease-out rounded-full"
             style={{ width: `${progress}%` }}
           />
         </div>
 
-        {/* Progress percentage */}
         <div className="text-white text-sm font-medium">
           {Math.round(progress)}%
         </div>
       </div>
 
-      {/* Custom animations */}
+      {/* Animations */}
       <style jsx>{`
         @keyframes spin-slow {
           from {

@@ -42,13 +42,13 @@ export default function LoginPage() {
                    duration-300 hover:scale-[1.02]"
       >
         <h1
-          className="text-3xl font-bold mb-6 text-center font-surgena
+          className="text-3xl font-bold mb-6 text-center 
                      bg-linear-to-r from-purple-300 to-violet-500 bg-clip-text text-transparent"
         >
           Admin Login
         </h1>
 
-        <div className="flex flex-col font-(--font-montserrat)">
+        <div className="flex flex-col">
           <input
             type="email"
             name="email"
