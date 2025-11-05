@@ -10,11 +10,13 @@ export default function Service() {
             Our Services
           </h1>
           <p className="mt-4 text-sm sm:text-base md:text-lg max-w-3xl mx-auto">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatum magni placeat quo nesciunt! Perspiciatis, reprehenderit? Quibusdam, magni. Nihil ea sint obcaecati delectus id, fuga repellendus. Dolorum totam aspernatur deleniti necessitatibus.
+            At Combine Zenith, we turn creativity into connection and ideas into impact.
+            Our services are designed to help brands grow with purpose, clarity, and authenticity.
+            From strategy to storytelling, design to digital, we bring your vision to life with meaning and
+            precision.
           </p>
+          <ServiceCard />
         </header>
-
-        <ServiceCard />
       </div>
     </main>
   )
