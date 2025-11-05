@@ -5,13 +5,13 @@ import Link from "next/link";
 
 export default function HeroSection() {
   return (
-    <section aria-label="Hero Section" className="relative min-h-screen flex items-center justify-center overflow-hidden m-10 lg:mt-10 mt-20">
-      <div aria-label="Hero Content" className="container mx-32 relative">
+    <section aria-label="Hero Section" className="relative min-h-screen flex items-center justify-center lg:justify-start overflow-hidden m-10 lg:mt-10 mt-20">
+      <div aria-label="Hero Content" className="container mx-4 lg:mx-32 relative">
         <div aria-label="Hero Grid" className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Text Content */}
-          <div aria-label="Hero Text" className="space-y-8">
+          <div aria-label="Hero Text" className="space-y-8 text-left">
             <div aria-label="Headline" className="space-y-6">
-              <h1 className="text-5xl md:text-6l lg:text-7l text-white">
+              <h1 className="text-4xl md:text-5xl lg:text-7xl text-white mt-10">
                 From Ideas to Impact We Bring Your Vision to Life
               </h1>
             </div>
@@ -22,7 +22,7 @@ export default function HeroSection() {
               </p>
             </div>
             <Link href="/services">
-              <button className="px-8 py-3  text-white rounded-l-xl rounded-r-xl bg-[#685885] transition-all transform hover:scale-105 shadow-2xl font-semibold text-lg">
+              <button className="px-8 py-3 text-white rounded-l-xl rounded-r-xl bg-[#685885] transition-all transform hover:scale-105 shadow-2xl font-semibold text-lg">
                 Explore Our Services
               </button>
             </Link>
@@ -49,7 +49,7 @@ export default function HeroSection() {
     }
   `}</style>
 
-            <div aria-label="Hero Illustration" className="relative justify-center ml-[30px] transition-transform duration-700 ease-in-out hover:scale-125 hidden md:flex">
+            <div aria-label="Hero Illustration" className="relative justify-center lg:ml-[30px] transition-transform duration-700 ease-in-out hover:scale-125 hidden md:flex">
               <div aria-label="Animated Star" className="relative animate-[starDrift_6s_ease-in-out_infinite]">
                 <Image
                   src="/star.png"
@@ -60,10 +60,7 @@ export default function HeroSection() {
                 />
               </div>
             </div>
-
           </>
-
-
         </div>
       </div>
 
