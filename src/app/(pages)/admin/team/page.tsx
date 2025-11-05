@@ -1,5 +1,8 @@
 "use client";
+
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import {
   collection,
   getDocs,
@@ -28,21 +31,34 @@ interface Team {
 export default function TeamPage() {
   const [teams, setTeams] = useState<Team[]>([]);
   const [refresh, setRefresh] = useState(false);
-  const [editingTeam, setEditingTeam] = useState<Team | null>(null); // ✅ modal state
+  const [editingTeam, setEditingTeam] = useState<Team | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const fetchTeams = async () => {
-    const querySnapshot = await getDocs(collection(db, "teamMembers"));
-    const data: Team[] = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...(doc.data() as Omit<Team, "id">),
-    }));
-    setTeams(data);
-  };
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
+  // ✅ Route protection: redirect unauthenticated users
   useEffect(() => {
-    fetchTeams();
-  }, [refresh]);
+    if (status === "unauthenticated") {
+      router.push("/admin/login");
+    }
+  }, [status, router]);
+
+  // ✅ Fetch team data
+  useEffect(() => {
+    const fetchTeams = async () => {
+      const querySnapshot = await getDocs(collection(db, "teamMembers"));
+      const data: Team[] = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...(doc.data() as Omit<Team, "id">),
+      }));
+      setTeams(data);
+    };
+
+    if (status === "authenticated" && session) {
+      fetchTeams();
+    }
+  }, [status, session, refresh]);
 
   const handleDelete = async (id: string) => {
     await deleteDoc(doc(db, "teamMembers", id));
@@ -69,6 +85,19 @@ export default function TeamPage() {
       setLoading(false);
     }
   };
+
+  // ✅ Handle loading & unauthenticated state AFTER hooks
+  if (status === "loading") {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-[#392C6A] text-white">
+        Checking authentication...
+      </div>
+    );
+  }
+
+  if (status === "unauthenticated") {
+    return null; // Prevent flicker before redirect
+  }
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-[#392C6A]">
@@ -121,7 +150,7 @@ export default function TeamPage() {
                   <td className="py-3 px-4 font-medium">{team.name}</td>
                   <td className="py-3 px-4">
                     <Image
-                      src={team.image || ''}
+                      src={team.image || ""}
                       alt={team.name}
                       width={40}
                       height={40}
