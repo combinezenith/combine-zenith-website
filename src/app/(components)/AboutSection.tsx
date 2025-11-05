@@ -1,6 +1,52 @@
 'use client';
 
+import { useState } from 'react';
+
 export default function AboutSection() {
+  // Array of logo image paths
+  const logos = [
+    '/partners/1.jpg',
+    '/partners/2.jpg',
+    '/partners/3.jpg',
+    '/partners/4.jpg',
+    '/partners/5.jpg',
+    '/partners/6.jpg',
+    '/partners/7.jpg',
+    '/partners/8.jpg',
+    '/partners/9.jpg',
+    '/partners/10.jpg',
+    '/partners/11.jpg',
+    '/partners/12.jpg',
+    '/partners/13.jpg',
+    '/partners/14.jpg',
+    '/partners/15.jpg',
+    '/partners/16.jpg',
+    '/partners/17.jpg',
+    '/partners/18.jpg',
+    '/partners/19.jpg',
+    '/partners/20.jpg',
+    '/partners/21.jpg',
+    '/partners/22.jpg',
+    '/partners/23.jpg',
+    '/partners/24.jpg',
+    '/partners/25.jpg',
+  ];
+
+  // Split logos into two groups for the two rows
+  const row1Logos = logos.slice(0, 13);
+  const row2Logos = logos.slice(13, 25);
+
+  // State to track loaded images
+  const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
+
+  const handleImageLoad = (src: string) => {
+    setLoadedImages(prev => new Set(prev.add(src)));
+  };
+
+  const handleImageError = (src: string) => {
+    console.warn(`Failed to load image: ${src}`);
+  };
+
   return (
     <section aria-label="About Section" className="py-20 px-6">
       <div aria-label="About Container" className="container mx-auto max-w-6xl">
@@ -23,21 +69,33 @@ export default function AboutSection() {
           {/* Row 1 - moves left */}
           <div aria-label="Logo Row 1" className="relative overflow-hidden">
             <div aria-label="Scrolling Logos" className="flex animate-marquee-left gap-12">
-              {[...Array(6)].map((_, index) => (
+              {row1Logos.map((logo, index) => (
                 <div
                   key={`row1-${index}`}
-                  className="w-48 h-24 bg-[#b5a6d0] rounded-xl flex items-center justify-center text-white font-semibold text-lg"
+                  className="w-48 h-24 flex items-center justify-center bg-white/10 rounded-xl p-4"
                 >
-                  Logo {index + 1}
+                  <img 
+                    src={logo} 
+                    alt={`Partner Company ${index + 1}`}
+                    className="max-w-full max-h-full object-contain opacity-90 hover:opacity-100 transition-opacity duration-300"
+                    onLoad={() => handleImageLoad(logo)}
+                    onError={() => handleImageError(logo)}
+                  />
                 </div>
               ))}
               {/* Duplicate for smooth loop */}
-              {[...Array(6)].map((_, index) => (
+              {row1Logos.map((logo, index) => (
                 <div
                   key={`row1-copy-${index}`}
-                  className="w-48 h-24 bg-[#b5a6d0] rounded-xl flex items-center justify-center text-white font-semibold text-lg"
+                  className="w-48 h-24 flex items-center justify-center bg-white/10 rounded-xl p-4"
                 >
-                  Logo {index + 1}
+                  <img 
+                    src={logo} 
+                    alt={`Partner Company ${index + 1}`}
+                    className="max-w-full max-h-full object-contain opacity-90 hover:opacity-100 transition-opacity duration-300"
+                    onLoad={() => handleImageLoad(logo)}
+                    onError={() => handleImageError(logo)}
+                  />
                 </div>
               ))}
             </div>
@@ -46,21 +104,33 @@ export default function AboutSection() {
           {/* Row 2 - moves right */}
           <div aria-label="Logo Row 2" className="relative overflow-hidden mt-12">
             <div aria-label="Scrolling Logos Reverse" className="flex animate-marquee-right gap-12">
-              {[...Array(6)].map((_, index) => (
+              {row2Logos.map((logo, index) => (
                 <div
                   key={`row2-${index}`}
-                  className="w-48 h-24 bg-[#b5a6d0] rounded-xl flex items-center justify-center text-white font-semibold text-lg"
+                  className="w-48 h-24 flex items-center justify-center bg-white/10 rounded-xl p-4"
                 >
-                  Logo {index + 1}
+                  <img 
+                    src={logo} 
+                    alt={`Partner Company ${index + 14}`}
+                    className="max-w-full max-h-full object-contain opacity-90 hover:opacity-100 transition-opacity duration-300"
+                    onLoad={() => handleImageLoad(logo)}
+                    onError={() => handleImageError(logo)}
+                  />
                 </div>
               ))}
               {/* Duplicate for seamless loop */}
-              {[...Array(6)].map((_, index) => (
+              {row2Logos.map((logo, index) => (
                 <div
                   key={`row2-copy-${index}`}
-                  className="w-48 h-24 bg-[#b5a6d0] rounded-xl flex items-center justify-center text-white font-semibold text-lg"
+                  className="w-48 h-24 flex items-center justify-center bg-white/10 rounded-xl p-4"
                 >
-                  Logo {index + 1}
+                  <img 
+                    src={logo} 
+                    alt={`Partner Company ${index + 14}`}
+                    className="max-w-full max-h-full object-contain opacity-90 hover:opacity-100 transition-opacity duration-300"
+                    onLoad={() => handleImageLoad(logo)}
+                    onError={() => handleImageError(logo)}
+                  />
                 </div>
               ))}
             </div>
@@ -87,11 +157,11 @@ export default function AboutSection() {
           }
         }
         .animate-marquee-left {
-          animation: marquee-left 15s linear infinite;
+          animation: marquee-left 20s linear infinite;
           width: max-content;
         }
         .animate-marquee-right {
-          animation: marquee-right 15s linear infinite;
+          animation: marquee-right 20s linear infinite;
           width: max-content;
         }
       `}</style>
