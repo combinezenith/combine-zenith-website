@@ -1,9 +1,6 @@
 'use client';
 
-<<<<<<< HEAD
-=======
 import Image from 'next/image';
->>>>>>> 7bd70a4a52f52ccacd1b5a00122f607bd90d4e2d
 import TextType from './TextType';
 import Masonry from './Masonry';
 
@@ -161,13 +158,10 @@ export default function AboutSection() {
     },
   ];
 
-<<<<<<< HEAD
-=======
   // Split logos into two groups for the two rows
   const row1Logos = logos.slice(0, 13);
   const row2Logos = logos.slice(13, 25);
 
->>>>>>> 7bd70a4a52f52ccacd1b5a00122f607bd90d4e2d
   return (
     <section aria-label="About Section" className="py-8 md:py-20 px-4 sm:px-6">
       <div aria-label="About Container" className="container mx-auto max-w-6xl">
@@ -193,20 +187,6 @@ export default function AboutSection() {
             Trusted by Industry Leaders.
           </h3>
 
-<<<<<<< HEAD
-          <div className="flex-1 relative min-h-[400px] md:min-h-[300px]">
-            <Masonry
-              items={items}
-              ease="power3.out"
-              duration={0.6}
-              stagger={0.05}
-              animateFrom="bottom"
-              scaleOnHover={true}
-              hoverScale={0.95}
-              blurToFocus={true}
-              colorShiftOnHover={false}
-            />
-=======
           {/* Row 1 - moves left */}
           <div aria-label="Logo Row 1" className="relative overflow-hidden">
             <div aria-label="Scrolling Logos" className="flex animate-marquee-left gap-12">
@@ -271,7 +251,6 @@ export default function AboutSection() {
                 </div>
               ))}
             </div>
->>>>>>> 7bd70a4a52f52ccacd1b5a00122f607bd90d4e2d
           </div>
         </div>
       </div>
