@@ -87,7 +87,7 @@ const Masonry: React.FC<MasonryProps> = ({
   const columns = useMedia(
     ['(min-width: 1500px)', '(min-width: 1024px)', '(min-width: 768px)', '(min-width: 640px)'],
     [5, 4, 3, 2],
-    1
+    2 // Default to 2 columns on mobile
   );
 
   const [containerRef, { width }] = useMeasure<HTMLDivElement>();
@@ -97,6 +97,7 @@ const Masonry: React.FC<MasonryProps> = ({
 
   const visibleItems = useMemo(() => items.slice(0, visibleCount), [items, visibleCount]);
   const hasMoreItems = visibleCount < items.length;
+  const canShowLess = visibleCount > itemsPerLoad;
 
   const loadMore = () => {
     if (isLoading || !hasMoreItems) return;
@@ -109,6 +110,12 @@ const Masonry: React.FC<MasonryProps> = ({
       setVisibleCount(prev => prev + itemsPerLoad);
       setIsLoading(false);
     });
+  };
+
+  const showLess = () => {
+    setVisibleCount(itemsPerLoad);
+    // Scroll to top of masonry section
+    containerRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const getInitialPosition = (item: GridItem) => {
@@ -147,7 +154,7 @@ const Masonry: React.FC<MasonryProps> = ({
   const grid = useMemo<GridItem[]>(() => {
     if (!width) return [];
     const colHeights = new Array(columns).fill(0);
-    const gap = columns > 2 ? 16 : 12; // Smaller gap on mobile
+    const gap = columns > 2 ? 12 : 8; // Smaller gaps for more compact layout
     const totalGaps = (columns - 1) * gap;
     const columnWidth = (width - totalGaps) / columns;
 
@@ -155,9 +162,9 @@ const Masonry: React.FC<MasonryProps> = ({
       const col = colHeights.indexOf(Math.min(...colHeights));
       const x = col * (columnWidth + gap);
       
-      // Adjust height based on screen size
-      const baseHeight = columns > 2 ? child.height / 2 : child.height / 3;
-      const height = Math.max(baseHeight, 120); // Minimum height for mobile
+      // Much smaller heights for compact layout
+      const baseHeight = columns > 2 ? child.height / 3 : child.height / 4;
+      const height = Math.max(baseHeight, 80); // Even smaller minimum height
       
       const y = colHeights[col];
 
@@ -196,15 +203,15 @@ const Masonry: React.FC<MasonryProps> = ({
             opacity: 1,
             ...animProps,
             ...(blurToFocus && { filter: 'blur(0px)' }),
-            duration: columns > 2 ? 0.8 : 0.6, // Faster on mobile
+            duration: columns > 2 ? 0.6 : 0.4, // Faster animations
             ease: 'power3.out',
-            delay: index * (columns > 2 ? stagger : stagger * 2) // Different stagger for mobile
+            delay: index * (columns > 2 ? stagger : stagger * 1.5)
           }
         );
       } else {
         gsap.to(selector, {
           ...animProps,
-          duration: columns > 2 ? duration : duration * 0.8, // Faster transitions on mobile
+          duration: columns > 2 ? duration * 0.8 : duration * 0.6,
           ease,
           overwrite: 'auto'
         });
@@ -215,16 +222,16 @@ const Masonry: React.FC<MasonryProps> = ({
   }, [grid, imagesReady, stagger, animateFrom, blurToFocus, duration, ease, columns]);
 
   const handleMouseEnter = (id: string, element: HTMLElement) => {
-    if (scaleOnHover && window.innerWidth > 768) { // Only on desktop
+    if (scaleOnHover && window.innerWidth > 768) {
       gsap.to(`[data-key="${id}"]`, {
         scale: hoverScale,
-        duration: 0.3,
+        duration: 0.2,
         ease: 'power2.out'
       });
     }
     if (colorShiftOnHover && window.innerWidth > 768) {
       const overlay = element.querySelector('.color-overlay') as HTMLElement;
-      if (overlay) gsap.to(overlay, { opacity: 0.3, duration: 0.3 });
+      if (overlay) gsap.to(overlay, { opacity: 0.3, duration: 0.2 });
     }
   };
 
@@ -232,13 +239,13 @@ const Masonry: React.FC<MasonryProps> = ({
     if (scaleOnHover && window.innerWidth > 768) {
       gsap.to(`[data-key="${id}"]`, {
         scale: 1,
-        duration: 0.3,
+        duration: 0.2,
         ease: 'power2.out'
       });
     }
     if (colorShiftOnHover && window.innerWidth > 768) {
       const overlay = element.querySelector('.color-overlay') as HTMLElement;
-      if (overlay) gsap.to(overlay, { opacity: 0, duration: 0.3 });
+      if (overlay) gsap.to(overlay, { opacity: 0, duration: 0.2 });
     }
   };
 
@@ -249,17 +256,17 @@ const Masonry: React.FC<MasonryProps> = ({
         className="relative w-full"
         style={{ 
           height: grid.length > 0 ? Math.max(...grid.map(item => item.y + item.h)) : 'auto',
-          minHeight: columns === 1 ? '400px' : '300px'
+          minHeight: '200px' // Smaller minimum height
         }}
       >
         {grid.map(item => (
           <div
             key={item.id}
             data-key={item.id}
-            className="absolute cursor-pointer touch-pan-y"
+            className="absolute cursor-pointer"
             style={{ 
               willChange: 'transform, width, height, opacity',
-              transform: 'translateZ(0)' // Hardware acceleration
+              transform: 'translateZ(0)'
             }}
             onClick={() => window.open(item.url, '_blank', 'noopener')}
             onMouseEnter={e => handleMouseEnter(item.id, e.currentTarget)}
@@ -276,42 +283,51 @@ const Masonry: React.FC<MasonryProps> = ({
             }}
           >
             <div
-              className="relative w-full h-full bg-cover bg-center rounded-lg md:rounded-[10px] shadow-sm md:shadow-[0px_10px_50px_-10px_rgba(0,0,0,0.2)]"
+              className="relative w-full h-full bg-cover bg-center rounded-md md:rounded-lg shadow-xs md:shadow-sm border border-purple-200/10"
               style={{ backgroundImage: `url(${item.img})` }}
             >
               {colorShiftOnHover && (
-                <div className="color-overlay absolute inset-0 rounded-lg md:rounded-[10px] bg-gradient-to-tr from-pink-500/50 to-sky-500/50 opacity-0 pointer-events-none" />
+                <div className="color-overlay absolute inset-0 rounded-md md:rounded-lg bg-gradient-to-tr from-pink-500/30 to-sky-500/30 opacity-0 pointer-events-none" />
               )}
             </div>
           </div>
         ))}
       </div>
 
-      {/* Load More Button */}
-      {hasMoreItems && (
-        <div className="flex justify-center mt-8 md:mt-12">
+      {/* Load More / See Less Buttons */}
+      <div className="flex justify-center gap-4 mt-6 md:mt-8">
+        {canShowLess && (
+          <button
+            onClick={showLess}
+            className="bg-purple-500 hover:bg-purple-600 text-white font-medium py-2 px-6 rounded-full transition-all duration-300 transform hover:scale-105 shadow-md text-sm"
+          >
+            See Less
+          </button>
+        )}
+        
+        {hasMoreItems && (
           <button
             onClick={loadMore}
             disabled={isLoading}
-            className="bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed shadow-lg"
+            className="bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 text-white font-medium py-2 px-6 rounded-full transition-all duration-300 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed shadow-md text-sm"
           >
             {isLoading ? (
               <div className="flex items-center space-x-2">
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                 <span>Loading...</span>
               </div>
             ) : (
-              `Load More (${items.length - visibleCount} remaining)`
+              `Load More (+${itemsPerLoad})`
             )}
           </button>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Show message when all items are loaded */}
       {!hasMoreItems && items.length > itemsPerLoad && (
-        <div className="text-center mt-8">
-          <p className="text-purple-300 text-lg font-medium">
-            All items loaded!
+        <div className="text-center mt-6">
+          <p className="text-purple-300 text-sm font-medium">
+            {items.length} partners.
           </p>
         </div>
       )}
