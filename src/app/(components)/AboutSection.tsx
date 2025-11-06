@@ -9,25 +9,25 @@ export default function AboutSection() {
       id: "1",
       img: "/partners/1.jpg",
       url: "#",
-      height: 200,
+      height: 180,
     },
     {
       id: "2",
       img: "/partners/2.jpg",
       url: "#",
-      height: 200,
+      height: 220,
     },
     {
       id: "3",
       img: "/partners/3.jpg",
       url: "#",
-      height: 200,
+      height: 160,
     },
     {
       id: "4",
       img: "/partners/4.jpg",
       url: "#",
-      height: 200,
+      height: 240,
     },
     {
       id: "5",
@@ -39,85 +39,85 @@ export default function AboutSection() {
       id: "6",
       img: "/partners/6.jpg",
       url: "#",
-      height: 200,
+      height: 190,
     },
     {
       id: "7",
       img: "/partners/7.jpg",
       url: "#",
-      height: 200,
+      height: 170,
     },
     {
       id: "8",
       img: "/partners/8.jpg",
       url: "#",
-      height: 200,
+      height: 210,
     },
     {
       id: "9",
       img: "/partners/9.jpg",
       url: "#",
-      height: 200,
+      height: 230,
     },
     {
       id: "10",
       img: "/partners/10.jpg",
       url: "#",
-      height: 200,
+      height: 150,
     },
     {
       id: "11",
       img: "/partners/11.jpg",
       url: "#",
-      height: 200,
+      height: 260,
     },
     {
       id: "12",
       img: "/partners/12.jpg",
       url: "#",
-      height: 200,
+      height: 180,
     },
     {
       id: "13",
       img: "/partners/13.jpg",
       url: "#",
-      height: 200,
+      height: 140,
     },
     {
       id: "14",
       img: "/partners/14.jpg",
       url: "#",
-      height: 200,
+      height: 220,
     },
     {
       id: "15",
       img: "/partners/15.jpg",
       url: "#",
-      height: 200,
+      height: 190,
     },
     {
       id: "16",
       img: "/partners/16.jpg",
       url: "#",
-      height: 200,
+      height: 170,
     },
     {
       id: "17",
       img: "/partners/17.jpg",
       url: "#",
-      height: 200,
+      height: 210,
     },
     {
       id: "18",
       img: "/partners/18.jpg",
       url: "#",
-      height: 200,
+      height: 240,
     },
     {
       id: "19",
       img: "/partners/19.jpg",
       url: "#",
-      height: 200,
+      height: 160,
     },
     {
       id: "20",
@@ -129,31 +129,31 @@ export default function AboutSection() {
       id: "21",
       img: "/partners/21.jpg",
       url: "#",
-      height: 200,
+      height: 180,
     },
     {
       id: "22",
       img: "/partners/22.jpg",
       url: "#",
-      height: 200,
+      height: 220,
     },
     {
       id: "23",
       img: "/partners/23.jpg",
       url: "#",
-      height: 200,
+      height: 140,
     },
     {
       id: "24",
       img: "/partners/24.jpg",
       url: "#",
-      height: 200,
+      height: 260,
     },
     {
       id: "25",
       img: "/partners/25.jpg",
       url: "#",
-      height: 200,
+      height: 190,
     },
   ];
 
@@ -177,22 +177,23 @@ export default function AboutSection() {
         </div>
 
         {/* Trusted By Section */}
-        <div aria-label="Trusted Companies" className="bg-purple-800/30 backdrop-blur-sm rounded-xl md:rounded-3xl p-4 md:p-16 min-h-[600px] md:min-h-[1000px] flex flex-col">
+        <div aria-label="Trusted Companies" className="bg-purple-800/30 backdrop-blur-sm rounded-xl md:rounded-3xl p-4 md:p-16 min-h-[500px] md:min-h-[800px] flex flex-col">
           <h3 className="text-xl md:text-4xl font-bold text-white text-center mb-6 md:mb-12">
             Trusted by Industry Leaders.
           </h3>
 
-          <div className="flex-1 relative min-h-[400px] md:min-h-[300px]">
+          <div className="flex-1 relative min-h-[300px] md:min-h-[200px]">
             <Masonry
               items={items}
               ease="power3.out"
               duration={0.6}
               stagger={0.05}
-              animateFrom="bottom"
+              animateFrom="random"
               scaleOnHover={true}
               hoverScale={0.95}
               blurToFocus={true}
               colorShiftOnHover={false}
+              itemsPerLoad={10}
             />
           </div>
         </div>
