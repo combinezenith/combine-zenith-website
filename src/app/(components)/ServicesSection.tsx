@@ -112,77 +112,83 @@ export default function ServicesSection() {
   };
 
   return (
-    <section aria-label="Our Services" className="py-20 px-4 sm:px-6">
+    <section aria-label="Our Services" className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8">
       <div aria-label="Services Container" className="container mx-auto max-w-7xl">
         {/* Header */}
-        <div aria-label="Services Header" className="text-center mb-12 sm:mb-16">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">
-<TextType 
-  text={["Building Brands.", "Driving Growth.", "Creating Impact."]}
-  typingSpeed={75}
-  pauseDuration={1500}
-  showCursor={true}
-  cursorCharacter="|"
-/>
+        <div aria-label="Services Header" className="text-center mb-8 sm:mb-12 md:mb-16">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4 md:mb-6 px-2">
+            <TextType 
+              text={["Building Brands.", "Driving Growth.", "Creating Impact."]}
+              typingSpeed={75}
+              pauseDuration={1500}
+              showCursor={true}
+              cursorCharacter="|"
+            />
           </h2>
-          <p className="text-purple-200 text-base sm:text-lg md:text-xl max-w-3xl mx-auto px-2">
+          <p className="text-purple-200 text-sm sm:text-base md:text-lg lg:text-xl max-w-3xl mx-auto px-4 sm:px-6 leading-relaxed">
             We deliver integrated marketing solutions that combine creativity with intelligence ensuring every project speaks with purpose and performs with excellence. Our expertise blends creativity, strategy, and technology to turn ideas into stories, and stories into movements. Every brand we touch is built to inspire, engage, and lead with purpose.
           </p>
         </div>
 
-        {/* Services Buttons Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mb-8 max-w-4xl mx-auto">
-          {services.map((service, index) => (
-            <ServiceButton
-              key={index}
-              service={service}
-              onClick={handleServiceClick}
-              isSelected={selectedService?.slug === service.slug}
-            />
-          ))}
-        </div>
+        {/* Services Buttons Grid and Card Container */}
+        <div className="max-w-5xl mx-auto px-2">
+          {/* Services Buttons Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
+            {services.map((service, index) => (
+              <ServiceButton
+                key={index}
+                service={service}
+                onClick={handleServiceClick}
+                isSelected={selectedService?.slug === service.slug}
+              />
+            ))}
+          </div>
 
-        {/* Selected Service Card */}
-        {selectedService && (
-          <div className={`bg-[#685885] backdrop-blur-sm rounded-2xl ml-45 mr-47 p-6 sm:p-8 shadow-lg shadow-purple-500/10 transition-all duration-500 ease-in-out ${
-            isTransitioning ? 'opacity-0 transform translate-y-4' : 'opacity-100 transform translate-y-0'
-          }`}>
-            <div className="flex flex-col lg:flex-row gap-6">
+          {/* Selected Service Card */}
+          {selectedService && (
+            <div className={`bg-[#685885] backdrop-blur-sm rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg shadow-purple-500/10 transition-all duration-500 ease-in-out ${
+              isTransitioning ? 'opacity-0 transform translate-y-4' : 'opacity-100 transform translate-y-0'
+            }`}>
+            <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8 h-full">
               {/* Left Side: Name, Description, CTA */}
-              <div className="flex-1">
-                <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4">
+              <div className="flex-1 flex flex-col">
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-3 sm:mb-4">
                   {selectedService.title}
                 </h3>
-                <p className="text-purple-200 text-base sm:text-lg leading-relaxed mb-6">
+                <p className="text-purple-200 text-sm sm:text-base md:text-lg leading-relaxed mb-4 sm:mb-6 flex-grow">
                   {selectedService.description}
                 </p>
                 <button
                   onClick={() => handleLearnMore(selectedService.id || selectedService.slug)}
-                  className="bg-white text-[#685885] px-6 py-3 rounded-lg font-semibold hover:bg-purple-100 transition-colors duration-300 flex items-center gap-2"
+                  className="bg-white text-[#685885] px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-purple-100 transition-colors duration-300 flex items-center justify-center gap-2 w-full sm:w-auto"
                 >
                   Learn More
-                  <ArrowRight className="w-5 h-5" strokeWidth={2} />
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2} />
                 </button>
               </div>
+              
               {/* Right Side: Image */}
-              <div className="flex-1">
+              <div className="flex-1 lg:max-w-md">
                 {selectedService.image ? (
-                  <Image
-                    src={selectedService.image}
-                    alt={selectedService.title}
-                    width={600}
-                    height={400}
-                    className="w-full h-64 sm:h-80 object-cover rounded-lg"
-                  />
+                  <div className="relative w-full h-48 sm:h-64 md:h-72 lg:h-80">
+                    <Image
+                      src={selectedService.image}
+                      alt={selectedService.title}
+                      fill
+                      className="object-cover rounded-lg"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
+                  </div>
                 ) : (
-                  <div className="w-full h-64 sm:h-80 bg-[#b5a6d0] rounded-lg flex items-center justify-center">
-                    <selectedService.icon className="w-16 h-16 text-white" strokeWidth={1.5} />
+                  <div className="w-full h-48 sm:h-64 md:h-72 lg:h-80 bg-[#b5a6d0] rounded-lg flex items-center justify-center">
+                    <selectedService.icon className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 text-white" strokeWidth={1.5} />
                   </div>
                 )}
               </div>
             </div>
-          </div>
-        )}
+            </div>
+          )}
+        </div>
       </div>
     </section>
   );
@@ -193,13 +199,13 @@ function ServiceButton({ service, onClick, isSelected }: ServiceButtonProps) {
   return (
     <button
       onClick={() => onClick(service)}
-      className={`flex items-center justify-center p-4 rounded-lg transition-all duration-300 ease-in-out ${
+      className={`flex items-center justify-center p-3 sm:p-4 rounded-lg transition-all duration-300 ease-in-out ${
         isSelected
           ? 'bg-[#685885] text-white hover:bg-[#7a5f95] shadow-md shadow-purple-500/10'
-          : 'bg-white text-[#685885] shadow-lg shadow-purple-500/20'
+          : 'bg-white text-[#685885] shadow-lg shadow-purple-500/20 hover:shadow-xl hover:shadow-purple-500/30'
       }`}
     >
-      <span className="text-sm font-medium text-center">{service.title}</span>
+      <span className="text-xs sm:text-sm font-medium text-center leading-tight">{service.title}</span>
     </button>
   );
 }
