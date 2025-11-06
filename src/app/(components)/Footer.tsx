@@ -2,9 +2,10 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className="bg-black/50 backdrop-blur-sm border-t border-purple-800/30">
-      <div className="container mx-auto px-6 py-12">
-        <div className="grid md:grid-cols-3 gap-8">
+    <footer className="bg-black/50 backdrop-blur-sm border-t border-purple-800/30 w-full">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Column 1 - Quick Links */}
           <div>
             <h3 className="text-white font-bold text-xl mb-4">Quick Links</h3>
             <ul className="space-y-2">
@@ -24,17 +25,16 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-              <Link href="/team" className="text-purple-300 hover:text-white transition">
-                Team
-              </Link>
+                <Link href="/team" className="text-purple-300 hover:text-white transition">
+                  Team
+                </Link>
               </li>
             </ul>
           </div>
 
-                    <div>
-            <h3 className="text-white font-bold text-xl mb-4">
-              <br />
-            </h3>
+          {/* Column 2 - More Links */}
+          <div>
+            <h3 className="text-white font-bold text-xl mb-4">More Links</h3>
             <ul className="space-y-2">
               <li>
                 <Link href="/portfolio" className="text-purple-300 hover:text-white transition">
@@ -52,16 +52,17 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-              <Link href="/privacy" className="text-purple-300 hover:text-white transition">
-                Privacy Policy
-              </Link>
+                <Link href="/privacy" className="text-purple-300 hover:text-white transition">
+                  Privacy Policy
+                </Link>
               </li>
             </ul>
           </div>
 
+          {/* Column 3 - Connect */}
           <div>
             <h3 className="text-white font-bold text-xl mb-4">Connect</h3>
-            <div className="flex space-x-4">
+            <div className="flex space-x-4 mb-4">
               <a href="https://www.facebook.com/profile.php?id=61583245775368" className="text-purple-300 hover:text-white transition">
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
@@ -78,14 +79,18 @@ export default function Footer() {
                 </svg>
               </a>
             </div>
-            <br />
-              <a href="mailto:info@combinezenith.com" className="text-purple-300 hover:text-white transition">
-                info@combinezenith.com
-              </a>
-              <br />
-<a href="tel:+923193372277" className="text-purple-300 hover:text-white transition">
-  +92 319 3372277
-</a>
+            <div className="space-y-2">
+              <div>
+                <a href="mailto:info@combinezenith.com" className="text-purple-300 hover:text-white transition">
+                  info@combinezenith.com
+                </a>
+              </div>
+              <div>
+                <a href="tel:+923193372277" className="text-purple-300 hover:text-white transition">
+                  +92 319 3372277
+                </a>
+              </div>
+            </div>
           </div>
         </div>
 
