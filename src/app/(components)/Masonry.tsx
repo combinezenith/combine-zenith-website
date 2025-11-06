@@ -69,6 +69,7 @@ interface MasonryProps {
   hoverScale?: number;
   blurToFocus?: boolean;
   colorShiftOnHover?: boolean;
+  itemsPerLoad?: number;
 }
 
 const Masonry: React.FC<MasonryProps> = ({
@@ -80,7 +81,8 @@ const Masonry: React.FC<MasonryProps> = ({
   scaleOnHover = true,
   hoverScale = 0.95,
   blurToFocus = true,
-  colorShiftOnHover = false
+  colorShiftOnHover = false,
+  itemsPerLoad = 10
 }) => {
   const columns = useMedia(
     ['(min-width: 1500px)', '(min-width: 1024px)', '(min-width: 768px)', '(min-width: 640px)'],
@@ -90,6 +92,24 @@ const Masonry: React.FC<MasonryProps> = ({
 
   const [containerRef, { width }] = useMeasure<HTMLDivElement>();
   const [imagesReady, setImagesReady] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(itemsPerLoad);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const visibleItems = useMemo(() => items.slice(0, visibleCount), [items, visibleCount]);
+  const hasMoreItems = visibleCount < items.length;
+
+  const loadMore = () => {
+    if (isLoading || !hasMoreItems) return;
+    
+    setIsLoading(true);
+    
+    // Preload next batch of images
+    const nextItems = items.slice(visibleCount, visibleCount + itemsPerLoad);
+    preloadImages(nextItems.map(i => i.img)).then(() => {
+      setVisibleCount(prev => prev + itemsPerLoad);
+      setIsLoading(false);
+    });
+  };
 
   const getInitialPosition = (item: GridItem) => {
     const containerRect = containerRef.current?.getBoundingClientRect();
@@ -121,8 +141,8 @@ const Masonry: React.FC<MasonryProps> = ({
   };
 
   useEffect(() => {
-    preloadImages(items.map(i => i.img)).then(() => setImagesReady(true));
-  }, [items]);
+    preloadImages(visibleItems.map(i => i.img)).then(() => setImagesReady(true));
+  }, [visibleItems]);
 
   const grid = useMemo<GridItem[]>(() => {
     if (!width) return [];
@@ -131,7 +151,7 @@ const Masonry: React.FC<MasonryProps> = ({
     const totalGaps = (columns - 1) * gap;
     const columnWidth = (width - totalGaps) / columns;
 
-    return items.map(child => {
+    return visibleItems.map(child => {
       const col = colHeights.indexOf(Math.min(...colHeights));
       const x = col * (columnWidth + gap);
       
@@ -144,7 +164,7 @@ const Masonry: React.FC<MasonryProps> = ({
       colHeights[col] += height + gap;
       return { ...child, x, y, w: columnWidth, h: height };
     });
-  }, [columns, items, width]);
+  }, [columns, visibleItems, width]);
 
   const hasMounted = useRef(false);
 
@@ -223,47 +243,78 @@ const Masonry: React.FC<MasonryProps> = ({
   };
 
   return (
-    <div 
-      ref={containerRef} 
-      className="relative w-full"
-      style={{ 
-        height: grid.length > 0 ? Math.max(...grid.map(item => item.y + item.h)) : 'auto',
-        minHeight: columns === 1 ? '400px' : '300px'
-      }}
-    >
-      {grid.map(item => (
-        <div
-          key={item.id}
-          data-key={item.id}
-          className="absolute cursor-pointer touch-pan-y"
-          style={{ 
-            willChange: 'transform, width, height, opacity',
-            transform: 'translateZ(0)' // Hardware acceleration
-          }}
-          onClick={() => window.open(item.url, '_blank', 'noopener')}
-          onMouseEnter={e => handleMouseEnter(item.id, e.currentTarget)}
-          onMouseLeave={e => handleMouseLeave(item.id, e.currentTarget)}
-          onTouchStart={e => {
-            if (window.innerWidth <= 768) {
-              e.currentTarget.style.opacity = '0.8';
-            }
-          }}
-          onTouchEnd={e => {
-            if (window.innerWidth <= 768) {
-              e.currentTarget.style.opacity = '1';
-            }
-          }}
-        >
+    <div className="w-full">
+      <div 
+        ref={containerRef} 
+        className="relative w-full"
+        style={{ 
+          height: grid.length > 0 ? Math.max(...grid.map(item => item.y + item.h)) : 'auto',
+          minHeight: columns === 1 ? '400px' : '300px'
+        }}
+      >
+        {grid.map(item => (
           <div
-            className="relative w-full h-full bg-cover bg-center rounded-lg md:rounded-[10px] shadow-sm md:shadow-[0px_10px_50px_-10px_rgba(0,0,0,0.2)]"
-            style={{ backgroundImage: `url(${item.img})` }}
+            key={item.id}
+            data-key={item.id}
+            className="absolute cursor-pointer touch-pan-y"
+            style={{ 
+              willChange: 'transform, width, height, opacity',
+              transform: 'translateZ(0)' // Hardware acceleration
+            }}
+            onClick={() => window.open(item.url, '_blank', 'noopener')}
+            onMouseEnter={e => handleMouseEnter(item.id, e.currentTarget)}
+            onMouseLeave={e => handleMouseLeave(item.id, e.currentTarget)}
+            onTouchStart={e => {
+              if (window.innerWidth <= 768) {
+                e.currentTarget.style.opacity = '0.8';
+              }
+            }}
+            onTouchEnd={e => {
+              if (window.innerWidth <= 768) {
+                e.currentTarget.style.opacity = '1';
+              }
+            }}
           >
-            {colorShiftOnHover && (
-              <div className="color-overlay absolute inset-0 rounded-lg md:rounded-[10px] bg-gradient-to-tr from-pink-500/50 to-sky-500/50 opacity-0 pointer-events-none" />
-            )}
+            <div
+              className="relative w-full h-full bg-cover bg-center rounded-lg md:rounded-[10px] shadow-sm md:shadow-[0px_10px_50px_-10px_rgba(0,0,0,0.2)]"
+              style={{ backgroundImage: `url(${item.img})` }}
+            >
+              {colorShiftOnHover && (
+                <div className="color-overlay absolute inset-0 rounded-lg md:rounded-[10px] bg-gradient-to-tr from-pink-500/50 to-sky-500/50 opacity-0 pointer-events-none" />
+              )}
+            </div>
           </div>
+        ))}
+      </div>
+
+      {/* Load More Button */}
+      {hasMoreItems && (
+        <div className="flex justify-center mt-8 md:mt-12">
+          <button
+            onClick={loadMore}
+            disabled={isLoading}
+            className="bg-purple-600 hover:bg-purple-700 disabled:bg-purple-400 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 disabled:scale-100 disabled:cursor-not-allowed shadow-lg"
+          >
+            {isLoading ? (
+              <div className="flex items-center space-x-2">
+                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                <span>Loading...</span>
+              </div>
+            ) : (
+              `Load More (${items.length - visibleCount} remaining)`
+            )}
+          </button>
         </div>
-      ))}
+      )}
+
+      {/* Show message when all items are loaded */}
+      {!hasMoreItems && items.length > itemsPerLoad && (
+        <div className="text-center mt-8">
+          <p className="text-purple-300 text-lg font-medium">
+            All items loaded!
+          </p>
+        </div>
+      )}
     </div>
   );
 };
