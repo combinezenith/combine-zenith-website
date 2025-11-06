@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import Image from 'next/image';
 import TextType from './TextType';
 
 export default function AboutSection() {
@@ -37,17 +37,6 @@ export default function AboutSection() {
   const row1Logos = logos.slice(0, 13);
   const row2Logos = logos.slice(13, 25);
 
-  // State to track loaded images
-  const [loadedImages, setLoadedImages] = useState<Set<string>>(new Set());
-
-  const handleImageLoad = (src: string) => {
-    setLoadedImages(prev => new Set(prev.add(src)));
-  };
-
-  const handleImageError = (src: string) => {
-    console.warn(`Failed to load image: ${src}`);
-  };
-
   return (
     <section aria-label="About Section" className="py-20 px-6">
       <div aria-label="About Container" className="container mx-auto max-w-6xl">
@@ -81,12 +70,11 @@ export default function AboutSection() {
                   key={`row1-${index}`}
                   className="w-48 h-24 flex items-center justify-center bg-white/10 rounded-xl p-4"
                 >
-                  <img 
-                    src={logo} 
+                  <Image
+                    src={logo}
                     alt={`Partner Company ${index + 1}`}
-                    className="max-w-full max-h-full object-contain opacity-90 hover:opacity-100 transition-opacity duration-300"
-                    onLoad={() => handleImageLoad(logo)}
-                    onError={() => handleImageError(logo)}
+                    fill
+                    className="object-contain opacity-90 hover:opacity-100 transition-opacity duration-300"
                   />
                 </div>
               ))}
@@ -96,12 +84,11 @@ export default function AboutSection() {
                   key={`row1-copy-${index}`}
                   className="w-48 h-24 flex items-center justify-center bg-white/10 rounded-xl p-4"
                 >
-                  <img 
-                    src={logo} 
+                  <Image
+                    src={logo}
                     alt={`Partner Company ${index + 1}`}
-                    className="max-w-full max-h-full object-contain opacity-90 hover:opacity-100 transition-opacity duration-300"
-                    onLoad={() => handleImageLoad(logo)}
-                    onError={() => handleImageError(logo)}
+                    fill
+                    className="object-contain opacity-90 hover:opacity-100 transition-opacity duration-300"
                   />
                 </div>
               ))}
@@ -116,12 +103,11 @@ export default function AboutSection() {
                   key={`row2-${index}`}
                   className="w-48 h-24 flex items-center justify-center bg-white/10 rounded-xl p-4"
                 >
-                  <img 
-                    src={logo} 
+                  <Image
+                    src={logo}
                     alt={`Partner Company ${index + 14}`}
-                    className="max-w-full max-h-full object-contain opacity-90 hover:opacity-100 transition-opacity duration-300"
-                    onLoad={() => handleImageLoad(logo)}
-                    onError={() => handleImageError(logo)}
+                    fill
+                    className="object-contain opacity-90 hover:opacity-100 transition-opacity duration-300"
                   />
                 </div>
               ))}
@@ -131,12 +117,11 @@ export default function AboutSection() {
                   key={`row2-copy-${index}`}
                   className="w-48 h-24 flex items-center justify-center bg-white/10 rounded-xl p-4"
                 >
-                  <img 
-                    src={logo} 
+                  <Image
+                    src={logo}
                     alt={`Partner Company ${index + 14}`}
-                    className="max-w-full max-h-full object-contain opacity-90 hover:opacity-100 transition-opacity duration-300"
-                    onLoad={() => handleImageLoad(logo)}
-                    onError={() => handleImageError(logo)}
+                    fill
+                    className="object-contain opacity-90 hover:opacity-100 transition-opacity duration-300"
                   />
                 </div>
               ))}
