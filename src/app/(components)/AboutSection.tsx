@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import TextType from './TextType';
 import Masonry from './Masonry';
 
@@ -158,10 +157,6 @@ export default function AboutSection() {
     },
   ];
 
-  // Split logos into two groups for the two rows
-  const row1Logos = logos.slice(0, 13);
-  const row2Logos = logos.slice(13, 25);
-
   return (
     <section aria-label="About Section" className="py-8 md:py-20 px-4 sm:px-6">
       <div aria-label="About Container" className="container mx-auto max-w-6xl">
@@ -187,70 +182,18 @@ export default function AboutSection() {
             Trusted by Industry Leaders.
           </h3>
 
-          {/* Row 1 - moves left */}
-          <div aria-label="Logo Row 1" className="relative overflow-hidden">
-            <div aria-label="Scrolling Logos" className="flex animate-marquee-left gap-12">
-              {row1Logos.map((logo, index) => (
-                <div
-                  key={`row1-${index}`}
-                  className="w-48 h-24 flex items-center justify-center bg-white/10 rounded-xl p-4"
-                >
-                  <Image
-                    src={logo}
-                    alt={`Partner Company ${index + 1}`}
-                    fill
-                    className="object-contain opacity-90 hover:opacity-100 transition-opacity duration-300"
-                  />
-                </div>
-              ))}
-              {/* Duplicate for smooth loop */}
-              {row1Logos.map((logo, index) => (
-                <div
-                  key={`row1-copy-${index}`}
-                  className="w-48 h-24 flex items-center justify-center bg-white/10 rounded-xl p-4"
-                >
-                  <Image
-                    src={logo}
-                    alt={`Partner Company ${index + 1}`}
-                    fill
-                    className="object-contain opacity-90 hover:opacity-100 transition-opacity duration-300"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Row 2 - moves right */}
-          <div aria-label="Logo Row 2" className="relative overflow-hidden mt-12">
-            <div aria-label="Scrolling Logos Reverse" className="flex animate-marquee-right gap-12">
-              {row2Logos.map((logo, index) => (
-                <div
-                  key={`row2-${index}`}
-                  className="w-48 h-24 flex items-center justify-center bg-white/10 rounded-xl p-4"
-                >
-                  <Image
-                    src={logo}
-                    alt={`Partner Company ${index + 14}`}
-                    fill
-                    className="object-contain opacity-90 hover:opacity-100 transition-opacity duration-300"
-                  />
-                </div>
-              ))}
-              {/* Duplicate for seamless loop */}
-              {row2Logos.map((logo, index) => (
-                <div
-                  key={`row2-copy-${index}`}
-                  className="w-48 h-24 flex items-center justify-center bg-white/10 rounded-xl p-4"
-                >
-                  <Image
-                    src={logo}
-                    alt={`Partner Company ${index + 14}`}
-                    fill
-                    className="object-contain opacity-90 hover:opacity-100 transition-opacity duration-300"
-                  />
-                </div>
-              ))}
-            </div>
+          <div className="flex-1 relative min-h-[400px] md:min-h-[300px]">
+            <Masonry
+              items={items}
+              ease="power3.out"
+              duration={0.6}
+              stagger={0.05}
+              animateFrom="bottom"
+              scaleOnHover={true}
+              hoverScale={0.95}
+              blurToFocus={true}
+              colorShiftOnHover={false}
+            />
           </div>
         </div>
       </div>
