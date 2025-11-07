@@ -1,13 +1,15 @@
 "use client";
 
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import {
   collection,
   addDoc,
   doc,
   updateDoc,
   serverTimestamp,
-  Timestamp, // ✅ Import this
+  Timestamp,
+  getDocs,
+  DocumentData,
 } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { motion } from "framer-motion";
@@ -20,6 +22,7 @@ interface Portfolio {
   description?: string;
   overview?: string;
   image?: string;
+  services?: string[];
   creativeApproach?: string;
   challenges?: string;
   clientWords?: string;
@@ -38,6 +41,16 @@ interface Portfolio {
   createdAt?: Timestamp;
 }
 
+interface Service {
+  id: string;
+  name: string;
+  description: string;
+  image?: string;
+  skills?: string[];
+  approach?: string[];
+  status?: string;
+}
+
 interface PortfolioFormProps {
   onClose: () => void;
   onSuccess: (portfolio: Portfolio) => void;
@@ -49,6 +62,7 @@ export default function PortfolioForm({
   editPortfolio,
   onSuccess,
 }: PortfolioFormProps) {
+  const [services, setServices] = useState<Service[]>([]);
   const [formData, setFormData] = useState<Omit<Portfolio, "id" | "createdAt">>(
     {
       slug: editPortfolio?.slug || "",
@@ -56,6 +70,7 @@ export default function PortfolioForm({
       description: editPortfolio?.description || "",
       overview: editPortfolio?.overview || "",
       image: editPortfolio?.image || "",
+      services: editPortfolio?.services || [],
       creativeApproach: editPortfolio?.creativeApproach || "",
       challenges: editPortfolio?.challenges || "",
       clientWords: editPortfolio?.clientWords || "",
@@ -75,6 +90,22 @@ export default function PortfolioForm({
   );
 
   const [loading, setLoading] = useState(false);
+
+  // Fetch services from Firestore
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const snapshot = await getDocs(collection(db, "services"));
+        const servicesData = snapshot.docs.map(
+          (d) => ({ id: d.id, ...(d.data() as DocumentData) } as Service)
+        );
+        setServices(servicesData);
+      } catch (error) {
+        console.error("Failed to fetch services:", error);
+      }
+    };
+    fetchServices();
+  }, []);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -98,6 +129,25 @@ export default function PortfolioForm({
     });
   };
 
+  const handleServiceChange = (serviceName: string, isChecked: boolean) => {
+    setFormData((prev) => {
+      const currentServices = prev.services || [];
+      if (isChecked) {
+        // Add service if not already present
+        return {
+          ...prev,
+          services: [...currentServices, serviceName],
+        };
+      } else {
+        // Remove service
+        return {
+          ...prev,
+          services: currentServices.filter(service => service !== serviceName),
+        };
+      }
+    });
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -105,6 +155,7 @@ export default function PortfolioForm({
     try {
       const dataToSave = {
         ...formData,
+        services: formData.services?.length ? formData.services : undefined,
         highlights: formData.highlights?.length ? formData.highlights : undefined,
         technologies: formData.technologies?.length ? formData.technologies : undefined,
       };
@@ -176,6 +227,24 @@ export default function PortfolioForm({
             rows={3}
             className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none resize-none"
           />
+
+          {/* Services Checkboxes */}
+          <div className="space-y-2">
+            <label className="block text-sm font-medium mb-2">Services Used</label>
+            <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto p-2 bg-[#3b2e65] rounded">
+              {services.map((service) => (
+                <label key={service.id} className="flex items-center space-x-2 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={formData.services?.includes(service.name) || false}
+                    onChange={(e) => handleServiceChange(service.name, e.target.checked)}
+                    className="rounded bg-[#2a2250] border-gray-600"
+                  />
+                  <span>{service.name}</span>
+                </label>
+              ))}
+            </div>
+          </div>
 
           <textarea
             name="creativeApproach"
