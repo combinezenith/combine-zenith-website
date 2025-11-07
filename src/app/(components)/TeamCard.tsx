@@ -24,8 +24,8 @@ const ROLE_ORDER = [
   'SEO & AI Support Specialist',
   'Content Writer',
   'Social Media Executive',
-  'Social media content creation and writing',
-  'AI video generation and editing',
+  'Creative Content Creator',
+  'AI Video Specialist',
 ];
 
 export default function OrgChart() {
@@ -84,8 +84,10 @@ export default function OrgChart() {
         ]);
         connect('Head of Marketing', ['Social Media Executive']);
         connect('Operations Lead', [
+          'Creative Content Creator',
+          'AI Video Specialist',
           'SEO & AI Support Specialist',
-          'Content Writer',
+          'Content Writer'
         ]);
         connect('Lead Developer', [
           'Web Developer & R&D Specialist',

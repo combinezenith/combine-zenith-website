@@ -1,8 +1,14 @@
 "use client";
-import { useState } from "react";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { useState, useEffect } from "react";
+import { collection, addDoc, serverTimestamp, getDocs } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { Add } from "@mui/icons-material";
+
+interface TeamMember {
+  id: string;
+  name: string;
+  role: string;
+}
 
 export default function TeamForm({ onAdded }: { onAdded: () => void }) {
   const [formData, setFormData] = useState({
@@ -11,11 +17,32 @@ export default function TeamForm({ onAdded }: { onAdded: () => void }) {
     role: "",
     bio: "",
     linkedin: "",
+    parentRole: "",
   });
   const [loading, setLoading] = useState(false);
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+
+  // Fetch existing team members for parent selection
+  useEffect(() => {
+    const fetchTeamMembers = async () => {
+      try {
+        const snap = await getDocs(collection(db, "teamMembers"));
+        const members = snap.docs.map((doc) => ({
+          id: doc.id,
+          name: doc.data().name,
+          role: doc.data().role,
+        }));
+        setTeamMembers(members);
+      } catch (error) {
+        console.error("Error fetching team members:", error);
+      }
+    };
+
+    fetchTeamMembers();
+  }, []);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -26,11 +53,23 @@ export default function TeamForm({ onAdded }: { onAdded: () => void }) {
 
     try {
       await addDoc(collection(db, "teamMembers"), {
-        ...formData,
+        name: formData.name,
+        image: formData.image,
+        role: formData.role,
+        bio: formData.bio,
+        linkedin: formData.linkedin,
+        parentRole: formData.parentRole || null, // Store parent role for hierarchy
         createdAt: serverTimestamp(),
       });
       onAdded();
-      setFormData({ name: "", image: "", role: "", bio: "", linkedin: "" });
+      setFormData({ 
+        name: "", 
+        image: "", 
+        role: "", 
+        bio: "", 
+        linkedin: "",
+        parentRole: ""
+      });
     } catch (error) {
       console.error("Error adding team member: ", error);
     } finally {
@@ -44,6 +83,7 @@ export default function TeamForm({ onAdded }: { onAdded: () => void }) {
       className="bg-[#3D2F68] p-5 rounded-xl shadow-md text-white space-y-4"
     >
       <h2 className="text-lg font-semibold mb-2">Add New Team Member</h2>
+      
       <input
         type="text"
         name="name"
@@ -53,6 +93,7 @@ export default function TeamForm({ onAdded }: { onAdded: () => void }) {
         required
         className="w-full px-3 py-2 bg-[#2E2058] rounded-md outline-none"
       />
+      
       <input
         type="text"
         name="image"
@@ -62,6 +103,7 @@ export default function TeamForm({ onAdded }: { onAdded: () => void }) {
         required
         className="w-full px-3 py-2 bg-[#2E2058] rounded-md outline-none"
       />
+      
       <input
         type="text"
         name="role"
@@ -71,6 +113,25 @@ export default function TeamForm({ onAdded }: { onAdded: () => void }) {
         required
         className="w-full px-3 py-2 bg-[#2E2058] rounded-md outline-none"
       />
+      
+      <select
+        name="parentRole"
+        value={formData.parentRole}
+        onChange={handleChange}
+        className="w-full px-3 py-2 bg-[#2E2058] rounded-md outline-none text-white"
+      >
+        <option value="">Select Parent (Optional - for hierarchy)</option>
+        <option value="Founder & Creative Director">Founder & Creative Director</option>
+        <option value="Head of Marketing">Head of Marketing</option>
+        <option value="Operations Lead">Operations Lead</option>
+        <option value="Lead Developer">Lead Developer</option>
+        {teamMembers.map((member) => (
+          <option key={member.id} value={member.role}>
+            {member.name} ({member.role})
+          </option>
+        ))}
+      </select>
+      
       <textarea
         name="bio"
         placeholder="Bio"
@@ -80,6 +141,7 @@ export default function TeamForm({ onAdded }: { onAdded: () => void }) {
         rows={3}
         className="w-full px-3 py-2 bg-[#2E2058] rounded-md outline-none resize-none"
       />
+      
       <input
         type="url"
         name="linkedin"
@@ -89,6 +151,7 @@ export default function TeamForm({ onAdded }: { onAdded: () => void }) {
         required
         className="w-full px-3 py-2 bg-[#2E2058] rounded-md outline-none"
       />
+      
       <button
         type="submit"
         disabled={loading}
