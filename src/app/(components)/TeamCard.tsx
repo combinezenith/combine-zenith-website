@@ -5,12 +5,14 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { Briefcase, ChevronDown, ChevronUp } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface TeamMember {
   id: string;
   name: string;
   role: string;
   image: string;
+  parentRole?: string | null;
   children?: TeamMember[];
 }
 
@@ -24,8 +26,6 @@ const ROLE_ORDER = [
   'SEO & AI Support Specialist',
   'Content Writer',
   'Social Media Executive',
-  'Creative Content Creator',
-  'AI Video Specialist',
 ];
 
 export default function OrgChart() {
@@ -84,10 +84,8 @@ export default function OrgChart() {
         ]);
         connect('Head of Marketing', ['Social Media Executive']);
         connect('Operations Lead', [
-          'Creative Content Creator',
-          'AI Video Specialist',
           'SEO & AI Support Specialist',
-          'Content Writer'
+          'Content Writer',
         ]);
         connect('Lead Developer', [
           'Web Developer & R&D Specialist',
@@ -108,29 +106,31 @@ export default function OrgChart() {
   // --- UI Components ---
 
   const MemberCard = ({ member }: { member: TeamMember }) => (
-    <div className="flex flex-col items-center p-3 sm:p-4 bg-white border border-gray-200 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 w-full max-w-[180px] sm:max-w-[200px] lg:max-w-[250px]">
-      <div className="relative w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 mb-2 sm:mb-3">
-        <Image
-          src={member.image || '/placeholder.png'}
-          alt={member.name}
-          fill
-          className="rounded-full object-cover ring-2 sm:ring-4 ring-[#b5a6d0]/50"
-          onError={(e) => {
-            (e.target as HTMLImageElement).src =
-              'https://placehold.co/100x100/6B46C1/FFF?text=User';
-          }}
-        />
+    <Link href={`/team/${member.id}`} className="block">
+      <div className="flex flex-col items-center p-3 sm:p-4 bg-white border border-gray-200 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer w-full max-w-[180px] sm:max-w-[200px] lg:max-w-[250px]">
+        <div className="relative w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 mb-2 sm:mb-3">
+          <Image
+            src={member.image || '/placeholder.png'}
+            alt={member.name}
+            fill
+            className="rounded-full object-cover ring-2 sm:ring-4 ring-[#b5a6d0]/50"
+            onError={(e) => {
+              (e.target as HTMLImageElement).src =
+                'https://placehold.co/100x100/6B46C1/FFF?text=User';
+            }}
+          />
+        </div>
+        <h3 className="text-xs sm:text-sm font-semibold text-gray-800 text-center leading-tight px-1">
+          {member.name}
+        </h3>
+        <p className="text-[10px] sm:text-xs text-[#200053] font-medium mt-1 flex items-center flex-wrap justify-center text-center">
+          <Briefcase className="w-3 h-3 mr-1 text-[#b5a6d0] flex-shrink-0" />
+          <span className="break-words max-w-[120px] sm:max-w-[150px] lg:max-w-none">
+            {member.role}
+          </span>
+        </p>
       </div>
-      <h3 className="text-xs sm:text-sm font-semibold text-gray-800 text-center leading-tight px-1">
-        {member.name}
-      </h3>
-      <p className="text-[10px] sm:text-xs text-[#200053] font-medium mt-1 flex items-center flex-wrap justify-center text-center">
-        <Briefcase className="w-3 h-3 mr-1 text-[#b5a6d0] flex-shrink-0" />
-        <span className="break-words max-w-[120px] sm:max-w-[150px] lg:max-w-none">
-          {member.role}
-        </span>
-      </p>
-    </div>
+    </Link>
   );
 
   const OrgChartNode = ({ member }: { member: TeamMember }) => {
