@@ -6,6 +6,13 @@ import NextAuthProvider from "@/app/context/NextAuthProvider";
 import { Toaster } from "react-hot-toast";
 import Layout from "@/app/(components)/ClientWrapper";
 import WebsiteLoader from "@/app/(components)/WebsiteLoader";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+// Register GSAP plugins globally
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 const surgena = localFont({
   src: [

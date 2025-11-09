@@ -1,11 +1,9 @@
 'use client';
-
 import React, { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../config/firebase';
-import { Briefcase, ChevronDown, ChevronUp } from 'lucide-react';
+import { Briefcase } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
 
 interface TeamMember {
   id: string;
@@ -33,7 +31,6 @@ export default function OrgChart() {
   const [loading, setLoading] = useState(true);
   const [hierarchy, setHierarchy] = useState<TeamMember | null>(null);
 
-  // --- Fetch and organize data ---
   useEffect(() => {
     const fetchTeam = async () => {
       try {
@@ -44,13 +41,10 @@ export default function OrgChart() {
           children: [],
         }));
 
-        console.log('Fetched members:', members); // Debug log
-
         // Sort by role order
         members.sort((a, b) => {
           const aIndex = ROLE_ORDER.indexOf(a.role);
           const bIndex = ROLE_ORDER.indexOf(b.role);
-          // If role not in ROLE_ORDER, put it at the end
           if (aIndex === -1 && bIndex === -1) return 0;
           if (aIndex === -1) return 1;
           if (bIndex === -1) return -1;
@@ -67,14 +61,12 @@ export default function OrgChart() {
         }
 
         const map = Object.fromEntries(members.map((m) => [m.role, m]));
-        console.log('Role map:', Object.keys(map)); // Debug log
 
         const connect = (parentRole: string, childRoles: string[]) => {
           if (map[parentRole]) {
             map[parentRole].children = childRoles
               .map((r) => map[r])
               .filter(Boolean);
-            console.log(`Connected ${parentRole} to ${map[parentRole].children?.length} children`);
           }
         };
 
@@ -83,12 +75,12 @@ export default function OrgChart() {
           'Operations Lead',
           'Lead Developer',
         ]);
-        connect('Head of Marketing', ['Social Media Executive']);
+        connect('Head of Marketing', ['Social Media Executive','Content Writer']);
         connect('Operations Lead', [
           'Creative Content Creator',
           'AI Video Specialist',
           'SEO & AI Support Specialist',
-          'Content Writer'
+
         ]);
         connect('Lead Developer', [
           'Web Developer & R&D Specialist',
@@ -106,98 +98,147 @@ export default function OrgChart() {
     fetchTeam();
   }, []);
 
-  // --- UI Components ---
+  const MemberCard = ({ member }: { member: TeamMember }) => {
+    return (
+      <a
+        href={`/team/${member.id}`}
+        className="flex flex-col items-center group no-underline transition-all duration-300 hover:scale-105"
+      >
+        <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 mb-3 sm:mb-4">
+          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-600 to-purple-800 shadow-2xl group-hover:shadow-purple-400/50 transition-all duration-300"></div>
+          <Image
+            src={member.image || 'https://placehold.co/200x200/6B46C1/FFF?text=User'}
+            alt={member.name}
+            width={128}
+            height={128}
+            className="absolute inset-0 w-full h-full rounded-full object-cover p-1 z-10"
+            onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+              (e.target as HTMLImageElement).src =
+                'https://placehold.co/200x200/6B46C1/FFF?text=User';
+            }}
+          />
+        </div>
+        <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-900 text-center mb-1 px-2">
+          {member.name}
+        </h3>
+        <p className="text-xs sm:text-sm text-purple-600 font-medium text-center flex items-center gap-1 px-2">
+          <Briefcase className="w-3 h-3 sm:w-4 sm:h-4 text-purple-400 flex-shrink-0" />
+          <span className="break-words">{member.role}</span>
+        </p>
+      </a>
+    );
+  };
 
-  const MemberCard = ({ member }: { member: TeamMember }) => (
-    <Link 
-      href={`/team/${member.id}`}
-      className="flex flex-col items-center p-3 sm:p-4 bg-white border border-gray-200 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 w-full max-w-[180px] sm:max-w-[200px] lg:max-w-[250px] hover:scale-105"
-    >
-      <div className="relative w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 mb-2 sm:mb-3">
-        <Image
-          src={member.image || '/placeholder.png'}
-          alt={member.name}
-          fill
-          className="rounded-full object-cover ring-2 sm:ring-4 ring-[#b5a6d0]/50"
-          onError={(e) => {
-            (e.target as HTMLImageElement).src =
-              'https://placehold.co/100x100/6B46C1/FFF?text=User';
-          }}
-        />
+
+
+  const DepartmentColumn = ({ head, teamMembers }: { head: TeamMember; teamMembers?: TeamMember[] }) => (
+    <div className="flex flex-col items-center gap-6 sm:gap-8 md:gap-10 lg:gap-12">
+      {/* Department Head */}
+      <div className="relative">
+        <MemberCard member={head} />
+
       </div>
-      <h3 className="text-xs sm:text-sm font-semibold text-gray-800 text-center leading-tight px-1">
-        {member.name}
-      </h3>
-      <p className="text-[10px] sm:text-xs text-[#200053] font-medium mt-1 flex items-center flex-wrap justify-center text-center">
-        <Briefcase className="w-3 h-3 mr-1 text-[#b5a6d0] flex-shrink-0" />
-        <span className="break-words max-w-[120px] sm:max-w-[150px] lg:max-w-none">
-          {member.role}
-        </span>
-      </p>
-    </Link>
+
+      {/* Team Members */}
+      {teamMembers && teamMembers.length > 0 && (
+        <div className="flex flex-col gap-6 sm:gap-8 md:gap-10">
+          {teamMembers.map((child) => (
+            <div key={child.id} className="relative">
+              <MemberCard member={child} />
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
 
-  const OrgChartNode = ({ member }: { member: TeamMember }) => {
-    const [expanded, setExpanded] = useState(true);
-    const hasChildren = member.children && member.children.length > 0;
+  const renderOrgChart = (root: TeamMember) => {
+    const directReports = root.children || [];
+    const marketing = directReports.find(m => m.role === 'Head of Marketing');
+    const operations = directReports.find(m => m.role === 'Operations Lead');
+    const lead = directReports.find(m => m.role === 'Lead Developer');
 
     return (
-      <div className="flex flex-col items-center w-full">
-        <div className="relative">
-          <MemberCard member={member} />
-          {hasChildren && (
-            <button
-              onClick={() => setExpanded((e) => !e)}
-              className="absolute -bottom-3 sm:-bottom-4 left-1/2 transform -translate-x-1/2 p-1 rounded-full bg-white text-[#200053] shadow-md hover:bg-indigo-50 transition z-10"
-            >
-              {expanded ? (
-                <ChevronUp className="w-3 h-3 sm:w-4 sm:h-4" />
-              ) : (
-                <ChevronDown className="w-3 h-3 sm:w-4 sm:h-4" />
-              )}
-            </button>
-          )}
-        </div>
+      <div className="w-full flex justify-center">
+        <div className="w-full max-w-7xl">
+          {/* Mobile Layout - Vertical Stack */}
+          <div className="flex flex-col items-center gap-8 sm:gap-10 md:hidden">
+            {/* Founder */}
+            <div className="relative">
+              <MemberCard member={root} />
+            </div>
 
-        {hasChildren && expanded && (
-          <div className="w-full relative mt-6 sm:mt-8">
-            {/* Horizontal line connecting all visible children */}
-            <div className="w-full border-t border-[#b5a6d0] absolute top-0 left-0"></div>
+            {/* All Departments Stacked */}
+            {marketing && (
+              <div className="relative w-full flex justify-center">
+                <DepartmentColumn head={marketing} teamMembers={marketing.children} />
+              </div>
+            )}
 
-            <div className="flex flex-col sm:flex-row justify-center items-center sm:items-start w-full gap-4 sm:gap-3 lg:gap-6 px-2 sm:px-0 flex-wrap">
-              {member.children!.map((child) => (
-                <div
-                  key={child.id}
-                  className="relative flex flex-col items-center w-full sm:w-auto"
-                >
-                  {/* Vertical line connecting parent to child - hidden on mobile */}
-                  <div className="hidden sm:block w-px h-6 sm:h-8 bg-[#b5a6d0] absolute -top-6 sm:-top-8 left-1/2 transform -translate-x-1/2"></div>
-                  
-                  {/* Mobile vertical line */}
-                  <div className="block sm:hidden w-px h-4 bg-[#b5a6d0] absolute -top-4 left-1/2 transform -translate-x-1/2"></div>
+            {operations && (
+              <div className="relative w-full flex justify-center">
+                <DepartmentColumn head={operations} teamMembers={operations.children} />
+              </div>
+            )}
 
-                  <OrgChartNode member={child} />
-                </div>
-              ))}
+            {lead && (
+              <div className="relative w-full flex justify-center">
+                <DepartmentColumn head={lead} teamMembers={lead.children} />
+              </div>
+            )}
+          </div>
+
+          {/* Tablet Layout - 2 Columns */}
+          <div className="hidden md:flex lg:hidden flex-col items-center gap-10">
+            {/* Founder */}
+            <div className="relative">
+              <MemberCard member={root} />
+            </div>
+
+            {/* First Row: Marketing + Operations */}
+            <div className="grid grid-cols-2 gap-12 w-full max-w-3xl">
+              {marketing && <DepartmentColumn head={marketing} teamMembers={marketing.children} />}
+              {operations && <DepartmentColumn head={operations} teamMembers={operations.children} />}
+            </div>
+
+            {/* Second Row: Development */}
+            {lead && (
+              <div className="w-full flex justify-center">
+                <DepartmentColumn head={lead} teamMembers={lead.children} />
+              </div>
+            )}
+          </div>
+
+          {/* Desktop Layout - 3 Columns + Founder */}
+          <div className="hidden lg:flex flex-col items-center gap-12">
+            {/* Founder */}
+            <div className="relative">
+              <MemberCard member={root} />
+            </div>
+
+            {/* All Three Departments Side by Side */}
+            <div className="grid grid-cols-3 gap-16 xl:gap-20 w-full max-w-6xl">
+              {marketing && <DepartmentColumn head={marketing} teamMembers={marketing.children} />}
+              {operations && <DepartmentColumn head={operations} teamMembers={operations.children} />}
+              {lead && <DepartmentColumn head={lead} teamMembers={lead.children} />}
             </div>
           </div>
-        )}
+        </div>
       </div>
     );
   };
 
-  // --- Main Render ---
   return (
     <div
-      className="min-h-screen p-3 sm:p-6 lg:p-8"
+      className="min-h-screen p-4 sm:p-6 md:p-8 lg:p-12 bg-gradient-to-br from-purple-50 via-white to-purple-50 transition-all duration-300"
       style={{ fontFamily: "'Inter', sans-serif" }}
     >
       <div className="max-w-7xl mx-auto">
-        <div className="pb-6 sm:pb-8 lg:pb-10 w-full text-center">
+        <div className="py-8 sm:py-10 md:py-12 lg:py-16 w-full">
           {loading ? (
             <div className="text-center py-16 sm:py-20 text-gray-500">
               <svg
-                className="animate-spin h-6 w-6 sm:h-8 sm:w-8 text-[#200053] mx-auto"
+                className="animate-spin h-6 w-6 sm:h-8 sm:w-8 text-purple-600 mx-auto"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -219,9 +260,9 @@ export default function OrgChart() {
               <p className="mt-3 sm:mt-4 text-sm sm:text-base">Loading Team Hierarchy...</p>
             </div>
           ) : hierarchy ? (
-            <OrgChartNode member={hierarchy} />
+            renderOrgChart(hierarchy)
           ) : (
-            <p className="text-gray-500 text-sm sm:text-base">No hierarchy data found.</p>
+            <p className="text-gray-500 text-center text-base sm:text-lg">No hierarchy data found.</p>
           )}
         </div>
       </div>
