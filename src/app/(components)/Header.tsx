@@ -1,19 +1,71 @@
 'use client';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { BiUser } from 'react-icons/bi';
+import { gsap } from 'gsap';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
+  const logoRef = useRef<HTMLDivElement>(null);
+  const navRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Animate logo
+      if (logoRef.current) {
+        gsap.fromTo(logoRef.current,
+          { opacity: 0, x: -50 },
+          {
+            opacity: 1,
+            x: 0,
+            duration: 1,
+            ease: "power2.out"
+          }
+        );
+      }
+
+      // Animate navigation links
+      if (navRef.current) {
+        gsap.fromTo(navRef.current,
+          { opacity: 0, y: -20 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: "power2.out",
+            delay: 0.2
+          }
+        );
+      }
+
+      // Animate explore button
+      if (buttonRef.current) {
+        gsap.fromTo(buttonRef.current,
+          { opacity: 0, scale: 0.8 },
+          {
+            opacity: 1,
+            scale: 1,
+            duration: 0.8,
+            ease: "back.out(1.7)",
+            delay: 0.4
+          }
+        );
+      }
+    }, headerRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-sm">
+    <header ref={headerRef} className="fixed top-0 left-0 right-0 z-50 backdrop-blur-sm bg-linear-to-bl from-purple-800 to-black">
       <nav className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo on the left */}
           <Link href="/" className="flex items-center">
-            <div className="relative w-40 h-12">
+            <div ref={logoRef} className="relative w-40 h-12">
               <Image
                 src="/logo-white.png"
                 fill
@@ -27,7 +79,7 @@ export default function Header() {
 
           {/* Navigation links in the middle - hidden on mobile */}
           <div className="hidden lg:flex items-center justify-center flex-1 mx-8">
-            <div className="flex items-center space-x-8">
+            <div ref={navRef} className="flex items-center space-x-8">
               <Link href="/" className="text-white hover:text-purple-300 transition-colors duration-200">
                 Home
               </Link>
@@ -55,7 +107,7 @@ export default function Header() {
           {/* Explore Services button */}
           <Link href="/services" className="hidden lg:flex items-center mr-4">
             <div className="hidden lg:flex items-center">
-              <button className="flex items-center space-x-2 p-2 bg-white text-purple-900 rounded-lg hover:bg-purple-100 transition-colors duration-200 font-semibold">
+              <button ref={buttonRef} className="flex items-center space-x-2 p-2 bg-white text-purple-900 rounded-lg hover:bg-purple-100 transition-colors duration-200 font-semibold">
                 <BiUser />
                 <span>Explore Services</span>
               </button>
@@ -141,4 +193,3 @@ export default function Header() {
     </header>
   );
 }
-

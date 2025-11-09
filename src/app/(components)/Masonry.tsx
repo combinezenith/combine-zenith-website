@@ -1,8 +1,8 @@
-import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 
 const useMedia = (queries: string[], values: number[], defaultValue: number): number => {
-  const get = () => values[queries.findIndex(q => matchMedia(q).matches)] ?? defaultValue;
+  const get = useCallback(() => values[queries.findIndex(q => matchMedia(q).matches)] ?? defaultValue, [queries, values, defaultValue]);
 
   const [value, setValue] = useState<number>(get);
 
@@ -10,7 +10,7 @@ const useMedia = (queries: string[], values: number[], defaultValue: number): nu
     const handler = () => setValue(get);
     queries.forEach(q => matchMedia(q).addEventListener('change', handler));
     return () => queries.forEach(q => matchMedia(q).removeEventListener('change', handler));
-  }, [queries]);
+  }, [queries, get]);
 
   return value;
 };
@@ -27,7 +27,7 @@ const useMeasure = <T extends HTMLElement>() => {
     });
     ro.observe(ref.current);
     return () => ro.disconnect();
-  }, []);
+  }, [ref]);
 
   return [ref, size] as const;
 };
@@ -101,9 +101,9 @@ const Masonry: React.FC<MasonryProps> = ({
 
   const loadMore = () => {
     if (isLoading || !hasMoreItems) return;
-    
+
     setIsLoading(true);
-    
+
     // Preload next batch of images
     const nextItems = items.slice(visibleCount, visibleCount + itemsPerLoad);
     preloadImages(nextItems.map(i => i.img)).then(() => {
@@ -161,11 +161,11 @@ const Masonry: React.FC<MasonryProps> = ({
     return visibleItems.map(child => {
       const col = colHeights.indexOf(Math.min(...colHeights));
       const x = col * (columnWidth + gap);
-      
+
       // Much smaller heights for compact layout
       const baseHeight = columns > 2 ? child.height / 3 : child.height / 4;
       const height = Math.max(baseHeight, 80); // Even smaller minimum height
-      
+
       const y = colHeights[col];
 
       colHeights[col] += height + gap;
@@ -180,11 +180,11 @@ const Masonry: React.FC<MasonryProps> = ({
 
     grid.forEach((item, index) => {
       const selector = `[data-key="${item.id}"]`;
-      const animProps = { 
-        x: item.x, 
-        y: item.y, 
-        width: item.w, 
-        height: item.h 
+      const animProps = {
+        x: item.x,
+        y: item.y,
+        width: item.w,
+        height: item.h
       };
 
       if (!hasMounted.current) {
@@ -219,7 +219,7 @@ const Masonry: React.FC<MasonryProps> = ({
     });
 
     hasMounted.current = true;
-  }, [grid, imagesReady, stagger, animateFrom, blurToFocus, duration, ease, columns]);
+  }, [grid, imagesReady, stagger, animateFrom, blurToFocus, duration, ease, columns, getInitialPosition]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleMouseEnter = (id: string, element: HTMLElement) => {
     if (scaleOnHover && window.innerWidth > 768) {
@@ -251,10 +251,10 @@ const Masonry: React.FC<MasonryProps> = ({
 
   return (
     <div className="w-full">
-      <div 
-        ref={containerRef} 
+      <div
+        ref={containerRef}
         className="relative w-full"
-        style={{ 
+        style={{
           height: grid.length > 0 ? Math.max(...grid.map(item => item.y + item.h)) : 'auto',
           minHeight: '200px' // Smaller minimum height
         }}
@@ -264,7 +264,7 @@ const Masonry: React.FC<MasonryProps> = ({
             key={item.id}
             data-key={item.id}
             className="absolute cursor-pointer"
-            style={{ 
+            style={{
               willChange: 'transform, width, height, opacity',
               transform: 'translateZ(0)'
             }}
@@ -304,7 +304,7 @@ const Masonry: React.FC<MasonryProps> = ({
             See Less
           </button>
         )}
-        
+
         {hasMoreItems && (
           <button
             onClick={loadMore}

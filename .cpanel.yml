@@ -1,0 +1,33 @@
+---
+deployment:
+  tasks:
+    # Set project paths
+    - export DEPLOYPATH=/home/combinezenith/website
+    - export NODEENVPATH=/home/combinezenith/nodevenv/website/20/bin/activate
+
+    - echo "🚀 Starting Next.js deployment for Combine Zenith..."
+
+    # Move into project directory
+    - cd $DEPLOYPATH
+
+    # Activate Node.js environment
+    - source $NODEENVPATH
+
+    # Pull latest code from Git
+    - echo "🔄 Pulling latest code from Git..."
+    - git fetch origin main
+    - git reset --hard origin/main
+
+    # Install dependencies
+    - echo "📦 Installing dependencies..."
+    - npm install
+
+    # Build Next.js for production
+    - echo "🛠️ Building Next.js project..."
+    - npm run build
+
+    # Restart Node.js app (using cPanel’s restart script)
+    - echo "♻️ Restarting Node.js application..."
+    - /usr/local/cpanel/scripts/restartsrv_nodejsapps --app /home/combinezenith/website
+
+    - echo "✅ Combine Zenith deployment completed successfully!"
