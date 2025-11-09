@@ -115,7 +115,7 @@ export default function TeamPage() {
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold">Team Management</h1>
             <p className="text-gray-300 text-sm mt-1 max-w-md">
-              Manage your organization's teams and their roles within Combine
+              Manage your organization&apos;s teams and their roles within Combine
               Zenith.
             </p>
           </div>

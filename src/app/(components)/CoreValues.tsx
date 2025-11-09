@@ -1,6 +1,19 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
+
 export default function CoreValues() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const bgCircle1Ref = useRef<HTMLDivElement>(null);
+  const bgCircle2Ref = useRef<HTMLDivElement>(null);
+  const bgCircle3Ref = useRef<HTMLDivElement>(null);
+
   const values = [
     {
       title: "Integrated Action",
@@ -40,34 +53,123 @@ export default function CoreValues() {
     }
   ];
 
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Animate header
+      if (headerRef.current) {
+        gsap.fromTo(headerRef.current,
+          { opacity: 0, y: 60 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1.2,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: headerRef.current,
+              start: "top 80%",
+              end: "bottom 20%",
+              toggleActions: "play none none reverse"
+            }
+          }
+        );
+      }
+
+      // Animate value cards with horizontal alternating animations
+      if (gridRef.current) {
+        const cards = gridRef.current.querySelectorAll('.value-card');
+        cards.forEach((card, index) => {
+          gsap.fromTo(card,
+            { opacity: 0, x: index % 2 === 0 ? -100 : 100, scale: 0.8 },
+            {
+              opacity: 1,
+              x: 0,
+              scale: 1,
+              duration: 0.8,
+              delay: index * 0.2,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: gridRef.current,
+                start: "top 75%",
+                end: "bottom 25%",
+                toggleActions: "play none none reverse"
+              }
+            }
+          );
+        });
+      }
+
+      // Parallax background effects
+      if (bgCircle1Ref.current) {
+        gsap.to(bgCircle1Ref.current, {
+          y: -100,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1
+          }
+        });
+      }
+
+      if (bgCircle2Ref.current) {
+        gsap.to(bgCircle2Ref.current, {
+          y: -80,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1
+          }
+        });
+      }
+
+      if (bgCircle3Ref.current) {
+        gsap.to(bgCircle3Ref.current, {
+          y: -120,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1
+          }
+        });
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section aria-label="Core Values Section" className="relative py-20 overflow-hidden">
+    <section ref={sectionRef} aria-label="Core Values Section" className="relative py-20 overflow-hidden">
       {/* Background Elements */}
       <div aria-label="Background Decorations" className="absolute inset-0 overflow-hidden">
-        <div aria-label="Background Blur Circle 1" className="absolute -top-32 -left-32 w-64 h-64 rounded-full blur-3xl" />
-        <div aria-label="Background Blur Circle 2" className="absolute -bottom-32 -right-32 w-64 h-64 rounded-full blur-3xl" />
-        <div aria-label="Background Blur Circle 3" className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
+        <div ref={bgCircle1Ref} aria-label="Background Blur Circle 1" className="absolute -top-32 -left-32 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl" />
+        <div ref={bgCircle2Ref} aria-label="Background Blur Circle 2" className="absolute -bottom-32 -right-32 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl" />
+        <div ref={bgCircle3Ref} aria-label="Background Blur Circle 3" className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
       </div>
 
       <div aria-label="Core Values Container" className="container mx-auto px-6 relative z-10">
         <div aria-label="Core Values Content" className="max-w-6xl mx-auto">
           {/* Header Section */}
-          <div aria-label="Core Values Header" className="text-center mb-16">
+          <div ref={headerRef} aria-label="Core Values Header" className="text-center mb-16">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
               Our Core Values
             </h1>
           </div>
 
           {/* Values Grid */}
-          <div aria-label="Values Grid" className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
+          <div ref={gridRef} aria-label="Values Grid" className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
             {values.map((value, index) => (
               <div
                 key={index}
-                className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:border-purple-400/30 transition-all duration-300 hover:transform hover:scale-105 group"
+                className="value-card bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:border-purple-400/30 transition-all duration-300 hover:transform hover:scale-105 group"
               >
                 <div aria-label="Value Item" className="flex items-start space-x-4">
-                  <div aria-label="Value Icon" className="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center group-hover:from-purple-600 group-hover:to-pink-600 transition-all duration-300">
-                    <div aria-hidden="true" className="text-white">
+                  <div aria-label="Value Icon" className="flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center group-hover:scale-110 transition-all duration-300">
+                    <div className="text-white">
                       {value.icon}
                     </div>
                   </div>

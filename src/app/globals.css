@@ -58,3 +58,45 @@ h1,
     border-color: hsl(var(--border));
   }
 }
+
+/* Custom animations for portfolio page */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 1s ease-out forwards;
+}
+
+.animation-delay-300 {
+  animation-delay: 0.3s;
+}
+
+.animation-delay-600 {
+  animation-delay: 0.6s;
+}
+
+.shss-wrapper {
+  display: flex;
+  overflow-x: auto;
+  scroll‑snap‑type: x mandatory;
+}
+.shss-slide {
+  flex‑shrink: 0;
+  scroll‑snap‑align: center;
+}
+/* hide scrollbar */
+.shss-wrapper::-webkit-scrollbar {
+  display: none;
+}
+.shss-wrapper {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
