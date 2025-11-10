@@ -5,16 +5,6 @@ import BlogPosts from "@/app/(components)/BlogPosts";
 export default function Blog() {
   return (
     <div className="min-h-screen flex flex-col pt-30 justify-center relative overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a0a] via-[#1a0a2e] to-[#0a0a0a]"></div>
-      <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_30%_20%,rgba(139,69,193,0.1),transparent_50%)]"></div>
-      <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(circle_at_70%_80%,rgba(168,85,247,0.1),transparent_50%)]"></div>
-
-      {/* Floating Elements */}
-      <div className="absolute top-20 left-10 w-32 h-32 bg-purple-500/10 rounded-full blur-xl animate-pulse"></div>
-      <div className="absolute top-40 right-20 w-24 h-24 bg-pink-500/10 rounded-full blur-xl animate-pulse delay-1000"></div>
-      <div className="absolute bottom-32 left-20 w-40 h-40 bg-blue-500/10 rounded-full blur-xl animate-pulse delay-2000"></div>
-
       <div className="text-center px-4 relative z-10">
         <div className="max-w-4xl mx-auto">
           {/* Animated Title */}
