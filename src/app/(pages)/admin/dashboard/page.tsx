@@ -189,9 +189,6 @@ export default function DashboardPage() {
         <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-8 gap-4">
           <div>
             <h1 className="text-3xl font-bold">Website Analytics Dashboard</h1>
-            <p className="text-gray-400 text-sm">
-              Integrated with Google Analytics (GA4) — real-time insights.
-            </p>
           </div>
 
           <div className="flex items-center gap-3">
