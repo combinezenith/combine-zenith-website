@@ -10,7 +10,7 @@ const analyticsDataClient = new BetaAnalyticsDataClient({
 
 export async function GET() {
   try {
-    const propertyId = "properties/509697900"; // your GA4 property ID
+    const propertyId = process.env.GA_PROPERTY_ID; // your GA4 property ID
 
     const [response] = await analyticsDataClient.runReport({
       property: propertyId,
