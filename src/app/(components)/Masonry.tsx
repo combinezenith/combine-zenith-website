@@ -64,7 +64,7 @@ interface MasonryProps {
   ease?: string;
   duration?: number;
   stagger?: number;
-  animateFrom?: 'bottom' | 'top' | 'left' | 'right' | 'center' | 'random';
+  animateFrom?: 'bottom' | 'top' | 'left' | 'center' | 'random';
   scaleOnHover?: boolean;
   hoverScale?: number;
   blurToFocus?: boolean;
@@ -124,7 +124,7 @@ const Masonry: React.FC<MasonryProps> = ({
 
     let direction = animateFrom;
     if (animateFrom === 'random') {
-      const dirs = ['top', 'bottom', 'left', 'right'];
+      const dirs = ['top', 'bottom', 'left'];
       direction = dirs[Math.floor(Math.random() * dirs.length)] as typeof animateFrom;
     }
 
@@ -135,8 +135,6 @@ const Masonry: React.FC<MasonryProps> = ({
         return { x: item.x, y: window.innerHeight + 100 };
       case 'left':
         return { x: -100, y: item.y };
-      case 'right':
-        return { x: window.innerWidth + 100, y: item.y };
       case 'center':
         return {
           x: containerRect.width / 2 - item.w / 2,
@@ -317,7 +315,7 @@ const Masonry: React.FC<MasonryProps> = ({
                 <span>Loading...</span>
               </div>
             ) : (
-              `Load More (+${itemsPerLoad})`
+              `Show more`
             )}
           </button>
         )}
