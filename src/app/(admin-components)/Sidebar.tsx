@@ -8,6 +8,8 @@ import {
   FolderKanban,
   Package,
   FileText,
+  Contact,
+  DollarSign
 } from "lucide-react";
 import { useState } from "react";
 
@@ -22,6 +24,8 @@ export default function Sidebar() {
     { name: "Portfolio", href: "/admin/portfolio", icon: FolderKanban },
     { name: "Services", href: "/admin/services", icon: Package },
     { name: "Blog Management", href: "/admin/blog", icon: FileText },
+    { name: "Contact Messages", href: "/admin/contact", icon: Contact },
+    { name: "Pricing", href: "/admin/pricing", icon: DollarSign },
   ];
 
   return (

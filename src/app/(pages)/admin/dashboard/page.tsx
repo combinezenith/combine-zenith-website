@@ -184,7 +184,7 @@ export default function DashboardPage() {
   return (
     <>
       <Sidebar />
-      <div className="md:ml-64 p-6 sm:p-8 bg-[#1c1833] min-h-screen text-white font-montserrat">
+      <div className="md:ml-64 p-6 sm:p-8 min-h-screen text-white font-montserrat">
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-8 gap-4">
           <div>
