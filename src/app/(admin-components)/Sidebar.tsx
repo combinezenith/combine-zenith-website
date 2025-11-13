@@ -9,7 +9,8 @@ import {
   Package,
   FileText,
   Contact,
-  DollarSign
+  DollarSign,
+  BarChart2,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -23,6 +24,7 @@ export default function Sidebar() {
     { name: "User Management", href: "/admin/user", icon: Users },
     { name: "Portfolio", href: "/admin/portfolio", icon: FolderKanban },
     { name: "Services", href: "/admin/services", icon: Package },
+    { name: "Stats", href: "/admin/stats", icon: BarChart2 },
     { name: "Blog Management", href: "/admin/blog", icon: FileText },
     { name: "Contact Messages", href: "/admin/contact", icon: Contact },
     { name: "Pricing", href: "/admin/pricing", icon: DollarSign },
