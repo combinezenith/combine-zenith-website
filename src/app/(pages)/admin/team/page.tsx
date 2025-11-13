@@ -102,7 +102,7 @@ export default function TeamPage() {
   }
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-[#392C6A]">
+    <div className="flex flex-col md:flex-row min-h-screen">
       {/* Sidebar */}
       <div className="md:fixed md:w-64 md:h-screen">
         <Sidebar />
