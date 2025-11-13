@@ -1,20 +1,77 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ChevronDown, Star, Award, Users, TrendingUp, ArrowRight, Sparkles } from 'lucide-react';
 import ServiceCard from '@/app/(components)/ServiceCard';
 import TextType from '@/app/(components)/TextType';
 import { CountingNumber } from '@/app/components/CountingNumber';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '@/app/config/firebase';
 
 gsap.registerPlugin(ScrollTrigger);
+
+interface Stat {
+  id: string;
+  icon: string;
+  value: number;
+  label: string;
+  color: string;
+  suffix: string;
+  order: number;
+}
+
+const iconMap = {
+  Star: Star,
+  Award: Award,
+  Users: Users,
+  TrendingUp: TrendingUp,
+};
 
 export default function Service() {
   const heroRef = useRef<HTMLElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
   const servicesRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
+
+  const [stats, setStats] = useState<Stat[]>([]);
+  const [loading, setLoading] = useState(true);
+
+useEffect(() => {
+  const fetchStats = async () => {
+    try {
+      const snapshot = await getDocs(collection(db, "stats"));
+      if (snapshot.empty) {
+        // Use default stats if none exist
+        setStats([
+          { id: "stat1", icon: "Star", value: 500, label: "Projects Completed", color: "text-yellow-400", suffix: "+", order: 1 },
+          { id: "stat2", icon: "Award", value: 98, label: "Client Satisfaction", color: "text-green-400", suffix: "%", order: 2 },
+          { id: "stat3", icon: "Users", value: 150, label: "Happy Clients", color: "text-blue-400", suffix: "+", order: 3 },
+          { id: "stat4", icon: "TrendingUp", value: 300, label: "Average ROI", color: "text-purple-400", suffix: "%", order: 4 }
+        ]);
+      } else {
+        const data: Stat[] = snapshot.docs
+          .map((d) => ({ id: d.id, ...d.data() } as Stat))
+          .sort((a, b) => a.order - b.order);
+        setStats(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch stats:", error);
+      // Fallback to default stats on error
+      setStats([
+        { id: "stat1", icon: "Star", value: 500, label: "Projects Completed", color: "text-yellow-400", suffix: "+", order: 1 },
+        { id: "stat2", icon: "Award", value: 98, label: "Client Satisfaction", color: "text-green-400", suffix: "%", order: 2 },
+        { id: "stat3", icon: "Users", value: 150, label: "Happy Clients", color: "text-blue-400", suffix: "+", order: 3 },
+        { id: "stat4", icon: "TrendingUp", value: 300, label: "Average ROI", color: "text-purple-400", suffix: "%", order: 4 }
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchStats(); // Remove authentication check
+}, []); // Remove dependencies
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -72,9 +129,9 @@ export default function Service() {
       }
 
       // Stats animations
-      if (statsRef.current) {
-        const stats = statsRef.current.querySelectorAll('.stat-item');
-        gsap.fromTo(stats,
+      if (statsRef.current && !loading) {
+        const statItems = statsRef.current.querySelectorAll('.stat-item');
+        gsap.fromTo(statItems,
           { opacity: 0, y: 50, scale: 0.9 },
           {
             opacity: 1,
@@ -133,14 +190,7 @@ export default function Service() {
     }, heroRef);
 
     return () => ctx.revert();
-  }, []);
-
-  const stats = [
-    { icon: Star, value: 500, label: 'Projects Completed', color: 'text-yellow-400', suffix: '+' },
-    { icon: Award, value: 98, label: 'Client Satisfaction', color: 'text-green-400', suffix: '%' },
-    { icon: Users, value: 150, label: 'Happy Clients', color: 'text-blue-400', suffix: '+' },
-    { icon: TrendingUp, value: 300, label: 'Average ROI', color: 'text-purple-400', suffix: '%' }
-  ];
+  }, [loading]);
 
   return (
     <main className="min-h-screen text-white overflow-hidden" aria-label='Services Page'>
@@ -200,30 +250,38 @@ export default function Service() {
       {/* Stats Section */}
       <section ref={statsRef} className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-            {stats.map((stat, index) => (
-              <div key={index} className="stat-item text-center group">
-                <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 sm:p-8 border border-white/10 hover:border-purple-400/30 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-purple-500/10">
-                  <stat.icon className={`w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-4 ${stat.color} group-hover:scale-110 transition-transform`} />
-                  <div className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
-                    <CountingNumber
-                      number={stat.value}
-                      fromNumber={0}
-                      padStart={false}
-                      decimalSeparator="."
-                      decimalPlaces={0}
-                      delay={index * 200}
-                      className="text-3xl sm:text-4xl md:text-5xl font-bold"
-                    />
-                    {stat.suffix}
+          {loading ? (
+            <div className="text-center text-purple-300">Loading stats...</div>
+          ) : (
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+              {stats.map((stat, index) => {
+                const IconComponent = iconMap[stat.icon as keyof typeof iconMap] || Star;
+                
+                return (
+                  <div key={stat.id} className="stat-item text-center group">
+                    <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 sm:p-8 border border-white/10 hover:border-purple-400/30 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-purple-500/10">
+                      <IconComponent className={`w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-4 ${stat.color} group-hover:scale-110 transition-transform`} />
+                      <div className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
+                        <CountingNumber
+                          number={stat.value}
+                          fromNumber={0}
+                          padStart={false}
+                          decimalSeparator="."
+                          decimalPlaces={0}
+                          delay={index * 200}
+                          className="text-3xl sm:text-4xl md:text-5xl font-bold"
+                        />
+                        {stat.suffix}
+                      </div>
+                      <div className="text-sm sm:text-base text-purple-200">
+                        {stat.label}
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-sm sm:text-base text-purple-200">
-                    {stat.label}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
 
