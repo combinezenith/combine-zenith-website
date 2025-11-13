@@ -281,7 +281,7 @@ export default function AboutSection() {
               ease="power3.out"
               duration={0.6}
               stagger={0.05}
-              animateFrom="random"
+              animateFrom="bottom"
               scaleOnHover={true}
               hoverScale={0.95}
               blurToFocus={true}
