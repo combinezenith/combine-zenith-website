@@ -1,0 +1,137 @@
+import React from 'react';
+import { Check, Circle } from 'lucide-react';
+
+export default function PricingPage() {
+  const plans = [
+    {
+      name: 'Starter',
+      description: 'Essential services for new businesses.',
+      price: '$99',
+      period: '/month',
+      features: [
+        'Basic SEO Audit',
+        '5 Articles Content Writing',
+        '1 Social Media Platform',
+        'Monthly Performance Reports'
+      ],
+      buttonText: 'Get Started',
+      isProfessional: false
+    },
+    {
+      name: 'Professional',
+      badge: 'MOST POPULAR',
+      description: 'Comprehensive solutions for growing brands.',
+      price: '$249',
+      period: '/month',
+      features: [
+        'Advanced SEO Strategy',
+        '20 Articles Content Writing',
+        '5 Social Media Platforms',
+        'Weekly Performance Reports',
+        'Basic Web Development (Landing Page)',
+        'Tier 2 Influencer Access',
+        '24/7 Support'
+      ],
+      buttonText: 'Choose Plan',
+      isProfessional: true
+    },
+    {
+      name: 'Organization',
+      description: 'Comprehensive solutions for growing brands.',
+      price: '$599',
+      period: '/month',
+      features: [
+        'Custom 4k Video Production',
+        'Unlimited Print Production Assets',
+        'Advanced SEO & Analytics',
+        'Custom Web Development (Unlimited Pages)',
+        'Dedicated Video Editing Team',
+        'Unlimited Graphic Design Concepts',
+        'Content Writing (Unlimited)',
+        'Influencer Marketing (Full Campaign)',
+        'Social Media Marketing (Full Management)',
+        'Email Marketing (Advanced Campaigns)'
+      ],
+      buttonText: 'Choose Organization',
+      isProfessional: false
+    }
+  ];
+
+  return (
+    <div className="py-16 px-4 mt-20">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <h1 className="text-5xl font-bold text-white mb-4">
+            Flexible Plans for Every Business
+          </h1>
+          <p className="text-purple-200 text-lg max-w-2xl mx-auto">
+            Tailored marketing solutions designed to scale with your growth. Find the perfect package to elevate your brand.
+          </p>
+        </div>
+
+        {/* Pricing Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+          {plans.map((plan, index) => (
+            <div
+              key={index}
+              className={`bg-white rounded-2xl p-8 shadow-2xl relative ${
+                plan.isProfessional ? 'transform md:scale-105' : ''
+              }`}
+            >
+              {/* Most Popular Badge */}
+              {plan.badge && (
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                  <span className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-xs font-bold px-4 py-1 rounded-full">
+                    {plan.badge}
+                  </span>
+                </div>
+              )}
+
+              {/* Plan Name */}
+              <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                {plan.name}
+              </h3>
+              
+              {/* Description */}
+              <p className="text-gray-500 text-sm mb-6">
+                {plan.description}
+              </p>
+
+              {/* Price */}
+              <div className="mb-6">
+                <span className="text-5xl font-bold text-gray-900">
+                  {plan.price}
+                </span>
+                <span className="text-gray-500 text-lg">
+                  {plan.period}
+                </span>
+              </div>
+
+              {/* Features List */}
+              <ul className="space-y-3 mb-8">
+                {plan.features.map((feature, idx) => (
+                  <li key={idx} className="flex items-start gap-3">
+                    {plan.isProfessional ? (
+                      <Check className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                    ) : (
+                      <Circle className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" fill="currentColor" />
+                    )}
+                    <span className="text-gray-700 text-sm leading-relaxed">
+                      {feature}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+
+              {/* CTA Button */}
+              <button className="w-full bg-gradient-to-r from-purple-900 to-indigo-900 hover:from-purple-800 hover:to-indigo-800 text-white font-semibold py-4 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl">
+                {plan.buttonText}
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
