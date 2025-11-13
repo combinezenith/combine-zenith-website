@@ -71,12 +71,12 @@ export default function PricingPage() {
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto items-stretch">
           {plans.map((plan, index) => (
             <div
               key={index}
-              className={`bg-white rounded-2xl p-8 shadow-2xl relative ${
-                plan.isProfessional ? 'transform md:scale-105' : ''
+              className={`bg-white rounded-2xl p-8 shadow-2xl relative flex flex-col h-full ${
+                plan.isProfessional ? 'transform md:scale-105 md:-translate-y-2' : ''
               }`}
             >
               {/* Most Popular Badge */}
@@ -109,7 +109,7 @@ export default function PricingPage() {
               </div>
 
               {/* Features List */}
-              <ul className="space-y-3 mb-8">
+              <ul className="space-y-3 mb-8 flex-grow">
                 {plan.features.map((feature, idx) => (
                   <li key={idx} className="flex items-start gap-3">
                     {plan.isProfessional ? (
