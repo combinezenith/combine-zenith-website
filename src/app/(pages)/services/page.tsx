@@ -232,11 +232,11 @@ useEffect(() => {
             </div>
 
             <div className="hero-cta">
-              <button className="group bg-purple-100/50 text-white px-8 sm:px-10 py-4 sm:py-5 rounded-full font-semibold text-lg sm:text-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/25 flex items-center gap-3 mx-auto">
+              <a href="#ServiceCard" className="group bg-purple-100/50 text-white px-8 sm:px-10 py-4 sm:py-5 rounded-full font-semibold text-lg sm:text-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/25 flex items-center gap-3 mx-auto w-fit">
                 <Sparkles className="w-5 h-5 sm:w-6 sm:h-6" />
                 Explore Our Services
                 <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
-              </button>
+              </a>
             </div>
           </div>
 
@@ -286,7 +286,7 @@ useEffect(() => {
       </section>
 
       {/* Services Section */}
-      <section ref={servicesRef} className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
+      <section id="ServiceCard" ref={servicesRef} className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 sm:mb-16">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">
