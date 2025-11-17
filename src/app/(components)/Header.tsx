@@ -67,7 +67,7 @@ export default function Header() {
           <Link href="/" className="flex items-center">
             <div ref={logoRef} className="relative w-40 h-12">
               <Image
-                src="/logo-white.png"
+                src="/logo-white.jpg"
                 fill
                 className="object-contain"
                 alt="COMBINE ZENITH LOGO"
@@ -173,6 +173,13 @@ export default function Header() {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Blog
+              </Link>
+              <Link
+                href="/pricing"
+                className="text-white hover:text-purple-300 transition-colors duration-200 py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Pricing
               </Link>
               <Link
                 href="/contact"
