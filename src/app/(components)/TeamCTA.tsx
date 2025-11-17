@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function TeamCTA() {
   return (
     <div className="py-16 px-8">
@@ -14,7 +16,9 @@ export default function TeamCTA() {
         
         {/* CTA Button */}
         <button className="bg-purple-400/80 hover:bg-purple-400/90 text-white font-semibold px-8 py-3.5 rounded-full transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-purple-400/50">
+          <Link href="/contact" className="block">
           Contact Our Experts
+          </Link>
         </button>
       </div>
     </div>
