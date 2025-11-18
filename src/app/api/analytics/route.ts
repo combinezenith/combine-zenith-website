@@ -4,13 +4,21 @@ import { BetaAnalyticsDataClient } from "@google-analytics/data";
 const analyticsDataClient = new BetaAnalyticsDataClient({
   credentials: {
     client_email: process.env.GOOGLE_CLIENT_EMAIL,
-    private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n") || "",
+    private_key: process.env.GOOGLE_PRIVATE_KEY!.replace(/\\n/g, "\n"),
   },
 });
 
+console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+console.log("EMAIL:", process.env.GOOGLE_CLIENT_EMAIL);
+console.log("PRIVATE KEY EXISTS:", !!process.env.GOOGLE_PRIVATE_KEY);
+console.log("PROPERTY ID:", process.env.GA_PROPERTY_ID);
+console.log("PRIVATE KEY:", process.env.GOOGLE_PRIVATE_KEY);
+console.log("GA_ID:", process.env.GA_PROPERTY_ID);
+console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+
 export async function GET() {
   try {
-    const propertyId = process.env.GA_PROPERTY_ID; // your GA4 property ID
+    const propertyId = `properties/${process.env.GA_PROPERTY_ID}`;
 
     const [response] = await analyticsDataClient.runReport({
       property: propertyId,
