@@ -9,7 +9,7 @@ export default function Pricing() {
       <div className="hidden md:block">
         <FeatureComparisonTable />
       </div>
-      <PricCTA />      
+      <PricCTA />
     </main>
   );
 }

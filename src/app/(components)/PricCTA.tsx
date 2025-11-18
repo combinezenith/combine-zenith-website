@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
 
 export default function CustomMarketingCTA() {
   const [isVisible, setIsVisible] = useState(false);
@@ -77,7 +78,9 @@ export default function CustomMarketingCTA() {
             }`}
           >
             <button className="bg-white hover:bg-purple-50 text-purple-900 font-bold text-lg px-10 py-4 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 animate-pulse-slow">
+            <Link href="/pricing/plan" className="no-underline">
               Create a Plan
+            </Link>
             </button>
           </div>
         </div>
