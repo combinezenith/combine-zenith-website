@@ -27,7 +27,7 @@ export default function ContactDetails() {
                 <div>
                   <h3 className="text-lg font-semibold text-white mb-1">Our Address</h3>
                   <p className="text-white/90">
-                    B, University, 18 Road, Block 16 Gulshan-e-Iqbal, Karachi, 75300
+                    B-18, Block 16, Gulshan-e-Iqbal, Karachi
                   </p>
                 </div>
               </div>
@@ -55,7 +55,7 @@ export default function ContactDetails() {
           {/* Right Side */}
           <div className="flex justify-center lg:justify-end">
             <iframe
-              src="https://maps.google.com/maps?q=Combine+Group+B+University+18+Road+Block+16+Gulshan-e-Iqbal+Karachi+75300&z=17&t=m&output=embed"
+              src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1656.2622323475418!2d67.0791341!3d24.9046869!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3eb33f27a93d4a63%3A0x6aa262346658a91d!2sCombine%20Consultants%20(Pvt)%20Ltd!5e1!3m2!1sen!2s!4v1763437299487!5m2!1sen!2s"
               width="400"
               height="400"
               style={{ border: 0 }}
