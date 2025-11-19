@@ -4,7 +4,6 @@ import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { event } from "../../../lib/ga";
 import Sidebar from "@/app/(admin-components)/Sidebar";
 import {
   Users,
@@ -32,42 +31,47 @@ import {
 interface Metric {
   title: string;
   value: string | number;
-  change: string;
-  trend: "up" | "down";
+  change?: string;
+  trend?: "up" | "down";
   icon: React.ElementType;
   subtitle?: string;
 }
 
 interface GADataPoint {
   date: string;
-  activeUsers: number;
+  totalUsers: number;
   newUsers: number;
-  [key: string]: string | number | undefined;
+  sessions: number;
+  pageViews: number;
+  engagedSessions: number;
+  bounceRate: string;
+  avgSessionDuration: string;
 }
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  console.log(session);
-
   const [selectedRange, setSelectedRange] = useState("7 Days");
   const [gaData, setGaData] = useState<GADataPoint[]>([]);
+  const [realtimeActiveUsers, setRealtimeActiveUsers] = useState(0);
   const [loadingGA, setLoadingGA] = useState(true);
 
   // ✅ Redirect if not authenticated
   useEffect(() => {
-    if (status === "unauthenticated") {
-      router.push("/admin/login");
-    }
+    if (status === "unauthenticated") router.push("/admin/login");
   }, [status, router]);
 
+  // Fetch GA data
   useEffect(() => {
     const fetchGA = async () => {
       try {
         const res = await fetch("/api/analytics");
         const json = await res.json();
-        if (json.success) setGaData(json.data);
+        if (json.success) {
+          setGaData(json.historicalData || []);
+          setRealtimeActiveUsers(json.realtimeActiveUsers || 0);
+        }
       } catch (err) {
         console.error("Failed to load GA data:", err);
       } finally {
@@ -77,31 +81,13 @@ export default function DashboardPage() {
     fetchGA();
   }, []);
 
-  if (status === "loading") {
-    return (
-      <div className="flex justify-center items-center min-h-screen text-white">
-        Checking authentication...
-      </div>
-    );
-  }
-
-  if (status === "unauthenticated") {
-    return null; // Prevent UI flash before redirect
-  }
-
   const handleLogout = async () => {
-    event({
-      action: "logout",
-      category: "User",
-      label: "Admin Logout",
-    });
     await signOut({ callbackUrl: "/admin/login" });
   };
 
   // --- Metrics ---
-  const totalVisitors =
-    gaData.reduce((sum, d) => sum + (d.activeUsers || 0), 0) || 0;
-  const newUsers = gaData.reduce((sum, d) => sum + (d.newUsers || 0), 0) || 0;
+  const totalVisitors = gaData.reduce((sum, d) => sum + d.totalUsers, 0);
+  const newUsers = gaData.reduce((sum, d) => sum + d.newUsers, 0);
 
   const metrics: Metric[] = [
     {
@@ -119,16 +105,13 @@ export default function DashboardPage() {
       icon: Activity,
     },
     {
-      title: "New vs Returning Users",
-      value: "70%",
-      subtitle: "New",
-      change: "-2.3%",
-      trend: "down",
+      title: "Real-Time Active Users",
+      value: loadingGA ? "Loading..." : realtimeActiveUsers,
       icon: Zap,
     },
     {
       title: "Average Session Duration",
-      value: "03:45",
+      value: gaData.length ? gaData[gaData.length - 1].avgSessionDuration : "0",
       change: "+8.9%",
       trend: "up",
       icon: Clock,
@@ -149,37 +132,7 @@ export default function DashboardPage() {
     },
   ];
 
-  // --- Dummy data for charts ---
   const COLORS = ["#FFB703", "#8ECAE6", "#219EBC", "#FB8500"];
-  const trafficData = [
-    { name: "Organic", value: 400 },
-    { name: "Social", value: 300 },
-    { name: "Referral", value: 200 },
-    { name: "Email", value: 100 },
-  ];
-  const topPages = [
-    { name: "/dashboard", views: 1200 },
-    { name: "/blog/post-1", views: 900 },
-    { name: "/blog/post-2", views: 700 },
-    { name: "/contact", views: 400 },
-  ];
-  const userGeo = [
-    { region: "Asia", users: 950 },
-    { region: "Europe", users: 650 },
-    { region: "America", users: 500 },
-    { region: "Africa", users: 300 },
-  ];
-  const deviceSplit = [
-    { name: "Desktop", value: 600 },
-    { name: "Mobile", value: 300 },
-    { name: "Tablet", value: 150 },
-  ];
-  const conversionData = [
-    { stage: "Visitors", value: 1000 },
-    { stage: "Leads", value: 600 },
-    { stage: "Qualified Leads", value: 350 },
-    { stage: "Sales", value: 180 },
-  ];
 
   return (
     <>
@@ -187,10 +140,7 @@ export default function DashboardPage() {
       <div className="md:ml-64 p-6 sm:p-8 min-h-screen text-white font-montserrat">
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-8 gap-4">
-          <div>
-            <h1 className="text-3xl font-bold">Website Analytics Dashboard</h1>
-          </div>
-
+          <h1 className="text-3xl font-bold">Website Analytics Dashboard</h1>
           <div className="flex items-center gap-3">
             <div className="flex bg-[#2a2250] rounded-lg overflow-hidden border border-[#3b2e65]">
               {["Today", "7 Days", "30 Days"].map((range) => (
@@ -207,7 +157,6 @@ export default function DashboardPage() {
                 </button>
               ))}
             </div>
-
             <button
               onClick={handleLogout}
               className="px-4 py-2 rounded-xl bg-linear-to-r from-indigo-500 to-purple-600 hover:from-purple-500 hover:to-indigo-600 transition-all duration-300 shadow-lg font-semibold text-sm"
@@ -237,108 +186,57 @@ export default function DashboardPage() {
                 </div>
                 <metric.icon className="text-gray-300 w-8 h-8" />
               </div>
-
-              <div
-                className={`flex items-center gap-1 text-sm font-medium ${
-                  metric.trend === "up" ? "text-green-400" : "text-red-400"
-                }`}
-              >
-                <span>{metric.change}</span>
-                <span>{metric.trend === "up" ? "▲" : "▼"}</span>
-              </div>
+              {metric.trend && (
+                <div
+                  className={`flex items-center gap-1 text-sm font-medium ${
+                    metric.trend === "up" ? "text-green-400" : "text-red-400"
+                  }`}
+                >
+                  <span>{metric.change}</span>
+                  <span>{metric.trend === "up" ? "▲" : "▼"}</span>
+                </div>
+              )}
             </motion.div>
           ))}
         </div>
 
-        {/* Charts */}
+        {/* Line Chart: 7-day Active Users */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          <ChartCard title="Active Users Over Time (GA4)">
+          <ChartCard title="Active Users Over Last 7 Days">
             <ResponsiveContainer width="100%" height={200}>
               <LineChart data={gaData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#3b2e65" />
                 <XAxis dataKey="date" stroke="#ccc" />
                 <YAxis stroke="#ccc" />
                 <Tooltip />
-                <Line type="monotone" dataKey="activeUsers" stroke="#8ECAE6" />
+                <Line type="monotone" dataKey="totalUsers" stroke="#8ECAE6" />
                 <Line type="monotone" dataKey="newUsers" stroke="#FB8500" />
               </LineChart>
             </ResponsiveContainer>
           </ChartCard>
 
-          <ChartCard title="Traffic Source Breakdown">
+          <ChartCard title="Traffic Source Breakdown (Dummy)">
             <ResponsiveContainer width="100%" height={200}>
               <PieChart>
                 <Pie
-                  data={trafficData}
+                  data={[
+                    { name: "Organic", value: 400 },
+                    { name: "Social", value: 300 },
+                    { name: "Referral", value: 200 },
+                    { name: "Email", value: 100 },
+                  ]}
                   innerRadius={50}
                   outerRadius={80}
                   paddingAngle={5}
                   dataKey="value"
                 >
-                  {trafficData.map((entry, index) => (
-                    <Cell key={index} fill={COLORS[index % COLORS.length]} />
-                  ))}
+                  {Array(4)
+                    .fill(null)
+                    .map((_, i) => (
+                      <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                    ))}
                 </Pie>
               </PieChart>
-            </ResponsiveContainer>
-          </ChartCard>
-
-          <ChartCard title="Top Pages by Views">
-            <ResponsiveContainer width="100%" height={200}>
-              <BarChart data={topPages}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#3b2e65" />
-                <XAxis dataKey="name" stroke="#ccc" />
-                <YAxis stroke="#ccc" />
-                <Tooltip />
-                <Bar dataKey="views" fill="#00C49F" />
-              </BarChart>
-            </ResponsiveContainer>
-          </ChartCard>
-
-          <ChartCard title="User Geography">
-            <ResponsiveContainer width="100%" height={200}>
-              <BarChart data={userGeo}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#3b2e65" />
-                <XAxis dataKey="region" stroke="#ccc" />
-                <YAxis stroke="#ccc" />
-                <Tooltip />
-                <Bar dataKey="users" fill="#3B82F6" />
-              </BarChart>
-            </ResponsiveContainer>
-          </ChartCard>
-
-          <ChartCard title="Device Category Split">
-            <ResponsiveContainer width="100%" height={200}>
-              <PieChart>
-                <Pie
-                  data={deviceSplit}
-                  innerRadius={50}
-                  outerRadius={80}
-                  startAngle={180}
-                  endAngle={0}
-                  dataKey="value"
-                >
-                  {deviceSplit.map((entry, index) => (
-                    <Cell key={index} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-          </ChartCard>
-
-          <ChartCard title="Conversion Funnel">
-            <ResponsiveContainer width="100%" height={200}>
-              <BarChart
-                layout="vertical"
-                data={conversionData}
-                margin={{ left: 50 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" stroke="#3b2e65" />
-                <XAxis type="number" stroke="#ccc" />
-                <YAxis dataKey="stage" type="category" stroke="#ccc" />
-                <Tooltip />
-                <Bar dataKey="value" fill="#FBBF24" />
-              </BarChart>
             </ResponsiveContainer>
           </ChartCard>
         </div>
