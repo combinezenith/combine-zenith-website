@@ -4,8 +4,16 @@ import { Check, Circle, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/app/config/firebase';
+import SubscriptionIncludes from '@/app/(components)/SubscriptionIncludes';
 
 // Define types
+interface SubscriptionFeature {
+  id: string;
+  title: string;
+  description: string;
+  order: number;
+}
+
 interface PricingPlan {
   id: string;
   name: string;
@@ -21,6 +29,7 @@ interface PricingPlan {
   tagline?: string;
   title?: string;
   discount?: string;
+  subscriptionFeatures?: SubscriptionFeature[];
 }
 
 interface PricingDetailProps {
@@ -115,7 +124,33 @@ export default function PricingDetail({ slug, id }: PricingDetailProps) {
       buttonText: 'Get Started',
       isProfessional: false,
       slug: 'starter',
-      order: 1
+      order: 1,
+      subscriptionFeatures: [
+        {
+          id: "feature-1",
+          title: "Digital Strategy",
+          description: "Tailored plans for online presence and growth.",
+          order: 1
+        },
+        {
+          id: "feature-2",
+          title: "Content Hub",
+          description: "High-quality articles, blogs, and visual content.",
+          order: 2
+        },
+        {
+          id: "feature-3",
+          title: "Social Boost",
+          description: "Boost your presence across all social platforms.",
+          order: 3
+        },
+        {
+          id: "feature-4",
+          title: "Ad Campaigns",
+          description: "High-converting ads on Google, Meta, and more.",
+          order: 4
+        }
+      ]
     },
     {
       id: 'plan-professional',
@@ -139,7 +174,33 @@ export default function PricingDetail({ slug, id }: PricingDetailProps) {
       buttonText: 'Choose Plan',
       isProfessional: true,
       slug: 'professional',
-      order: 2
+      order: 2,
+      subscriptionFeatures: [
+        {
+          id: "feature-5",
+          title: "Advanced Strategy",
+          description: "Comprehensive digital marketing strategy.",
+          order: 1
+        },
+        {
+          id: "feature-6",
+          title: "Premium Content",
+          description: "Unlimited content creation and strategy.",
+          order: 2
+        },
+        {
+          id: "feature-7",
+          title: "Multi-Platform Management",
+          description: "Full management across all social platforms.",
+          order: 3
+        },
+        {
+          id: "feature-8",
+          title: "Advanced Analytics",
+          description: "Detailed performance tracking and reporting.",
+          order: 4
+        }
+      ]
     },
     {
       id: 'plan-organization',
@@ -165,7 +226,33 @@ export default function PricingDetail({ slug, id }: PricingDetailProps) {
       buttonText: 'Choose Organization',
       isProfessional: false,
       slug: 'organization',
-      order: 3
+      order: 3,
+      subscriptionFeatures: [
+        {
+          id: "feature-9",
+          title: "Enterprise Strategy",
+          description: "Custom enterprise-level marketing strategy.",
+          order: 1
+        },
+        {
+          id: "feature-10",
+          title: "Dedicated Team",
+          description: "Your own dedicated marketing team.",
+          order: 2
+        },
+        {
+          id: "feature-11",
+          title: "Full Funnel Marketing",
+          description: "Complete marketing funnel management.",
+          order: 3
+        },
+        {
+          id: "feature-12",
+          title: "Premium Support",
+          description: "24/7 premium support and consulting.",
+          order: 4
+        }
+      ]
     }
   ];
 
@@ -212,119 +299,127 @@ export default function PricingDetail({ slug, id }: PricingDetailProps) {
   };
 
   return (
-    <div className="min-h-screen mt-20 text-white p-6 md:p-12">
-      <div className="max-w-7xl mx-auto">
-        {/* Header with back button */}
-        <div className="mb-8">
-          <Link href="/pricing">
-            <button className="flex items-center text-purple-200 hover:text-white transition-colors mb-6">
-              <ArrowLeft className="w-5 h-5 mr-2" />
-              <span className="text-sm">Back to Pricing</span>
-            </button>
-          </Link>
-          
-          {/* Plan selector */}
-          <div className="flex gap-4 mb-6 flex-wrap">
-            {allPlans.map((p) => (
-              <Link key={p.id} href={`/pricing/${p.slug}`}>
-                <button
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                    p.slug === planIdentifier
-                      ? 'bg-purple-600 text-white'
-                      : 'bg-purple-900/50 text-purple-200 hover:bg-purple-800/50'
-                  }`}
-                >
-                  {p.name}
-                  {p.badge && (
-                    <span className="ml-2 text-xs bg-purple-500 px-2 py-0.5 rounded">
-                      {p.badge}
-                    </span>
-                  )}
-                </button>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Main content grid */}
-        <div className="grid md:grid-cols-2 gap-8 items-start">
-          {/* Left column - Plan details */}
-          <div className="space-y-6">
-            <div>
-              {plan.badge && (
-                <span className="inline-block bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-xs font-bold px-4 py-1 rounded-full mb-3">
-                  {plan.badge}
-                </span>
-              )}
-              <p className="text-purple-200 text-sm mb-3">
-                {plan.tagline || `${plan.name} Plan - ${plan.description}`}
-              </p>
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
-                {plan.title || `${plan.name} Plan`}
-              </h1>
-              <p className="text-purple-100 text-lg">
-                {plan.description}
-              </p>
-            </div>
-
-            {/* Features list */}
-            <div className="space-y-4">
-              {plan.features.map((feature: string, index: number) => (
-                <div key={index} className="flex items-start gap-3">
-                  <div className="mt-1">
-                    {plan.isProfessional ? (
-                      <Check className="w-5 h-5 text-purple-300 flex-shrink-0" />
-                    ) : (
-                      <Circle className="w-5 h-5 text-purple-300 flex-shrink-0" fill="currentColor" />
-                    )}
-                  </div>
-                  <p className="text-purple-100 leading-relaxed">{feature}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* Pricing */}
-            <div className="pt-6">
-              <div className="flex items-baseline gap-2 mb-2">
-                <span className="text-5xl font-bold">{plan.price}</span>
-                <span className="text-purple-200 text-lg">/ {plan.period}</span>
-              </div>
-              {plan.discount && (
-                <p className="text-purple-300 text-sm">{plan.discount}</p>
-              )}
-            </div>
-
-            {/* CTA Button */}
-            <Link href="/contact" className="block">
-              <button className="w-full bg-white/10 backdrop-blur-sm border border-white/20 text-white py-4 px-6 rounded-lg hover:bg-white/20 transition-all duration-300 font-medium">
-                Contact our team
+    <div className="min-h-screen mt-20 text-white">
+      {/* Main pricing detail section */}
+      <div className="p-6 md:p-12">
+        <div className="max-w-7xl mx-auto">
+          {/* Header with back button */}
+          <div className="mb-8">
+            <Link href="/pricing">
+              <button className="flex items-center text-purple-200 hover:text-white transition-colors mb-6">
+                <ArrowLeft className="w-5 h-5 mr-2" />
+                <span className="text-sm">Back to Pricing</span>
               </button>
             </Link>
+            
+            {/* Plan selector */}
+            <div className="flex gap-4 mb-6 flex-wrap">
+              {allPlans.map((p) => (
+                <Link key={p.id} href={`/pricing/${p.slug}`}>
+                  <button
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                      p.slug === planIdentifier
+                        ? 'bg-purple-600 text-white'
+                        : 'bg-purple-900/50 text-purple-200 hover:bg-purple-800/50'
+                    }`}
+                  >
+                    {p.name}
+                    {p.badge && (
+                      <span className="ml-2 text-xs bg-purple-500 px-2 py-0.5 rounded">
+                        {p.badge}
+                      </span>
+                    )}
+                  </button>
+                </Link>
+              ))}
+            </div>
           </div>
 
-          {/* Right column - Visual element */}
-          <div className="relative hidden md:block">
-            <div className="bg-gradient-to-br from-purple-800/30 to-indigo-800/30 backdrop-blur-sm border border-white/10 rounded-2xl p-8 md:p-12 min-h-[500px] flex items-center justify-center">
-              {/* Decorative circles */}
-              <div className="absolute top-10 right-10 w-32 h-32 bg-purple-500/20 rounded-full blur-3xl"></div>
-              <div className="absolute bottom-10 left-10 w-40 h-40 bg-indigo-500/20 rounded-full blur-3xl"></div>
-              
-              {/* Center content */}
-              <div className="relative z-10 text-center">
-                <div className="w-32 h-32 mx-auto mb-6 bg-gradient-to-br from-purple-500/30 to-indigo-500/30 rounded-full flex items-center justify-center border border-white/20">
-                  <div className="text-6xl">
-                    {getEmoji(plan.name)}
-                  </div>
-                </div>
-                <h3 className="text-2xl font-bold mb-3">Ready to Get Started?</h3>
-                <p className="text-purple-200">
-                  Join businesses growing with our {plan.name} plan
+          {/* Main content grid */}
+          <div className="grid md:grid-cols-2 gap-8 items-start">
+            {/* Left column - Plan details */}
+            <div className="space-y-6">
+              <div>
+                {plan.badge && (
+                  <span className="inline-block bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-xs font-bold px-4 py-1 rounded-full mb-3">
+                    {plan.badge}
+                  </span>
+                )}
+                <p className="text-purple-200 text-sm mb-3">
+                  {plan.tagline || `${plan.name} Plan - ${plan.description}`}
                 </p>
+                <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
+                  {plan.title || `${plan.name} Plan`}
+                </h1>
+                <p className="text-purple-100 text-lg">
+                  {plan.description}
+                </p>
+              </div>
+
+              {/* Features list */}
+              <div className="space-y-4">
+                {plan.features.map((feature: string, index: number) => (
+                  <div key={index} className="flex items-start gap-3">
+                    <div className="mt-1">
+                      {plan.isProfessional ? (
+                        <Check className="w-5 h-5 text-purple-300 flex-shrink-0" />
+                      ) : (
+                        <Circle className="w-5 h-5 text-purple-300 flex-shrink-0" fill="currentColor" />
+                      )}
+                    </div>
+                    <p className="text-purple-100 leading-relaxed">{feature}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Pricing */}
+              <div className="pt-6">
+                <div className="flex items-baseline gap-2 mb-2">
+                  <span className="text-5xl font-bold">{plan.price}</span>
+                  <span className="text-purple-200 text-lg">/ {plan.period}</span>
+                </div>
+                {plan.discount && (
+                  <p className="text-purple-300 text-sm">{plan.discount}</p>
+                )}
+              </div>
+
+              {/* CTA Button */}
+              <Link href="/contact" className="block">
+                <button className="w-full bg-white/10 backdrop-blur-sm border border-white/20 text-white py-4 px-6 rounded-lg hover:bg-white/20 transition-all duration-300 font-medium">
+                  Contact our team
+                </button>
+              </Link>
+            </div>
+
+            {/* Right column - Visual element */}
+            <div className="relative hidden md:block">
+              <div className="bg-gradient-to-br from-purple-800/30 to-indigo-800/30 backdrop-blur-sm border border-white/10 rounded-2xl p-8 md:p-12 min-h-[500px] flex items-center justify-center">
+                {/* Decorative circles */}
+                <div className="absolute top-10 right-10 w-32 h-32 bg-purple-500/20 rounded-full blur-3xl"></div>
+                <div className="absolute bottom-10 left-10 w-40 h-40 bg-indigo-500/20 rounded-full blur-3xl"></div>
+                
+                {/* Center content */}
+                <div className="relative z-10 text-center">
+                  <div className="w-32 h-32 mx-auto mb-6 bg-gradient-to-br from-purple-500/30 to-indigo-500/30 rounded-full flex items-center justify-center border border-white/20">
+                    <div className="text-6xl">
+                      {getEmoji(plan.name)}
+                    </div>
+                  </div>
+                  <h3 className="text-2xl font-bold mb-3">Ready to Get Started?</h3>
+                  <p className="text-purple-200">
+                    Join businesses growing with our {plan.name} plan
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Subscription Includes Component - Added after plan details */}
+      {plan && (
+        <SubscriptionIncludes planId={plan.id} />
+      )}
     </div>
   );
 }

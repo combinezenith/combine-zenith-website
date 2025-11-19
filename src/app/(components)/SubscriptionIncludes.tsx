@@ -1,8 +1,9 @@
+// app/(components)/SubscriptionIncludes.tsx
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { db } from "@/app/config/firebase";
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/app/config/firebase';
 
 interface SubscriptionFeature {
   id: string;
@@ -14,18 +15,16 @@ interface SubscriptionFeature {
 interface PricingPlan {
   id: string;
   name: string;
-  slug: string;
   subscriptionFeatures?: SubscriptionFeature[];
 }
 
 interface SubscriptionIncludesProps {
-  planSlug?: string; // Optional: if not provided, will use 'starter' as default
-  planName?: string; // Optional: custom plan name for the title
+  planId: string;
 }
 
-export default function SubscriptionIncludes({ planSlug = 'starter', planName }: SubscriptionIncludesProps) {
+export default function SubscriptionIncludes({ planId }: SubscriptionIncludesProps) {
   const [features, setFeatures] = useState<SubscriptionFeature[]>([]);
-  const [planTitle, setPlanTitle] = useState<string>('');
+  const [planName, setPlanName] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -35,45 +34,50 @@ export default function SubscriptionIncludes({ planSlug = 'starter', planName }:
         setLoading(true);
         setError(null);
 
-        // Query the pricing plans collection for the specific plan slug
-        const plansQuery = query(
-          collection(db, "pricingPlans"), 
-          where("slug", "==", planSlug)
-        );
+        console.log('Fetching subscription features for plan ID:', planId);
+
+        // Get the specific plan document by ID
+        const planDoc = await getDoc(doc(db, "pricingPlans", planId));
         
-        const plansSnapshot = await getDocs(plansQuery);
+        if (!planDoc.exists()) {
+          console.warn(`No plan found with ID: ${planId}`);
+          setError(`Plan configuration not found`);
+          setFeatures([]);
+          return;
+        }
         
-        if (plansSnapshot.empty) {
-          // Fallback to starter plan if no plan found
-          const fallbackQuery = query(
-            collection(db, "pricingPlans"), 
-            where("slug", "==", "starter")
-          );
-          const fallbackSnapshot = await getDocs(fallbackQuery);
-          
-          if (fallbackSnapshot.empty) {
-            setError("No pricing plans found");
-            return;
-          }
-          
-          const fallbackPlan = fallbackSnapshot.docs[0].data() as PricingPlan;
-          setFeatures(fallbackPlan.subscriptionFeatures || []);
-          setPlanTitle(planName || fallbackPlan.name);
+        const planData = planDoc.data() as PricingPlan;
+        console.log('Found plan data:', planData);
+        
+        if (planData.subscriptionFeatures && planData.subscriptionFeatures.length > 0) {
+          setFeatures(planData.subscriptionFeatures);
+          setPlanName(planData.name);
         } else {
-          const planData = plansSnapshot.docs[0].data() as PricingPlan;
-          setFeatures(planData.subscriptionFeatures || []);
-          setPlanTitle(planName || planData.name);
+          console.warn(`No subscription features found for plan: ${planId}`);
+          setFeatures([]);
+          setPlanName(planData.name);
         }
       } catch (err) {
         console.error('Error fetching subscription features:', err);
         setError('Failed to load subscription features');
+        setFeatures([]);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPlanData();
-  }, [planSlug, planName]);
+    if (planId) {
+      fetchPlanData();
+    } else {
+      setError('Plan ID is required');
+      setLoading(false);
+    }
+  }, [planId]);
+
+  // Don't render anything if no features
+  if (features.length === 0) {
+    return null;
+  }
 
   // Loading state
   if (loading) {
@@ -81,9 +85,9 @@ export default function SubscriptionIncludes({ planSlug = 'starter', planName }:
       <div className="py-12 px-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-white text-2xl md:text-3xl font-bold text-center mb-8">
-            Loading...
+            Loading features...
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {[1, 2, 3, 4].map((item) => (
               <div
                 key={item}
@@ -105,18 +109,6 @@ export default function SubscriptionIncludes({ planSlug = 'starter', planName }:
       <div className="py-12 px-4">
         <div className="max-w-6xl mx-auto text-center">
           <div className="text-white text-xl mb-4">⚠️ {error}</div>
-          <div className="text-purple-200">Please try refreshing the page</div>
-        </div>
-      </div>
-    );
-  }
-
-  // Empty state
-  if (features.length === 0) {
-    return (
-      <div className="py-12 px-4">
-        <div className="max-w-6xl mx-auto text-center">
-          <div className="text-white text-xl mb-4">No features available</div>
           <div className="text-purple-200">Please check the admin panel configuration</div>
         </div>
       </div>
@@ -128,7 +120,7 @@ export default function SubscriptionIncludes({ planSlug = 'starter', planName }:
       <div className="max-w-6xl mx-auto">
         {/* Title */}
         <h2 className="text-white text-2xl md:text-3xl font-bold text-center mb-8">
-          A {planTitle} subscription includes
+          A {planName} subscription includes
         </h2>
 
         {/* Feature Cards Grid */}
