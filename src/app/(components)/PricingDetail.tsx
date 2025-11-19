@@ -277,7 +277,7 @@ export default function PricingDetail({ slug, id }: PricingDetailProps) {
         <div className="max-w-7xl mx-auto">
           <div className="text-center py-12">
             <h2 className="text-2xl font-bold mb-4">Plan Not Found</h2>
-            <p className="text-purple-200 mb-6">The pricing plan you're looking for doesn't exist.</p>
+            <p className="text-purple-200 mb-6">The pricing plan you&apos;re looking for doesn&apos;t exist.</p>
             <Link href="/pricing">
               <button className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg transition-colors">
                 Back to Pricing

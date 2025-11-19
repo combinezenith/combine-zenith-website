@@ -23,8 +23,6 @@ import {
   PieChart,
   Pie,
   Cell,
-  BarChart,
-  Bar,
   ResponsiveContainer,
 } from "recharts";
 

@@ -1275,7 +1275,7 @@ export default function PricingManagementPage() {
                       </div>
 
                       <div className="space-y-4">
-                        {plan.subscriptionFeatures?.map((feature, featureIndex) => (
+                        {plan.subscriptionFeatures?.map((feature) => (
                           <div key={feature.id} className="bg-[#1e183a] rounded-lg p-4 border border-white/10">
                             <div className="flex gap-3 mb-3">
                               <div className="flex flex-col gap-1">
@@ -1646,7 +1646,7 @@ export default function PricingManagementPage() {
                       <p className="text-gray-600 text-sm mb-4">{calc.description}</p>
                       
                       <div className="space-y-4">
-                        {calc.services.slice(0, 3).map((service, serviceIndex) => (
+                        {calc.services.slice(0, 3).map((service) => (
                           <div key={service.id} className="border border-gray-200 rounded-lg p-4">
                             <h4 className="font-semibold mb-2">{service.name}</h4>
                             <p className="text-sm text-gray-600 mb-3">{service.description}</p>
@@ -1771,7 +1771,7 @@ export default function PricingManagementPage() {
                       </div>
 
                       <div className="space-y-4">
-                        {calc.services.map((service, serviceIndex) => (
+                        {calc.services.map((service) => (
                           <div key={service.id} className="bg-[#1e183a] rounded-lg p-4 border border-white/10">
                             <div className="flex justify-between items-start mb-3">
                               <div className="flex-1">
@@ -1834,7 +1834,7 @@ export default function PricingManagementPage() {
                                 </button>
                               </div>
 
-                              {service.options.map((option, optionIndex) => (
+                              {service.options.map((option) => (
                                 <div key={option.id} className="flex gap-2 items-start">
                                   <div className="flex-1 grid grid-cols-2 gap-2">
                                     <input
