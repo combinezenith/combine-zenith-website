@@ -1,5 +1,8 @@
 "use client";
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from "@/app/config/firebase";
 import { Plus, X, RotateCcw } from 'lucide-react';
 
 interface PlanForm {
@@ -26,6 +29,31 @@ interface CalculationResult {
   totalUpfront: string;
 }
 
+interface CalculatorService {
+  id: string;
+  name: string;
+  description: string;
+  options: ServiceOption[];
+  order: number;
+}
+
+interface ServiceOption {
+  id: string;
+  name: string;
+  price: number;
+  description: string;
+  order: number;
+}
+
+interface PricingCalculator {
+  id: string;
+  title: string;
+  description: string;
+  basePrice: number;
+  services: CalculatorService[];
+  order: number;
+}
+
 export default function PlanCalculator() {
   const [plans, setPlans] = useState<PlanForm[]>([
     {
@@ -41,6 +69,40 @@ export default function PlanCalculator() {
   
   const [results, setResults] = useState<CalculationResult[]>([]);
   const [showResults, setShowResults] = useState(false);
+  const [calculatorData, setCalculatorData] = useState<PricingCalculator | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  // Timeline multiplier definition
+  const timelineMonths: Record<string, number> = {
+    '1month': 1,
+    '3months': 3,
+    '6months': 6,
+    '12months': 12
+  };
+
+  useEffect(() => {
+    const fetchCalculatorData = async () => {
+      try {
+        const calculatorSnapshot = await getDocs(collection(db, "pricingCalculator"));
+        if (!calculatorSnapshot.empty) {
+          const data: PricingCalculator[] = calculatorSnapshot.docs
+            .map((d) => ({ id: d.id, ...d.data() } as PricingCalculator))
+            .sort((a, b) => a.order - b.order);
+          
+          // Use the first calculator for now
+          if (data.length > 0) {
+            setCalculatorData(data[0]);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching calculator data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCalculatorData();
+  }, []);
 
   const handleChange = (planId: number, field: string, value: string) => {
     setPlans(plans.map(plan => 
@@ -49,46 +111,40 @@ export default function PlanCalculator() {
   };
 
   const calculatePrice = (plan: PlanForm) => {
-    // Price calculation logic based on selections
-    let basePrice = 0;
+    if (!calculatorData) {
+      return {
+        estimatedCost: "0",
+        monthlyPayment: "0",
+        totalUpfront: "0"
+      };
+    }
+
+    let totalCost = calculatorData.basePrice;
     
-    // Service pricing
-    const servicePrices: Record<string, number> = {
-      'seo': 500,
-      'content': 300,
-      'social': 400,
-      'ppc': 600,
-      'web': 1000
-    };
+    // Find the selected service and option
+    const selectedService = calculatorData.services.find(service => 
+      service.name.toLowerCase().replace(/\s+/g, '-') === plan.service
+    );
     
-    // Features multiplier
-    const featuresMultiplier: Record<string, number> = {
-      'basic': 1,
-      'standard': 1.5,
-      'premium': 2,
-      'custom': 2.5
-    };
+    if (selectedService) {
+      const selectedOption = selectedService.options.find(option => 
+        option.name.toLowerCase().includes(plan.features.toLowerCase())
+      );
+      
+      if (selectedOption) {
+        const months = timelineMonths[plan.timeline] || 1;
+        totalCost += selectedOption.price * months;
+      }
+    }
     
-    // Timeline multiplier
-    const timelineMonths: Record<string, number> = {
-      '1month': 1,
-      '3months': 3,
-      '6months': 6,
-      '12months': 12
-    };
-    
-    basePrice = servicePrices[plan.service] || 0;
-    const multiplier = featuresMultiplier[plan.features] || 1;
     const months = timelineMonths[plan.timeline] || 1;
-    
-    const totalCost = basePrice * multiplier * months;
-    const monthlyPayment = totalCost / months;
+    const monthlyPayment = Math.ceil(totalCost / months);
     const upfrontPayment = totalCost * 0.3; // 30% upfront
     
     return {
-      estimatedCost: `$${totalCost.toLocaleString()}`,
-      monthlyPayment: `$${monthlyPayment.toLocaleString()}`,
-      totalUpfront: `$${upfrontPayment.toLocaleString()}`
+      estimatedCost: `${totalCost.toLocaleString()}`,
+      monthlyPayment: `${monthlyPayment.toLocaleString()}`,
+      totalUpfront: `${upfrontPayment.toLocaleString()}`
     };
   };
 
@@ -155,9 +211,20 @@ export default function PlanCalculator() {
     setResults([]);
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen py-12 px-4 flex items-center justify-center">
+        <div className="text-center text-white">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
+          <p>Loading calculator...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (showResults && results.length > 0) {
     return (
-      <div className="bg-gradient-to-br from-indigo-950 via-purple-900 to-purple-950 min-h-screen py-12 px-4">
+      <div className="min-h-screen py-12 px-4">
         <div className="max-w-7xl mx-auto">
           <h1 className="text-white text-3xl md:text-4xl font-bold text-center mb-12">
             Calculation Results
@@ -191,7 +258,7 @@ export default function PlanCalculator() {
                 <div className="border-t border-gray-200 pt-4 mb-6">
                   <h3 className="text-purple-700 font-semibold text-sm uppercase mb-3">Estimated Cost</h3>
                   <div className="text-3xl font-bold text-purple-900 mb-2">
-                    {result.estimatedCost}
+                    ${result.estimatedCost}
                   </div>
                   <p className="text-gray-500 text-xs">Total project cost</p>
                 </div>
@@ -202,7 +269,7 @@ export default function PlanCalculator() {
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span className="text-gray-600">Security Deposit (30%):</span>
-                      <span className="text-gray-900 font-semibold">{result.totalUpfront}</span>
+                      <span className="text-gray-900 font-semibold">${result.totalUpfront}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Processing Fee:</span>
@@ -210,7 +277,7 @@ export default function PlanCalculator() {
                     </div>
                     <div className="border-t border-purple-200 pt-2 mt-2 flex justify-between">
                       <span className="text-gray-900 font-bold">Total Upfront:</span>
-                      <span className="text-purple-900 font-bold">{result.totalUpfront}</span>
+                      <span className="text-purple-900 font-bold">${result.totalUpfront}</span>
                     </div>
                   </div>
                 </div>
@@ -225,7 +292,7 @@ export default function PlanCalculator() {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Payment per month:</span>
-                      <span className="text-indigo-900 font-bold text-lg">{result.monthlyPayment}</span>
+                      <span className="text-indigo-900 font-bold text-lg">${result.monthlyPayment}</span>
                     </div>
                   </div>
                   <p className="text-gray-500 text-xs mt-2">Calculation includes all services and support</p>
@@ -250,11 +317,17 @@ export default function PlanCalculator() {
   }
 
   return (
-    <div className="bg-gradient-to-br from-indigo-950 via-purple-900 to-purple-950 min-h-screen py-12 px-4">
+    <div className="min-h-screen py-12 px-4">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-white text-3xl md:text-4xl font-bold text-center mb-12">
-          Customize your Plan
+          {calculatorData?.title || "Customize your Plan"}
         </h1>
+
+        {calculatorData?.description && (
+          <p className="text-purple-200 text-center mb-8 max-w-2xl mx-auto">
+            {calculatorData.description}
+          </p>
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 auto-rows-fr">
           {plans.map((plan) => (
@@ -281,11 +354,14 @@ export default function PlanCalculator() {
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white text-gray-700"
                   >
                     <option value="">Select a service</option>
-                    <option value="seo">SEO Services</option>
-                    <option value="content">Content Marketing</option>
-                    <option value="social">Social Media Management</option>
-                    <option value="ppc">PPC Advertising</option>
-                    <option value="web">Web Development</option>
+                    {calculatorData?.services.map((service) => (
+                      <option 
+                        key={service.id} 
+                        value={service.name.toLowerCase().replace(/\s+/g, '-')}
+                      >
+                        {service.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -308,18 +384,17 @@ export default function PlanCalculator() {
 
                 <div>
                   <label className="block text-gray-700 text-sm mb-2">
-                    Select features you need <span className="text-red-500">*</span>
+                    Select Package Level <span className="text-red-500">*</span>
                   </label>
                   <select
                     value={plan.features}
                     onChange={(e) => handleChange(plan.id, 'features', e.target.value)}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white text-gray-700"
                   >
-                    <option value="">Select features</option>
+                    <option value="">Select package</option>
                     <option value="basic">Basic Package</option>
-                    <option value="standard">Standard Package</option>
                     <option value="premium">Premium Package</option>
-                    <option value="custom">Custom Package</option>
+                    <option value="advanced">Advanced Package</option>
                   </select>
                 </div>
 
