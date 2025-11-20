@@ -9,6 +9,7 @@ import TextType from '@/app/(components)/TextType';
 import { CountingNumber } from '@/app/components/CountingNumber';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/app/config/firebase';
+import Link from 'next/link';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -318,15 +319,19 @@ useEffect(() => {
               create something extraordinary together.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center">
+              <Link href='/pricing'>
               <button className="group bg-purple-100/50 text-white px-8 sm:px-10 py-4 sm:py-5 rounded-full font-semibold text-lg sm:text-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/25 flex items-center justify-center gap-3">
                 <Sparkles className="w-5 h-5 sm:w-6 sm:h-6" />
                 Start Your Project
                 <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
               </button>
+              </Link>
+              <Link href='/contact'>
               <button className="group bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white px-8 sm:px-10 py-4 sm:py-5 rounded-full font-semibold text-lg sm:text-xl transition-all duration-300 hover:scale-105 border border-white/20 flex items-center justify-center gap-3">
                 Schedule a Call
                 <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-1 transition-transform" />
               </button>
+              </Link>
             </div>
           </div>
         </div>
