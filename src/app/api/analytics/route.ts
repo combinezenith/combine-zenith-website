@@ -9,6 +9,9 @@ const analyticsDataClient = new BetaAnalyticsDataClient({
   },
 });
 
+console.log(process.env.GOOGLE_CLIENT_EMAIL);
+console.log(process.env.GOOGLE_PRIVATE_KEY);
+
 function getDateRange(range: string | null) {
   switch (range) {
     case "today":
