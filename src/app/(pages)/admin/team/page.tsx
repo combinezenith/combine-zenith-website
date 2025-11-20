@@ -40,10 +40,10 @@ export default function TeamPage() {
 
   // ✅ Route protection: redirect unauthenticated users
   useEffect(() => {
-    if (status === "unauthenticated") {
-      router.push("/admin/login");
+    if (status === "unauthenticated" || session?.user.role !== "admin") {
+      router.replace("/admin/login");
     }
-  }, [status, router]);
+  }, [status, session]);
 
   // ✅ Fetch team data
   useEffect(() => {
@@ -115,8 +115,8 @@ export default function TeamPage() {
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold">Team Management</h1>
             <p className="text-gray-300 text-sm mt-1 max-w-md">
-              Manage your organization&apos;s teams and their roles within Combine
-              Zenith.
+              Manage your organization&apos;s teams and their roles within
+              Combine Zenith.
             </p>
           </div>
           <button className="p-2 bg-white/10 hover:bg-white/20 rounded-full self-start">
@@ -236,11 +236,19 @@ interface EditModalProps {
   loading: boolean;
 }
 
-function EditTeamModal({ team, teams, onClose, onSave, loading }: EditModalProps) {
+function EditTeamModal({
+  team,
+  teams,
+  onClose,
+  onSave,
+  loading,
+}: EditModalProps) {
   const [formData, setFormData] = useState<Team>(team);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -282,7 +290,7 @@ function EditTeamModal({ team, teams, onClose, onSave, loading }: EditModalProps
             placeholder="Role"
             className="w-full bg-[#2E2058] rounded-lg px-3 py-2 outline-none"
           />
-          
+
           {/* Parent Role Dropdown */}
           <select
             name="parentRole"
@@ -291,7 +299,9 @@ function EditTeamModal({ team, teams, onClose, onSave, loading }: EditModalProps
             className="w-full bg-[#2E2058] rounded-lg px-3 py-2 outline-none text-white"
           >
             <option value="">Select Parent (Optional - for hierarchy)</option>
-            <option value="Founder & Creative Director">Founder & Creative Director</option>
+            <option value="Founder & Creative Director">
+              Founder & Creative Director
+            </option>
             <option value="Head of Marketing">Head of Marketing</option>
             <option value="Operations Lead">Operations Lead</option>
             <option value="Lead Developer">Lead Developer</option>
