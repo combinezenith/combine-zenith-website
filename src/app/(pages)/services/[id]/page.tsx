@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import ServicePillars from '@/app/(components)/ServicePillars';
 import ServiceApproach from '@/app/(components)/FAQ';
 import CTASectionEnhanced from '@/app/(components)/CTASection';
+import ServicePricingPlan, { PricingPackage } from '@/app/(components)/ServicePricingPlan';
 
 type ApproachStep = {
   id: string;
@@ -30,7 +31,7 @@ export async function generateStaticParams() {
 export default async function DynamicServices({ params }: Props) {
   const { id } = (await params) as { id: string };
   // Define a lightweight type for services we expect to render here
-  type Service = { id: string; name: string; description?: string; image?: string; skills?: string[]; approach?: ApproachStep[]; pillars?: ApproachStep[] };
+  type Service = { id: string; name: string; description?: string; image?: string; skills?: string[]; approach?: ApproachStep[]; pillars?: ApproachStep[]; pricingPackages?: PricingPackage[]; };
 
   let service: Service | null = null;
 
@@ -72,7 +73,7 @@ export default async function DynamicServices({ params }: Props) {
 
       {/* Service-specific pillars */}
       <ServicePillars pillars={service.pillars} />
-
+      <ServicePricingPlan pricingPackages={service.pricingPackages || []}/>
   {/* Proven approach / accordion */}
   <ServiceApproach approach={service.approach} />
 

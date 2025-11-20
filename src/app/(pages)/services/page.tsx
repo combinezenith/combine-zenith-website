@@ -212,15 +212,6 @@ useEffect(() => {
                   Our Services
                 </span>
               </h1>
-              <div className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold">
-                <TextType
-                  text={["Building Brands.", "Driving Growth.", "Creating Impact."]}
-                  typingSpeed={75}
-                  pauseDuration={1500}
-                  showCursor={true}
-                  cursorCharacter="|"
-                />
-              </div>
             </div>
 
             <div className="hero-subtitle max-w-4xl mx-auto mb-8 sm:mb-12">
