@@ -11,6 +11,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { motion } from "framer-motion";
+import { PricingPackage } from "../(components)/ServicePricingPlan";
 
 // ✅ Define a strongly typed Service interface
 interface Service {
@@ -20,6 +21,7 @@ interface Service {
   image?: string;
   pillars?: { id: string; title: string; content: string }[];
   approach?: { id: string; title: string; content: string }[];
+  pricingPackages?: { [key: string]: { price: number; description?: string } };
   status?: "Active" | "Inactive";
   createdAt?: Timestamp; // ✅ Replaced 'any' with Firestore Timestamp
 }
@@ -45,6 +47,7 @@ export default function ServiceForm({
     approaches: editService?.approach || [
       { id: "", title: "", content: "" }
     ],
+    pricingPackages: editService?.pricingPackages || { basic: { price: 0, description: "" }, premium: { price: 0, description: "" }, advanced: { price: 0, description: "" } },
     status: editService?.status || "Active",
   });
 
@@ -54,7 +57,7 @@ export default function ServiceForm({
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    if (name.startsWith('pillar') || name.startsWith('approach')) {
+    if (name.startsWith('pillar') || name.startsWith('approach') || name.startsWith('pricing-')) {
       const [type, index, field] = name.split('-');
       if (type === 'pillar') {
         const idx = parseInt(index);
@@ -70,6 +73,18 @@ export default function ServiceForm({
           newApproaches[idx] = { ...newApproaches[idx], [field]: value };
           return { ...prev, approaches: newApproaches };
         });
+      } else if (type === 'pricing') {
+        const packageKey = index;
+        setFormData((prev) => ({
+          ...prev,
+          pricingPackages: {
+            ...prev.pricingPackages,
+            [packageKey]: {
+              ...prev.pricingPackages[packageKey],
+              [field]: field === 'price' ? parseFloat(value) || 0 : value
+            }
+          }
+        }));
       }
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
@@ -90,6 +105,8 @@ export default function ServiceForm({
     }));
   };
 
+
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
@@ -104,6 +121,7 @@ export default function ServiceForm({
         image: formData.image,
         pillars,
         approach,
+        pricingPackages: formData.pricingPackages,
         status: formData.status,
       };
 
@@ -235,6 +253,31 @@ export default function ServiceForm({
                   name={`approach-${index}-content`}
                   placeholder="Approach Content"
                   value={approach.content}
+                  onChange={handleChange}
+                  rows={2}
+                  className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none resize-none"
+                />
+              </div>
+            ))}
+          </div>
+
+          <div className="space-y-2">
+            <h3 className="text-sm font-semibold">Pricing Packages</h3>
+            {Object.entries(formData.pricingPackages).map(([key, pkg]) => (
+              <div key={key} className="space-y-1 border border-gray-600 p-2 rounded">
+                <h4 className="text-xs font-medium capitalize">{key} Package</h4>
+                <input
+                  name={`pricing-${key}-price`}
+                  placeholder="Price"
+                  type="number"
+                  value={pkg.price}
+                  onChange={handleChange}
+                  className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
+                />
+                <textarea
+                  name={`pricing-${key}-description`}
+                  placeholder="Description"
+                  value={pkg.description || ""}
                   onChange={handleChange}
                   rows={2}
                   className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none resize-none"
