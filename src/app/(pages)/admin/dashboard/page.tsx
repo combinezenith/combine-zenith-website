@@ -76,8 +76,10 @@ export default function DashboardPage() {
   const intervalRef = useRef<number | null>(null);
 
   useEffect(() => {
-    if (status === "unauthenticated") router.push("/admin/login");
-  }, [status, router]);
+    if (status === "unauthenticated" || session?.user.role !== "admin") {
+      router.replace("/admin/login");
+    }
+  }, [status, session]);
 
   // Fetch full dataset
   const fetchAll = async () => {
