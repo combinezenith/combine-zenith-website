@@ -4,6 +4,7 @@ import TextType from './TextType';
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Image from 'next/image';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -159,7 +160,7 @@ export default function AboutSection() {
                     href={item.url}
                     className="flex-shrink-0 w-32 h-20 md:w-40 md:h-24 bg-white rounded-lg p-1 md:p-2 hover:scale-105 transition-transform duration-300 shadow-md"
                   >
-                    <img 
+                    <Image
                       src={item.img} 
                       alt={`Partner ${item.id}`}
                       className="w-full h-full object-contain"
@@ -184,7 +185,7 @@ export default function AboutSection() {
                     href={item.url}
                     className="flex-shrink-0 w-32 h-20 md:w-40 md:h-24 bg-white rounded-lg p-1 md:p-2 hover:scale-105 transition-transform duration-300 shadow-md"
                   >
-                    <img 
+                    <Image
                       src={item.img} 
                       alt={`Partner ${item.id}`}
                       className="w-full h-full object-contain"
