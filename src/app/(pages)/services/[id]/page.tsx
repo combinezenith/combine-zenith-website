@@ -1,7 +1,11 @@
+'use client';
+
 import Image from 'next/image';
-import { collection, getDocs, doc, getDoc, DocumentData } from 'firebase/firestore';
+import { doc, onSnapshot, DocumentData } from 'firebase/firestore';
 import { db } from '../../../config/firebase';
 import { notFound } from 'next/navigation';
+import { useParams } from 'next/navigation';
+import { useState, useEffect } from 'react';
 import ServicePillars from '@/app/(components)/ServicePillars';
 import ServiceApproach from '@/app/(components)/FAQ';
 import CTASectionEnhanced from '@/app/(components)/CTASection';
@@ -13,37 +17,56 @@ type ApproachStep = {
   content: string;
 };
 
-type Props = {
-  // params can be provided synchronously or as a Promise in some Next.js runtimes
-  params: { id: string } | Promise<{ id: string }>;
+type Service = {
+  id: string;
+  name: string;
+  description?: string;
+  image?: string;
+  skills?: string[];
+  approach?: ApproachStep[];
+  pillars?: ApproachStep[];
+  pricingPackages?: PricingPackage[];
 };
 
-export async function generateStaticParams() {
-  try {
-    const snapshot = await getDocs(collection(db, "services"));
-    return snapshot.docs.map((doc) => ({ id: doc.id }));
-  } catch (error) {
-    console.error("Error generating static params:", error);
-    return [];
-  }
-}
+export default function DynamicServices() {
+  const params = useParams();
+  const id = params.id as string;
 
-export default async function DynamicServices({ params }: Props) {
-  const { id } = (await params) as { id: string };
-  // Define a lightweight type for services we expect to render here
-  type Service = { id: string; name: string; description?: string; image?: string; skills?: string[]; approach?: ApproachStep[]; pillars?: ApproachStep[]; pricingPackages?: PricingPackage[]; };
+  const [service, setService] = useState<Service | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  let service: Service | null = null;
+  useEffect(() => {
+    if (!id) return;
 
-  try {
     const docRef = doc(db, "services", id);
-    const docSnap = await getDoc(docRef);
+    const unsubscribe = onSnapshot(docRef, (docSnap) => {
+      if (docSnap.exists()) {
+        setService({ id: docSnap.id, ...(docSnap.data() as DocumentData) } as Service);
+      } else {
+        setService(null);
+      }
+      setLoading(false);
+    }, (error) => {
+      console.error("Error fetching service:", error);
+      setService(null);
+      setLoading(false);
+    });
 
-    if (docSnap.exists()) {
-      service = { id: docSnap.id, ...(docSnap.data() as DocumentData) } as Service;
-    }
-  } catch (error) {
-    console.error("Error fetching service:", error);
+    return () => unsubscribe();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <section className="relative w-full">
+        <div className="mt-20 h-96 bg-gray-200 animate-pulse"></div>
+        <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="text-center">
+            <div className="h-12 bg-gray-200 animate-pulse mb-4"></div>
+            <div className="h-6 bg-gray-200 animate-pulse"></div>
+          </div>
+        </div>
+      </section>
+    );
   }
 
   if (!service) return notFound();
