@@ -47,10 +47,10 @@ export default function BlogPage() {
 
   // ✅ Redirect if not logged in
   useEffect(() => {
-    if (status === "unauthenticated") {
-      router.push("/admin/login");
+    if (status === "unauthenticated" || session?.user.role !== "admin") {
+      router.replace("/admin/login");
     }
-  }, [status, router]);
+  }, [status, session]);
 
   // ✅ Load blogs only after authentication confirmed
   useEffect(() => {

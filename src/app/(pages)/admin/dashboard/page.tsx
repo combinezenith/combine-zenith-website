@@ -1,8 +1,11 @@
+// 🔥 REWRITTEN NEXT.JS ANALYTICS DASHBOARD UI (REAL DATA, NO DUMMY JSON)
+// This file fully replaces your previous dashboard.tsx
+
 "use client";
 
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import Sidebar from "@/app/(admin-components)/Sidebar";
 import {
@@ -23,141 +26,159 @@ import {
   PieChart,
   Pie,
   Cell,
+  BarChart,
+  Bar,
   ResponsiveContainer,
 } from "recharts";
 
-interface Metric {
-  title: string;
-  value: string | number;
-  change?: string;
-  trend?: "up" | "down";
-  icon: React.ElementType;
-  subtitle?: string;
-}
-
-interface GADataPoint {
+type GADataPoint = {
   date: string;
   totalUsers: number;
   newUsers: number;
   sessions: number;
   pageViews: number;
   engagedSessions: number;
-  bounceRate: string;
-  avgSessionDuration: string;
-}
+};
+
+type TrafficSource = {
+  name: string;
+  value: number;
+};
+
+type TopPage = {
+  path: string;
+  views: number;
+};
+
+type GeoData = {
+  country: string;
+  users: number;
+};
+
+type DeviceData = {
+  device: string;
+  users: number;
+};
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  const [selectedRange, setSelectedRange] = useState("7 Days");
-  const [gaData, setGaData] = useState<GADataPoint[]>([]);
-  const [realtimeActiveUsers, setRealtimeActiveUsers] = useState(0);
-  const [loadingGA, setLoadingGA] = useState(true);
+  const [range, setRange] = useState("7days");
+  const [ga, setGa] = useState<GADataPoint[]>([]);
+  const [active, setActive] = useState(0);
+  const [sources, setSources] = useState<TrafficSource[]>([]);
+  const [pages, setPages] = useState<TopPage[]>([]);
+  const [geo, setGeo] = useState<GeoData[]>([]);
+  const [devices, setDevices] = useState<DeviceData[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // ✅ Redirect if not authenticated
-  useEffect(() => {
-    if (status === "unauthenticated") router.push("/admin/login");
-  }, [status, router]);
+  const intervalRef = useRef<number | null>(null);
 
-  // Fetch GA data
   useEffect(() => {
-    const fetchGA = async () => {
-      try {
-        const res = await fetch("/api/analytics");
-        const json = await res.json();
-        if (json.success) {
-          setGaData(json.historicalData || []);
-          setRealtimeActiveUsers(json.realtimeActiveUsers || 0);
-        }
-      } catch (err) {
-        console.error("Failed to load GA data:", err);
-      } finally {
-        setLoadingGA(false);
+    if (status === "unauthenticated" || session?.user.role !== "admin") {
+      router.replace("/admin/login");
+    }
+  }, [status, session]);
+
+  // Fetch full dataset
+  const fetchAll = async () => {
+    try {
+      setLoading(true);
+      const res = await fetch(`/api/analytics?range=${range}`);
+      const json = await res.json();
+      if (json.success) {
+        setGa(json.historicalData || []);
+        setActive(Number(json.realtimeActiveUsers || 0));
+        setSources(json.trafficSources || []);
+        setPages(json.topPages || []);
+        setGeo(json.geo || []);
+        setDevices(json.devices || []);
       }
-    };
-    fetchGA();
-  }, []);
-
-  const handleLogout = async () => {
-    await signOut({ callbackUrl: "/admin/login" });
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // --- Metrics ---
-  const totalVisitors = gaData.reduce((sum, d) => sum + d.totalUsers, 0);
-  const newUsers = gaData.reduce((sum, d) => sum + d.newUsers, 0);
+  useEffect(() => {
+    fetchAll();
+  }, [range]);
 
-  const metrics: Metric[] = [
+  // Poll realtime
+  useEffect(() => {
+    const poll = async () => {
+      const res = await fetch(`/api/analytics?range=${range}`);
+      const j = await res.json();
+      if (j.success) setActive(j.realtimeActiveUsers || 0);
+    };
+
+    poll();
+    intervalRef.current = window.setInterval(poll, 15000) as unknown as number;
+    return () => {
+      if (intervalRef.current !== null) {
+        window.clearInterval(intervalRef.current);
+      }
+    };
+  }, [range]);
+
+  // Metrics
+  const totalUsers = ga.reduce((a, b) => a + (b.totalUsers || 0), 0);
+  const newUsers = ga.reduce((a, b) => a + (b.newUsers || 0), 0);
+
+  const metrics = [
     {
-      title: "Total Visitors (7 Days)",
-      value: loadingGA ? "Loading..." : totalVisitors.toLocaleString(),
-      change: "+12.5%",
-      trend: "up",
+      title: "Total Visitors",
+      value: loading ? "..." : totalUsers.toLocaleString(),
       icon: Users,
     },
     {
       title: "New Users",
-      value: loadingGA ? "Loading..." : newUsers.toLocaleString(),
-      change: "+5.1%",
-      trend: "up",
+      value: loading ? "..." : newUsers.toLocaleString(),
       icon: Activity,
     },
     {
       title: "Real-Time Active Users",
-      value: loadingGA ? "Loading..." : realtimeActiveUsers,
+      value: loading ? "..." : active,
       icon: Zap,
-    },
-    {
-      title: "Average Session Duration",
-      value: gaData.length ? gaData[gaData.length - 1].avgSessionDuration : "0",
-      change: "+8.9%",
-      trend: "up",
-      icon: Clock,
-    },
-    {
-      title: "Engagement Rate",
-      value: "68.2%",
-      change: "+4.7%",
-      trend: "up",
-      icon: Handshake,
-    },
-    {
-      title: "Conversions",
-      value: "124",
-      change: "-1.8%",
-      trend: "down",
-      icon: DollarSign,
     },
   ];
 
-  const COLORS = ["#FFB703", "#8ECAE6", "#219EBC", "#FB8500"];
+  const COLORS = [
+    "#FFB703",
+    "#8ECAE6",
+    "#219EBC",
+    "#FB8500",
+    "#F72585",
+    "#7209B7",
+  ];
 
   return (
     <>
       <Sidebar />
-      <div className="md:ml-64 p-6 sm:p-8 min-h-screen text-white font-montserrat">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-8 gap-4">
-          <h1 className="text-3xl font-bold">Website Analytics Dashboard</h1>
-          <div className="flex items-center gap-3">
-            <div className="flex bg-[#2a2250] rounded-lg overflow-hidden border border-[#3b2e65]">
-              {["Today", "7 Days", "30 Days"].map((range) => (
-                <button
-                  key={range}
-                  onClick={() => setSelectedRange(range)}
-                  className={`px-4 py-2 text-sm font-medium transition ${
-                    selectedRange === range
-                      ? "bg-blue-600 text-white"
-                      : "text-gray-300 hover:bg-[#3b2e65]"
-                  }`}
-                >
-                  {range}
-                </button>
-              ))}
-            </div>
+
+      <div className="md:ml-64 p-6 min-h-screen text-white font-montserrat">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold">Analytics Dashboard</h1>
+          <div className="flex gap-3">
+            {[
+              { label: "Today", value: "today" },
+              { label: "7 Days", value: "7days" },
+              { label: "30 Days", value: "30days" },
+            ].map((r) => (
+              <button
+                key={r.value}
+                onClick={() => setRange(r.value)}
+                className={`px-4 py-2 rounded-lg text-sm transition ${
+                  range === r.value ? "bg-blue-600" : "bg-[#2a2250]"
+                }`}
+              >
+                {r.label}
+              </button>
+            ))}
+
             <button
-              onClick={handleLogout}
-              className="px-4 py-2 rounded-xl bg-linear-to-r from-indigo-500 to-purple-600 hover:from-purple-500 hover:to-indigo-600 transition-all duration-300 shadow-lg font-semibold text-sm"
+              onClick={() => signOut({ callbackUrl: "/admin/login" })}
+              className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 transition"
             >
               Logout
             </button>
@@ -166,43 +187,30 @@ export default function DashboardPage() {
 
         {/* Metrics */}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
-          {metrics.map((metric, index) => (
+          {metrics.map((m, i) => (
             <motion.div
-              key={index}
+              key={i}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              className="bg-[#2a2250]/80 p-6 rounded-2xl shadow-lg hover:bg-[#3b2e65]/70 transition"
+              transition={{ delay: i * 0.05 }}
+              className="bg-[#2a2250]/80 p-6 rounded-2xl shadow-lg"
             >
-              <div className="flex justify-between items-center mb-4">
+              <div className="flex justify-between items-center">
                 <div>
-                  <p className="text-sm text-gray-400">{metric.title}</p>
-                  <h2 className="text-3xl font-bold mt-1">{metric.value}</h2>
-                  {metric.subtitle && (
-                    <p className="text-sm font-medium">{metric.subtitle}</p>
-                  )}
+                  <p className="text-gray-400 text-sm">{m.title}</p>
+                  <h2 className="text-3xl font-bold mt-1">{m.value}</h2>
                 </div>
-                <metric.icon className="text-gray-300 w-8 h-8" />
+                <m.icon className="w-8 h-8 text-gray-300" />
               </div>
-              {metric.trend && (
-                <div
-                  className={`flex items-center gap-1 text-sm font-medium ${
-                    metric.trend === "up" ? "text-green-400" : "text-red-400"
-                  }`}
-                >
-                  <span>{metric.change}</span>
-                  <span>{metric.trend === "up" ? "▲" : "▼"}</span>
-                </div>
-              )}
             </motion.div>
           ))}
         </div>
 
-        {/* Line Chart: 7-day Active Users */}
+        {/* Charts */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          <ChartCard title="Active Users Over Last 7 Days">
-            <ResponsiveContainer width="100%" height={200}>
-              <LineChart data={gaData}>
+          <Card title="Users Over Time">
+            <ResponsiveContainer width="100%" height={220}>
+              <LineChart data={ga}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#3b2e65" />
                 <XAxis dataKey="date" stroke="#ccc" />
                 <YAxis stroke="#ccc" />
@@ -211,40 +219,76 @@ export default function DashboardPage() {
                 <Line type="monotone" dataKey="newUsers" stroke="#FB8500" />
               </LineChart>
             </ResponsiveContainer>
-          </ChartCard>
+          </Card>
 
-          <ChartCard title="Traffic Source Breakdown (Dummy)">
-            <ResponsiveContainer width="100%" height={200}>
+          <Card title="Traffic Sources">
+            <ResponsiveContainer width="100%" height={220}>
               <PieChart>
                 <Pie
-                  data={[
-                    { name: "Organic", value: 400 },
-                    { name: "Social", value: 300 },
-                    { name: "Referral", value: 200 },
-                    { name: "Email", value: 100 },
-                  ]}
+                  data={sources}
+                  dataKey="value"
+                  nameKey="name"
                   innerRadius={50}
                   outerRadius={80}
-                  paddingAngle={5}
-                  dataKey="value"
                 >
-                  {Array(4)
-                    .fill(null)
-                    .map((_, i) => (
-                      <Cell key={i} fill={COLORS[i % COLORS.length]} />
-                    ))}
+                  {sources.map((s, i) => (
+                    <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                  ))}
                 </Pie>
+                <Tooltip />
               </PieChart>
             </ResponsiveContainer>
-          </ChartCard>
+          </Card>
+
+          <Card title="Top Pages">
+            <ResponsiveContainer width="100%" height={220}>
+              <BarChart data={pages}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#3b2e65" />
+                <XAxis dataKey="path" stroke="#ccc" />
+                <YAxis stroke="#ccc" />
+                <Tooltip />
+                <Bar dataKey="views" fill="#00C49F" />
+              </BarChart>
+            </ResponsiveContainer>
+          </Card>
+
+          <Card title="User Geography">
+            <ResponsiveContainer width="100%" height={220}>
+              <BarChart data={geo}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#3b2e65" />
+                <XAxis dataKey="country" stroke="#ccc" />
+                <YAxis stroke="#ccc" />
+                <Tooltip />
+                <Bar dataKey="users" fill="#3B82F6" />
+              </BarChart>
+            </ResponsiveContainer>
+          </Card>
+
+          <Card title="Device Category">
+            <ResponsiveContainer width="100%" height={220}>
+              <PieChart>
+                <Pie
+                  data={devices}
+                  dataKey="users"
+                  nameKey="device"
+                  innerRadius={50}
+                  outerRadius={80}
+                >
+                  {devices.map((d, i) => (
+                    <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </Card>
         </div>
       </div>
     </>
   );
 }
 
-// Chart wrapper
-function ChartCard({
+function Card({
   title,
   children,
 }: {
@@ -252,7 +296,7 @@ function ChartCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-[#2a2250]/80 p-6 rounded-2xl shadow-lg hover:bg-[#3b2e65]/70 transition">
+    <div className="bg-[#2a2250]/80 p-6 rounded-2xl shadow-lg">
       <p className="text-sm text-gray-400 mb-3">{title}</p>
       {children}
     </div>

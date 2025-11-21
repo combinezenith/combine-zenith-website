@@ -17,7 +17,7 @@ bun dev
 Open [http://combinezenith.com](http://combinezenith.com) with your browser to see the result
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+## Learn Mor
 
 To learn more about Next js, take a look at the following resources:
 
