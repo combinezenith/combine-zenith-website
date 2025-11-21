@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
-const { createServer } = require("http");
-const next = require("next");
-const { parse } = require("url");
+import { createServer } from "http";
+import next from "next";
+import { parse } from "url";
 
 const port = process.env.PORT || 3000;
 const dev = process.env.NODE_ENV !== "production";
