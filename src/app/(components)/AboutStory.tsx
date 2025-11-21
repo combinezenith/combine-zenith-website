@@ -128,16 +128,16 @@ export default function AboutStory() {
           {/* Content Section */}
           <div ref={contentRef} aria-label="About Description" className="space-y-8">
             <p className="text-lg text-gray-300 leading-relaxed text-left">
-              At Combine Zenith, creativity isn&apos;t just about colors, shapes, or visuals it&apos;s about people, emotions, and purpose. We believe every brand has a story worth telling a story that deserves honesty, heart, and imagination.
+              At Combine Zenith, we believe creativity begins with people. We focus on the ideas, emotions, and goals that shape every brand's story. Before creating anything, we first analyze your brand and its needs. We believe honesty leads to work that feels real and thoughtful.
             </p>
             <p className="text-lg text-gray-300 leading-relaxed text-left">
-              We don&apos;t just build campaigns; we build meaningful connections. Before creating, we listen to your ideas, challenges, and dreams because behind every brand lies a purpose waiting to shine.
+              We don't treat brands as tasks to complete; we see them as partnerships built on trust. Our team of designers, writers, and thinkers works with care and clarity, crafting work that is thoughtful, original, and true to your vision. Every logo, message, and concept is shaped with attention to detail and a genuine respect for your story.
             </p>
             <p className="text-lg text-gray-300 leading-relaxed text-left">
-              Our team of dreamers, thinkers, and creators blends strategy with imagination and design with emotion to craft experiences that not only look extraordinary but feel authentic. We don&apos;t see clients as projects we see them as partners. Every logo, campaign, and concept we craft carries a piece of your story and our promise of passion and precision.
+              Whether we're building your identity or creating your next campaign, our focus stays simple: clear communication, sincere creativity, and meaningful connections with your audience. At Combine Zenith, our mission is to help your brand rise with confidence, stand with intention, and be remembered for the right reasons.
             </p>
             <p className="text-lg text-gray-300 leading-relaxed text-left">
-              We work with brands that dare to dream, grow, and make an impact because we believe great work happens when passion meets purpose. Our goal isn&apos;t just to make you visible it&apos;s to elevate our clients to the peak of their market success and make their presence unforgettable.
+              We hold ourselves to the highest level of quality in everything we do. Every detail, from design to strategy, reflects care, precision, and a commitment to excellence. We work side by side with you, bringing design, strategy, and content together so everything feels connected and makes sense.
             </p>
           </div>
         </div>

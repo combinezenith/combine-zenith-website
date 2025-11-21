@@ -1,7 +1,6 @@
 'use client';
 
 import TextType from './TextType';
-import Masonry from './Masonry';
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -9,11 +8,11 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 gsap.registerPlugin(ScrollTrigger);
 
 export default function AboutSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  const descriptionRef = useRef<HTMLParagraphElement>(null);
-  const trustedHeadingRef = useRef<HTMLHeadingElement>(null);
-  const masonryRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef(null);
+  const headingRef = useRef(null);
+  const descriptionRef = useRef(null);
+  const trustedHeadingRef = useRef(null);
+  const marqueeRef = useRef(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -74,8 +73,8 @@ export default function AboutSection() {
         }
       );
 
-      // Masonry container zoom-in animation
-      gsap.fromTo(masonryRef.current,
+      // Marquee container zoom-in animation
+      gsap.fromTo(marqueeRef.current,
         {
           opacity: 0,
           scale: 0.8,
@@ -86,7 +85,7 @@ export default function AboutSection() {
           duration: 1.2,
           ease: "power3.out",
           scrollTrigger: {
-            trigger: masonryRef.current,
+            trigger: marqueeRef.current,
             start: "top 85%",
             toggleActions: "play none none reverse",
           },
@@ -98,156 +97,31 @@ export default function AboutSection() {
   }, []);
 
   const items = [
-    {
-      id: "1",
-      img: "/partners/1.jpg",
-      url: "#",
-      height: 180,
-    },
-    {
-      id: "2",
-      img: "/partners/2.jpg",
-      url: "#",
-      height: 220,
-    },
-    {
-      id: "3",
-      img: "/partners/3.jpg",
-      url: "#",
-      height: 160,
-    },
-    {
-      id: "4",
-      img: "/partners/4.jpg",
-      url: "#",
-      height: 240,
-    },
-    {
-      id: "5",
-      img: "/partners/5.jpg",
-      url: "#",
-      height: 200,
-    },
-    {
-      id: "6",
-      img: "/partners/6.jpg",
-      url: "#",
-      height: 190,
-    },
-    {
-      id: "7",
-      img: "/partners/7.jpg",
-      url: "#",
-      height: 170,
-    },
-    {
-      id: "8",
-      img: "/partners/8.jpg",
-      url: "#",
-      height: 210,
-    },
-    {
-      id: "9",
-      img: "/partners/9.jpg",
-      url: "#",
-      height: 230,
-    },
-    {
-      id: "10",
-      img: "/partners/10.jpg",
-      url: "#",
-      height: 150,
-    },
-    {
-      id: "11",
-      img: "/partners/11.jpg",
-      url: "#",
-      height: 260,
-    },
-    {
-      id: "12",
-      img: "/partners/12.jpg",
-      url: "#",
-      height: 180,
-    },
-    {
-      id: "13",
-      img: "/partners/13.jpg",
-      url: "#",
-      height: 140,
-    },
-    {
-      id: "14",
-      img: "/partners/14.jpg",
-      url: "#",
-      height: 220,
-    },
-    {
-      id: "15",
-      img: "/partners/15.jpg",
-      url: "#",
-      height: 190,
-    },
-    {
-      id: "16",
-      img: "/partners/16.jpg",
-      url: "#",
-      height: 170,
-    },
-    {
-      id: "17",
-      img: "/partners/17.jpg",
-      url: "#",
-      height: 210,
-    },
-    {
-      id: "18",
-      img: "/partners/18.jpg",
-      url: "#",
-      height: 240,
-    },
-    {
-      id: "19",
-      img: "/partners/19.jpg",
-      url: "#",
-      height: 160,
-    },
-    {
-      id: "20",
-      img: "/partners/20.jpg",
-      url: "#",
-      height: 200,
-    },
-    {
-      id: "21",
-      img: "/partners/21.jpg",
-      url: "#",
-      height: 180,
-    },
-    {
-      id: "22",
-      img: "/partners/22.jpg",
-      url: "#",
-      height: 220,
-    },
-    {
-      id: "23",
-      img: "/partners/23.jpg",
-      url: "#",
-      height: 140,
-    },
-    {
-      id: "24",
-      img: "/partners/24.jpg",
-      url: "#",
-      height: 260,
-    },
-    {
-      id: "25",
-      img: "/partners/25.jpg",
-      url: "#",
-      height: 190,
-    },
+    { id: "1", img: "/partners/1.jpg", url: "#" },
+    { id: "2", img: "/partners/2.jpg", url: "#" },
+    { id: "3", img: "/partners/3.jpg", url: "#" },
+    { id: "4", img: "/partners/4.jpg", url: "#" },
+    { id: "5", img: "/partners/5.jpg", url: "#" },
+    { id: "6", img: "/partners/6.jpg", url: "#" },
+    { id: "7", img: "/partners/7.jpg", url: "#" },
+    { id: "8", img: "/partners/8.jpg", url: "#" },
+    { id: "9", img: "/partners/9.jpg", url: "#" },
+    { id: "10", img: "/partners/10.jpg", url: "#" },
+    { id: "11", img: "/partners/11.jpg", url: "#" },
+    { id: "12", img: "/partners/12.jpg", url: "#" },
+    { id: "13", img: "/partners/13.jpg", url: "#" },
+    { id: "14", img: "/partners/14.jpg", url: "#" },
+    { id: "15", img: "/partners/15.jpg", url: "#" },
+    { id: "16", img: "/partners/16.jpg", url: "#" },
+    { id: "17", img: "/partners/17.jpg", url: "#" },
+    { id: "18", img: "/partners/18.jpg", url: "#" },
+    { id: "19", img: "/partners/19.jpg", url: "#" },
+    { id: "20", img: "/partners/20.jpg", url: "#" },
+    { id: "21", img: "/partners/21.jpg", url: "#" },
+    { id: "22", img: "/partners/22.jpg", url: "#" },
+    { id: "23", img: "/partners/23.jpg", url: "#" },
+    { id: "24", img: "/partners/24.jpg", url: "#" },
+    { id: "25", img: "/partners/25.jpg", url: "#" },
   ];
 
   return (
@@ -270,27 +144,89 @@ export default function AboutSection() {
         </div>
 
         {/* Trusted By Section */}
-        <div aria-label="Trusted Companies" className="bg-purple-800/30 backdrop-blur-sm rounded-xl md:rounded-3xl p-4 md:p-16 min-h-[500px] md:min-h-[800px] flex flex-col">
+        <div aria-label="Trusted Companies" className="bg-purple-800/30 backdrop-blur-sm rounded-xl md:rounded-3xl p-4 md:p-12 overflow-hidden">
           <h3 ref={trustedHeadingRef} className="text-xl md:text-4xl font-bold text-white text-center mb-6 md:mb-12">
             Trusted by Industry Leaders.
           </h3>
 
-          <div ref={masonryRef} className="flex-1 relative min-h-[300px] md:min-h-[200px]">
-            <Masonry
-              items={items}
-              ease="power3.out"
-              duration={0.6}
-              stagger={0.05}
-              animateFrom="bottom"
-              scaleOnHover={true}
-              hoverScale={0.95}
-              blurToFocus={true}
-              colorShiftOnHover={false}
-              itemsPerLoad={10}
-            />
+          <div ref={marqueeRef}>
+            {/* Row 1 - moves left */}
+            <div className="relative overflow-hidden mb-6 md:mb-8">
+              <div className="flex animate-marquee-left gap-4 md:gap-8">
+                {[...items.slice(0, 13), ...items.slice(0, 13)].map((item, index) => (
+                  <a
+                    key={`row1-${index}`}
+                    href={item.url}
+                    className="flex-shrink-0 w-32 h-20 md:w-40 md:h-24 bg-white rounded-lg p-1 md:p-2 hover:scale-105 transition-transform duration-300 shadow-md"
+                  >
+                    <img 
+                      src={item.img} 
+                      alt={`Partner ${item.id}`}
+                      className="w-full h-full object-contain"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        if (target.parentElement) {
+                          target.parentElement.innerHTML = `<div class="w-full h-full flex items-center justify-center text-purple-600 font-semibold text-xs md:text-sm">Logo ${item.id}</div>`;
+                        }
+                      }}
+                    />
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* Row 2 - moves right */}
+            <div className="relative overflow-hidden">
+              <div className="flex animate-marquee-right gap-4 md:gap-8">
+                {[...items.slice(13, 25), ...items.slice(13, 25)].map((item, index) => (
+                  <a
+                    key={`row2-${index}`}
+                    href={item.url}
+                    className="flex-shrink-0 w-32 h-20 md:w-40 md:h-24 bg-white rounded-lg p-1 md:p-2 hover:scale-105 transition-transform duration-300 shadow-md"
+                  >
+                    <img 
+                      src={item.img} 
+                      alt={`Partner ${item.id}`}
+                      className="w-full h-full object-contain"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        if (target.parentElement) {
+                          target.parentElement.innerHTML = `<div class="w-full h-full flex items-center justify-center text-purple-600 font-semibold text-xs md:text-sm">Logo ${item.id}</div>`;
+                        }
+                      }}
+                    />
+                  </a>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
+
+      <style jsx>{`
+        @keyframes marquee-left {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+        @keyframes marquee-right {
+          0% {
+            transform: translateX(-50%);
+          }
+          100% {
+            transform: translateX(0);
+          }
+        }
+        .animate-marquee-left {
+          animation: marquee-left 10s linear infinite;
+        }
+        .animate-marquee-right {
+          animation: marquee-right 10s linear infinite;
+        }
+      `}</style>
     </section>
   );
 }
