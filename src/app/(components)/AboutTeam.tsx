@@ -620,7 +620,7 @@ export default function MeetTheTeam() {
       scrollSpeed: 2,
       scrollEase: 0.1,
       autoScroll: true,
-      autoScrollSpeed: 0.5
+      autoScrollSpeed: 0.1
     });
 
     galleryAppRef.current = app;
@@ -737,17 +737,6 @@ export default function MeetTheTeam() {
             <p className="text-gray-300 text-lg max-w-2xl mx-auto mb-4">
               Scroll or drag to explore our talented team members
             </p>
-            
-            {/* Auto-scroll Toggle */}
-            <button
-              onClick={toggleAutoScroll}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-purple-600/20 hover:bg-purple-600/30 text-white rounded-lg transition-all duration-300 border border-purple-500/30"
-            >
-              <span className={`w-3 h-3 rounded-full ${autoScrollEnabled ? 'bg-green-400' : 'bg-gray-400'}`}></span>
-              <span className="text-sm font-medium">
-                Auto-scroll: {autoScrollEnabled ? 'ON' : 'OFF'}
-              </span>
-            </button>
           </div>
 
           {/* Circular Gallery */}
