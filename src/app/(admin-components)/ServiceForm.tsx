@@ -7,11 +7,10 @@ import {
   doc,
   updateDoc,
   serverTimestamp,
-  Timestamp, // ✅ Import Firestore Timestamp
+  Timestamp,
 } from "firebase/firestore";
 import { db } from "../config/firebase";
 import { motion } from "framer-motion";
-import { PricingPackage } from "../(components)/ServicePricingPlan";
 
 // ✅ Define a strongly typed Service interface
 interface Service {
@@ -19,11 +18,13 @@ interface Service {
   name?: string;
   description?: string;
   image?: string;
+  video?: string;
+  skills?: string[];
   pillars?: { id: string; title: string; content: string }[];
   approach?: { id: string; title: string; content: string }[];
   pricingPackages?: { [key: string]: { price: number; description?: string } };
   status?: "Active" | "Inactive";
-  createdAt?: Timestamp; // ✅ Replaced 'any' with Firestore Timestamp
+  createdAt?: Timestamp;
 }
 
 // ✅ Define props for this form
@@ -43,11 +44,16 @@ export default function ServiceForm({
     name: editService?.name || "",
     description: editService?.description || "",
     image: editService?.image || "",
+    video: editService?.video || "",
     pillars: editService?.pillars || [{ id: "", title: "", content: "" }],
     approaches: editService?.approach || [
       { id: "", title: "", content: "" }
     ],
-    pricingPackages: editService?.pricingPackages || { basic: { price: 0, description: "" }, premium: { price: 0, description: "" }, advanced: { price: 0, description: "" } },
+    pricingPackages: editService?.pricingPackages || { 
+      basic: { price: 0, description: "" }, 
+      premium: { price: 0, description: "" }, 
+      advanced: { price: 0, description: "" } 
+    },
     status: editService?.status || "Active",
   });
 
@@ -105,8 +111,6 @@ export default function ServiceForm({
     }));
   };
 
-
-
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
@@ -119,6 +123,7 @@ export default function ServiceForm({
         name: formData.name,
         description: formData.description,
         image: formData.image,
+        video: formData.video,
         pillars,
         approach,
         pricingPackages: formData.pricingPackages,
@@ -175,13 +180,41 @@ export default function ServiceForm({
             className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none resize-none"
           />
 
-          <input
-            name="image"
-            placeholder="Image URL"
-            value={formData.image}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
-          />
+          {/* 👇 Image Path Input */}
+          <div>
+            <label className="block text-sm font-medium mb-1 text-gray-300">
+              Image Path
+            </label>
+            <input
+              name="image"
+              type="text"
+              placeholder="/images/service-banner.jpg"
+              value={formData.image}
+              onChange={handleChange}
+              className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
+            />
+            <p className="text-gray-400 text-xs mt-1 px-1">
+              💡 Enter path from public folder (e.g., /images/banner.jpg)
+            </p>
+          </div>
+
+          {/* 👇 Video Path Input */}
+          <div>
+            <label className="block text-sm font-medium mb-1 text-gray-300">
+              Video Path (Optional)
+            </label>
+            <input
+              name="video"
+              type="text"
+              placeholder="/videos/service-promo.mp4"
+              value={formData.video}
+              onChange={handleChange}
+              className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
+            />
+            <p className="text-gray-400 text-xs mt-1 px-1">
+              💡 Enter video path from public folder (e.g., /videos/promo.mp4)
+            </p>
+          </div>
 
           <div className="space-y-2">
             <div className="flex justify-between items-center">
