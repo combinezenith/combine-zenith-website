@@ -164,6 +164,8 @@ export default function AboutSection() {
                       src={item.img} 
                       alt={`Partner ${item.id}`}
                       className="w-full h-full object-contain"
+                      width={200}
+                      height={200}
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         if (target.parentElement) {
@@ -189,6 +191,8 @@ export default function AboutSection() {
                       src={item.img} 
                       alt={`Partner ${item.id}`}
                       className="w-full h-full object-contain"
+                      width={200}
+                      height={200}
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         if (target.parentElement) {
