@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { doc, onSnapshot, DocumentData } from 'firebase/firestore';
 import { db } from '../../../config/firebase';
 import { notFound } from 'next/navigation';
@@ -21,7 +20,7 @@ type Service = {
   id: string;
   name: string;
   description?: string;
-  image?: string;
+  video?: string;
   skills?: string[];
   approach?: ApproachStep[];
   pillars?: ApproachStep[];
@@ -34,6 +33,8 @@ export default function DynamicServices() {
 
   const [service, setService] = useState<Service | null>(null);
   const [loading, setLoading] = useState(true);
+  const [videoError, setVideoError] = useState(false);
+  const [videoLoading, setVideoLoading] = useState(true);
 
   useEffect(() => {
     if (!id) return;
@@ -58,11 +59,13 @@ export default function DynamicServices() {
   if (loading) {
     return (
       <section className="relative w-full">
-        <div className="mt-20 h-96 bg-gray-200 animate-pulse"></div>
+        <div className="mt-20 h-96 bg-gray-900 animate-pulse flex items-center justify-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-purple-500"></div>
+        </div>
         <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center">
-            <div className="h-12 bg-gray-200 animate-pulse mb-4"></div>
-            <div className="h-6 bg-gray-200 animate-pulse"></div>
+            <div className="h-12 bg-gray-700 animate-pulse mb-4 rounded"></div>
+            <div className="h-6 bg-gray-700 animate-pulse rounded"></div>
           </div>
         </div>
       </section>
@@ -73,35 +76,84 @@ export default function DynamicServices() {
 
   return (
     <section aria-labelledby="service-title" className="relative w-full">
+      {/* Hero Video Section - Autoplay with Audio */}
       <div className="mt-20">
-        <Image
-          src={service.image || '/laptop-hero.jpg'}
-          alt={service.name}
-          width={900}
-          height={900}
-          className="object-cover w-full h-96 block"
-          priority
-        />
-      </div>
-      <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="text-center">
-            <h1 id="service-title" className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold leading-tight">
-              {service.name}
-            </h1>
-            <p className="text-[#b589fc] text-center sm:text-lg md:text-xl">
-              {service.description}
-            </p>
+        {service.video ? (
+          <div className="relative bg-black">
+            {videoLoading && !videoError && (
+              <div className="absolute inset-0 flex items-center justify-center bg-gray-900 z-10">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-purple-500"></div>
+              </div>
+            )}
+            {!videoError ? (
+              <video
+                src={service.video}
+                className="object-cover w-full h-96 block [&::-webkit-media-controls]:hidden [&::-webkit-media-controls-enclosure]:hidden"
+                autoPlay
+                loop
+                playsInline
+                muted
+                onLoadedData={() => setVideoLoading(false)}
+                onError={() => {
+                  setVideoError(true);
+                  setVideoLoading(false);
+                }}
+              >
+                <track kind="captions" />
+                Your browser does not support the video tag.
+              </video>
+            ) : (
+              <div className="w-full h-96 bg-gray-800 flex items-center justify-center text-white">
+                <div className="text-center">
+                  <p className="text-lg mb-2">⚠️ Video could not be loaded</p>
+                  <p className="text-sm text-gray-400">Path: {service.video}</p>
+                  <p className="text-xs text-gray-500 mt-1">Make sure the file exists in the public folder</p>
+                </div>
+              </div>
+            )}
           </div>
+        ) : (
+          <div className="w-full h-96 bg-gray-800 flex items-center justify-center text-white">
+            <div className="text-center">
+              <p className="text-lg mb-2">📹 No video available</p>
+              <p className="text-sm text-gray-400">Please try refreshing the page</p>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Service Title and Description */}
+      <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="text-center">
+          <h1 
+            id="service-title" 
+            className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold leading-tight mb-4"
+          >
+            {service.name}
+          </h1>
+          <p className="text-[#b589fc] text-center sm:text-lg md:text-xl max-w-4xl mx-auto">
+            {service.description}
+          </p>
         </div>
+      </div>
 
       {/* Service-specific pillars */}
-      <ServicePillars pillars={service.pillars} />
-      <ServicePricingPlan pricingPackages={service.pricingPackages || []}/>
-  {/* Proven approach / accordion */}
-  <ServiceApproach approach={service.approach} />
+      {service.pillars && service.pillars.length > 0 && (
+        <ServicePillars pillars={service.pillars} />
+      )}
 
-  <CTASectionEnhanced/>
+      {/* Pricing Packages */}
+      {service.pricingPackages && Object.keys(service.pricingPackages).length > 0 && (
+        <ServicePricingPlan pricingPackages={service.pricingPackages || []} />
+      )}
 
+      {/* Proven approach / FAQ */}
+      {service.approach && service.approach.length > 0 && (
+        <ServiceApproach approach={service.approach} />
+      )}
+
+      {/* CTA Section */}
+      <CTASectionEnhanced />
     </section>
   );
 }
