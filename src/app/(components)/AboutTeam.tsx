@@ -85,6 +85,38 @@ export default function MeetTheTeam() {
   }, []);
 
   useEffect(() => {
+<<<<<<< HEAD
+=======
+    if (!galleryRef.current || loading || teamMembers.length === 0) return;
+
+    const items = teamMembers.map(member => ({
+      image: member.image,
+      text: member.name,
+      id: member.id
+    }));
+
+    const app = new GalleryApp(galleryRef.current, {
+      items,
+      bend: 2.5,
+      textColor: '#ffffff',
+      borderRadius: 0.5,
+      font: 'bold 28px sans-serif',
+      scrollSpeed: 2,
+      scrollEase: 0.1,
+      autoScroll: true,
+      autoScrollSpeed: 0.1
+    });
+
+    galleryAppRef.current = app;
+
+    return () => {
+      app.destroy();
+      galleryAppRef.current = null;
+    };
+  }, [loading, teamMembers]);
+
+  useEffect(() => {
+>>>>>>> a300441ff41d72df04f15d647bf75be1c83b036d
     const ctx = gsap.context(() => {
       if (headerRef.current) {
         gsap.fromTo(
