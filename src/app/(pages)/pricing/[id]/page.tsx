@@ -1,6 +1,6 @@
 import React from "react";
 import PricingDetail from "@/app/(components)/PricingDetail";
-import PlanCalculator from "@/app/(components)/PlanCalculator";
+// import PlanCalculator from "@/app/(components)/PlanCalculator";
 
 interface PageProps {
   params: Promise<{
@@ -17,7 +17,7 @@ export default async function PricingDetailPage({ params }: PageProps) {
     <div className="min-h-screen">
       <PricingDetail id={id} />
       <div className="hidden md:block">
-        <PlanCalculator />
+        {/* <PlanCalculator /> */}
       </div>
     </div>
   );
