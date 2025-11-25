@@ -6,6 +6,8 @@ import {
   addDoc,
   doc,
   updateDoc,
+  getDocs,
+  deleteDoc,
   serverTimestamp,
   Timestamp,
 } from "firebase/firestore";
@@ -22,6 +24,7 @@ interface Service {
   skills?: string[];
   pillars?: { id: string; title: string; content: string }[];
   approach?: { id: string; title: string; content: string }[];
+  works?: { id: string; image: string; link: string }[];
   pricingPackages?: { [key: string]: { price: number; description?: string } };
   status?: "Active" | "Inactive";
   createdAt?: Timestamp;
@@ -45,16 +48,17 @@ export default function ServiceForm({
     description: editService?.description || "",
     image: editService?.image || "",
     video: editService?.video || "",
-    pillars: editService?.pillars || [{ id: "", title: "", content: "" }],
-    approaches: editService?.approach || [
-      { id: "", title: "", content: "" }
-    ],
-    pricingPackages: editService?.pricingPackages || { 
-      basic: { price: 0, description: "" }, 
-      premium: { price: 0, description: "" }, 
-      advanced: { price: 0, description: "" } 
-    },
-    status: editService?.status || "Active",
+  pillars: editService?.pillars || [{ id: "", title: "", content: "" }],
+  approaches: editService?.approach || [
+    { id: "", title: "", content: "" }
+  ],
+  works: editService?.works || [{ id: "", image: "", link: "" }],
+  pricingPackages: editService?.pricingPackages || { 
+    basic: { price: 0, description: "" }, 
+    premium: { price: 0, description: "" }, 
+    advanced: { price: 0, description: "" } 
+  },
+  status: editService?.status || "Active",
   });
 
   const [loading, setLoading] = useState(false);
@@ -63,7 +67,12 @@ export default function ServiceForm({
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    if (name.startsWith('pillar') || name.startsWith('approach') || name.startsWith('pricing-')) {
+    if (
+      name.startsWith('pillar') ||
+      name.startsWith('approach') ||
+      name.startsWith('works') ||
+      name.startsWith('pricing-')
+    ) {
       const [type, index, field] = name.split('-');
       if (type === 'pillar') {
         const idx = parseInt(index);
@@ -78,6 +87,13 @@ export default function ServiceForm({
           const newApproaches = [...prev.approaches];
           newApproaches[idx] = { ...newApproaches[idx], [field]: value };
           return { ...prev, approaches: newApproaches };
+        });
+      } else if (type === 'works') {
+        const idx = parseInt(index);
+        setFormData((prev) => {
+          const newWorks = [...prev.works];
+          newWorks[idx] = { ...newWorks[idx], [field]: value };
+          return { ...prev, works: newWorks };
         });
       } else if (type === 'pricing') {
         const packageKey = index;
@@ -111,6 +127,13 @@ export default function ServiceForm({
     }));
   };
 
+  const addWork = () => {
+    setFormData((prev) => ({
+      ...prev,
+      works: [...prev.works, { id: "", image: "", link: "" }],
+    }));
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
@@ -118,6 +141,7 @@ export default function ServiceForm({
     try {
       const pillars = formData.pillars.filter(p => p.id && p.title && p.content);
       const approach = formData.approaches.filter(a => a.id && a.title && a.content);
+      const works = formData.works.filter(w => w.image && w.link); // id may be empty for new docs
 
       const serviceData = {
         name: formData.name,
@@ -130,19 +154,59 @@ export default function ServiceForm({
         status: formData.status,
       };
 
+      let docRef;
       if (editService?.id) {
-        // ✅ Updating existing service
-        const docRef = doc(db, "services", editService.id);
+        // Updating existing service
+        docRef = doc(db, "services", editService.id);
         await updateDoc(docRef, serviceData);
-        onSuccess({ ...editService, ...serviceData });
       } else {
-        // ✅ Adding new service
-        const docRef = await addDoc(collection(db, "services"), {
+        // Adding new service
+        docRef = await addDoc(collection(db, "services"), {
           ...serviceData,
           createdAt: serverTimestamp(),
         });
-        onSuccess({ id: docRef.id, ...serviceData });
       }
+
+      // Sync works subcollection
+      const worksCollectionRef = collection(db, "services", docRef.id, "works");
+
+      // Fetch current works docs in subcollection
+      const currentWorksSnapshot = await getDocs(worksCollectionRef);
+      const currentWorksDocs = currentWorksSnapshot.docs;
+
+      // Delete docs missing from formData.works
+      for (const docSnap of currentWorksDocs) {
+        if (!works.find((w) => w.id === docSnap.id)) {
+          await deleteDoc(doc(db, "services", docRef.id, "works", docSnap.id));
+        }
+      }
+
+      // Add or update works from formData
+      for (const work of works) {
+        if (work.id) {
+          // Update existing doc
+          const workDocRef = doc(db, "services", docRef.id, "works", work.id);
+          await updateDoc(workDocRef, {
+            image: work.image,
+            link: work.link,
+          });
+        } else {
+          // New doc
+          await addDoc(worksCollectionRef, {
+            image: work.image,
+            link: work.link,
+          });
+        }
+      }
+
+      // Notify success with updated service data, excluding works (location uncertain)
+      const updatedService = {
+        id: docRef.id,
+        ...serviceData,
+      };
+
+      onSuccess(updatedService);
+
     } catch (error) {
       console.error("Error saving service:", error);
     } finally {
@@ -215,6 +279,38 @@ export default function ServiceForm({
               💡 Enter video path from public folder (e.g., /videos/promo.mp4)
             </p>
           </div>
+    {/* New Works Section Added */}
+    <div className="space-y-2 mt-6">
+      <div className="flex justify-between items-center">
+        <h3 className="text-sm font-semibold">Gallery</h3>
+        <button
+          type="button"
+          onClick={addWork}
+          className="px-2 py-1 text-xs bg-green-600 hover:bg-green-700 rounded"
+        >
+          Add Items
+        </button>
+      </div>
+      {formData.works.map((work, index) => (
+        <div key={index} className="space-y-1 border border-gray-600 p-2 rounded mt-2">
+          <input
+            name={`works-${index}-image-path`}
+            placeholder="Write Image Path..."
+            value={work.image}
+            onChange={handleChange}
+            className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
+          />
+          <textarea
+            name={`works-${index}-link`}
+            placeholder="Write Link..."
+            value={work.link}
+            onChange={handleChange}
+            rows={2}
+            className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none resize-none"
+          />
+        </div>
+      ))}
+    </div>
 
           <div className="space-y-2">
             <div className="flex justify-between items-center">
@@ -338,15 +434,17 @@ export default function ServiceForm({
               Cancel
             </button>
             <button
-              type="submit"
-              disabled={loading}
-              className="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700"
-            >
-              {loading ? "Saving..." : "Save"}
-            </button>
-          </div>
-        </form>
-      </motion.div>
+          type="submit"
+          disabled={loading}
+          className="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700"
+        >
+          {loading ? "Saving..." : "Save"}
+        </button>
+      </div>
+    </form>
+
+
+  </motion.div>
     </div>
   );
 }

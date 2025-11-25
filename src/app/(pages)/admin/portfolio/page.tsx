@@ -62,7 +62,7 @@ export default function PortfolioPage() {
     if (status === "unauthenticated" || session?.user.role !== "admin") {
       router.replace("/admin/login");
     }
-  }, [status, session]);
+  }, [status, session, router]);
 
   // ✅ Fetch portfolios only when authenticated
   useEffect(() => {

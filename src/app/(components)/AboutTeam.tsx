@@ -46,9 +46,6 @@ export default function MeetTheTeam() {
   const headerRef = useRef<HTMLDivElement>(null);
   const marqueeRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
-  const bgCircle1Ref = useRef<HTMLDivElement>(null);
-  const bgCircle2Ref = useRef<HTMLDivElement>(null);
-  const bgCircle3Ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchTeamMembers = async () => {

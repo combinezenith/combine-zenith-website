@@ -79,7 +79,7 @@ export default function DashboardPage() {
     if (status === "unauthenticated" || session?.user.role !== "admin") {
       router.replace("/admin/login");
     }
-  }, [status, session]);
+  }, [status, session, router]);
 
   // Fetch full dataset
   const fetchAll = async () => {
