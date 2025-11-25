@@ -108,9 +108,8 @@ export default function CTASectionEnhanced() {
 
           {/* Description */}
           <p ref={descriptionRef} className="text-purple-200 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto">
-            Every collaboration at Combine Zenith begins with trust and grows through shared vision. We see our clients not as projects, but as partners in purpose. Their goals become our goals, their challenges our mission. Each success story we create together is built on open communication, mutual respect, and genuine passion for making something meaningful. When our clients thrive, we thrive because every brand we help build is a reflection of the relationships we nurture with honesty and heart. At Combine Zenith, it&apos;s never just about campaigns or designs it&apos;s about creating impact, celebrating growth, and walking the journey together.
+              At Combine Zenith, collaboration is rooted in trust and a shared vision, treating clients as partners. Their goals and challenges become central to the mission, fostering success stories through open communication and mutual respect. The focus is on creating meaningful impact and celebrating growth together, rather than merely executing campaigns or designs.
           </p>
-
           {/* CTA Button */}
           <div aria-label="Call to Action Button" className="pt-4">
             <Link
