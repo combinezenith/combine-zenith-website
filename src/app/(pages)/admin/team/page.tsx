@@ -43,7 +43,7 @@ export default function TeamPage() {
     if (status === "unauthenticated" || session?.user.role !== "admin") {
       router.replace("/admin/login");
     }
-  }, [status, session]);
+  }, [status, session, router]);
 
   // ✅ Fetch team data
   useEffect(() => {

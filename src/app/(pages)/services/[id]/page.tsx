@@ -1,6 +1,6 @@
 'use client';
 
-import { doc, onSnapshot, DocumentData } from 'firebase/firestore';
+import { doc, onSnapshot, collection, DocumentData } from 'firebase/firestore';
 import { db } from '../../../config/firebase';
 import { notFound } from 'next/navigation';
 import { useParams } from 'next/navigation';
@@ -9,11 +9,19 @@ import ServicePillars from '@/app/(components)/ServicePillars';
 import ServiceApproach from '@/app/(components)/FAQ';
 import CTASectionEnhanced from '@/app/(components)/CTASection';
 import ServicePricingPlan, { PricingPackage } from '@/app/(components)/ServicePricingPlan';
+import ServiceWorksGallery from '@/app/(components)/ServiceWorksGallery';
+
 
 type ApproachStep = {
   id: string;
   title: string;
   content: string;
+};
+
+type WorkItem = {
+  id: string;
+  image: string;
+  link: string;
 };
 
 type Service = {
@@ -32,6 +40,7 @@ export default function DynamicServices() {
   const id = params.id as string;
 
   const [service, setService] = useState<Service | null>(null);
+  const [works, setWorks] = useState<WorkItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [videoError, setVideoError] = useState(false);
   const [videoLoading, setVideoLoading] = useState(true);
@@ -54,6 +63,31 @@ export default function DynamicServices() {
     });
 
     return () => unsubscribe();
+  }, [id]);
+  
+  useEffect(() => {
+    if (!id) return;
+
+    const worksCollectionRef = collection(db, "services", id, "works");
+    const unsubscribeWorks = onSnapshot(
+      worksCollectionRef,
+      (querySnapshot) => {
+        const worksData: WorkItem[] = [];
+        querySnapshot.forEach((doc) => {
+          worksData.push({
+            id: doc.id,
+            ...(doc.data() as DocumentData),
+          } as WorkItem);
+        });
+        setWorks(worksData);
+      },
+      (error) => {
+        console.error("Error fetching works gallery:", error);
+        setWorks([]);
+      }
+    );
+
+    return () => unsubscribeWorks();
   }, [id]);
 
   if (loading) {
@@ -124,36 +158,39 @@ export default function DynamicServices() {
 
       {/* Service Title and Description */}
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center">
-          <h1 
-            id="service-title" 
-            className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold leading-tight mb-4"
-          >
-            {service.name}
-          </h1>
-          <p className="text-[#b589fc] text-center sm:text-lg md:text-xl max-w-4xl mx-auto">
-            {service.description}
-          </p>
-        </div>
+      <div className="text-center">
+        <h1 
+          id="service-title" 
+          className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold leading-tight mb-4"
+        >
+          {service.name}
+        </h1>
+        <p className="text-[#b589fc] text-center sm:text-lg md:text-xl max-w-4xl mx-auto">
+          {service.description}
+        </p>
       </div>
+    </div>
 
-      {/* Service-specific pillars */}
-      {service.pillars && service.pillars.length > 0 && (
-        <ServicePillars pillars={service.pillars} />
-      )}
+    {/* Service works gallery */}
+    <ServiceWorksGallery works={works} />
 
-      {/* Pricing Packages */}
-      {service.pricingPackages && Object.keys(service.pricingPackages).length > 0 && (
-        <ServicePricingPlan pricingPackages={service.pricingPackages || []} />
-      )}
+    {/* Service-specific pillars */}
+    {service.pillars && service.pillars.length > 0 && (
+      <ServicePillars pillars={service.pillars} />
+    )}
 
-      {/* Proven approach / FAQ */}
-      {service.approach && service.approach.length > 0 && (
-        <ServiceApproach approach={service.approach} />
-      )}
+    {/* Pricing Packages */}
+    {service.pricingPackages && Object.keys(service.pricingPackages).length > 0 && (
+      <ServicePricingPlan pricingPackages={service.pricingPackages || []} />
+    )}
 
-      {/* CTA Section */}
-      <CTASectionEnhanced />
-    </section>
-  );
+    {/* Proven approach / FAQ */}
+    {service.approach && service.approach.length > 0 && (
+      <ServiceApproach approach={service.approach} />
+    )}
+
+    {/* CTA Section */}
+    <CTASectionEnhanced />
+  </section>
+);
 }

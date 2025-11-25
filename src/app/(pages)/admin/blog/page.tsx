@@ -50,7 +50,7 @@ export default function BlogPage() {
     if (status === "unauthenticated" || session?.user.role !== "admin") {
       router.replace("/admin/login");
     }
-  }, [status, session]);
+  }, [status, session, router]);
 
   // ✅ Load blogs only after authentication confirmed
   useEffect(() => {
