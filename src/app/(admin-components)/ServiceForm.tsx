@@ -24,7 +24,7 @@ interface Service {
   skills?: string[];
   pillars?: { id: string; title: string; content: string }[];
   approach?: { id: string; title: string; content: string }[];
-  works?: { id: string; image: string; link: string }[];
+  works?: { id: string; mediaType: "image" | "video"; mediaPath: string; title: string; link: string }[];
   pricingPackages?: { [key: string]: { price: number; description?: string } };
   status?: "Active" | "Inactive";
   createdAt?: Timestamp;
@@ -48,17 +48,17 @@ export default function ServiceForm({
     description: editService?.description || "",
     image: editService?.image || "",
     video: editService?.video || "",
-  pillars: editService?.pillars || [{ id: "", title: "", content: "" }],
-  approaches: editService?.approach || [
-    { id: "", title: "", content: "" }
-  ],
-  works: editService?.works || [{ id: "", image: "", link: "" }],
-  pricingPackages: editService?.pricingPackages || { 
-    basic: { price: 0, description: "" }, 
-    premium: { price: 0, description: "" }, 
-    advanced: { price: 0, description: "" } 
-  },
-  status: editService?.status || "Active",
+    pillars: editService?.pillars || [{ id: "", title: "", content: "" }],
+    approaches: editService?.approach || [
+      { id: "", title: "", content: "" }
+    ],
+    works: editService?.works || [{ id: "", mediaType: "image" as "image" | "video", mediaPath: "", title: "", link: "" }],
+    pricingPackages: editService?.pricingPackages || { 
+      basic: { price: 0, description: "" }, 
+      premium: { price: 0, description: "" }, 
+      advanced: { price: 0, description: "" } 
+    },
+    status: editService?.status || "Active",
   });
 
   const [loading, setLoading] = useState(false);
@@ -92,7 +92,11 @@ export default function ServiceForm({
         const idx = parseInt(index);
         setFormData((prev) => {
           const newWorks = [...prev.works];
-          newWorks[idx] = { ...newWorks[idx], [field]: value };
+          if (field === 'mediaType') {
+            newWorks[idx] = { ...newWorks[idx], [field]: value as "image" | "video" };
+          } else {
+            newWorks[idx] = { ...newWorks[idx], [field]: value };
+          }
           return { ...prev, works: newWorks };
         });
       } else if (type === 'pricing') {
@@ -130,7 +134,14 @@ export default function ServiceForm({
   const addWork = () => {
     setFormData((prev) => ({
       ...prev,
-      works: [...prev.works, { id: "", image: "", link: "" }],
+      works: [...prev.works, { id: "", mediaType: "image", mediaPath: "", title: "", link: "" }],
+    }));
+  };
+
+  const removeWork = (index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      works: prev.works.filter((_, i) => i !== index),
     }));
   };
 
@@ -141,7 +152,7 @@ export default function ServiceForm({
     try {
       const pillars = formData.pillars.filter(p => p.id && p.title && p.content);
       const approach = formData.approaches.filter(a => a.id && a.title && a.content);
-      const works = formData.works.filter(w => w.image && w.link); // id may be empty for new docs
+      const works = formData.works.filter(w => w.mediaPath && w.title && w.link);
 
       const serviceData = {
         name: formData.name,
@@ -187,22 +198,27 @@ export default function ServiceForm({
           // Update existing doc
           const workDocRef = doc(db, "services", docRef.id, "works", work.id);
           await updateDoc(workDocRef, {
-            image: work.image,
+            mediaType: work.mediaType,
+            mediaPath: work.mediaPath,
+            title: work.title,
             link: work.link,
           });
         } else {
           // New doc
           await addDoc(worksCollectionRef, {
-            image: work.image,
+            mediaType: work.mediaType,
+            mediaPath: work.mediaPath,
+            title: work.title,
             link: work.link,
           });
         }
       }
 
-      // Notify success with updated service data, excluding works (location uncertain)
+      // Notify success with updated service data
       const updatedService = {
         id: docRef.id,
         ...serviceData,
+        works,
       };
 
       onSuccess(updatedService);
@@ -279,38 +295,100 @@ export default function ServiceForm({
               💡 Enter video path from public folder (e.g., /videos/promo.mp4)
             </p>
           </div>
-    {/* New Works Section Added */}
-    <div className="space-y-2 mt-6">
-      <div className="flex justify-between items-center">
-        <h3 className="text-sm font-semibold">Gallery</h3>
-        <button
-          type="button"
-          onClick={addWork}
-          className="px-2 py-1 text-xs bg-green-600 hover:bg-green-700 rounded"
-        >
-          Add Items
-        </button>
-      </div>
-      {formData.works.map((work, index) => (
-        <div key={index} className="space-y-1 border border-gray-600 p-2 rounded mt-2">
-          <input
-            name={`works-${index}-image-path`}
-            placeholder="Write Image Path..."
-            value={work.image}
-            onChange={handleChange}
-            className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
-          />
-          <textarea
-            name={`works-${index}-link`}
-            placeholder="Write Link..."
-            value={work.link}
-            onChange={handleChange}
-            rows={2}
-            className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none resize-none"
-          />
-        </div>
-      ))}
-    </div>
+
+          {/* 📸 Works Gallery Section - Image or Video */}
+          <div className="space-y-2 mt-6">
+            <div className="flex justify-between items-center">
+              <h3 className="text-sm font-semibold">Gallery (Images/Videos)</h3>
+              <button
+                type="button"
+                onClick={addWork}
+                className="px-2 py-1 text-xs bg-green-600 hover:bg-green-700 rounded"
+              >
+                + Add Media
+              </button>
+            </div>
+            {formData.works.map((work, index) => (
+              <div key={index} className="space-y-2 border border-gray-600 p-3 rounded mt-2 bg-[#1f1a3a]">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs text-gray-400">Media #{index + 1}</span>
+                  <button
+                    type="button"
+                    onClick={() => removeWork(index)}
+                    className="text-red-500 hover:text-red-400 text-xs"
+                  >
+                    ✕ Remove
+                  </button>
+                </div>
+                
+                {/* Media Type Selector */}
+                <div>
+                  <label className="block text-xs font-medium mb-1 text-gray-300">
+                    Media Type
+                  </label>
+                  <select
+                    name={`works-${index}-mediaType`}
+                    value={work.mediaType}
+                    onChange={handleChange}
+                    className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
+                  >
+                    <option value="image">🖼️ Image</option>
+                    <option value="video">🎥 Video</option>
+                  </select>
+                </div>
+
+                {/* Media Path Input */}
+                <div>
+                  <label className="block text-xs font-medium mb-1 text-gray-300">
+                    {work.mediaType === "image" ? "Image" : "Video"} Path
+                  </label>
+                  <input
+                    name={`works-${index}-mediaPath`}
+                    placeholder={
+                      work.mediaType === "image" 
+                        ? "/images/gallery/project1.jpg" 
+                        : "/videos/gallery/demo.mp4"
+                    }
+                    value={work.mediaPath}
+                    onChange={handleChange}
+                    className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
+                  />
+                  <p className="text-gray-400 text-xs mt-1 px-1">
+                    💡 Path from public folder (e.g., {work.mediaType === "image" ? "/images/gallery/photo.jpg" : "/videos/gallery/clip.mp4"})
+                  </p>
+                </div>
+
+                {/* Title Input */}
+                <div>
+                  <label className="block text-xs font-medium mb-1 text-gray-300">
+                    Title
+                  </label>
+                  <input
+                    name={`works-${index}-title`}
+                    placeholder="Project Title or Media Description"
+                    value={work.title}
+                    onChange={handleChange}
+                    className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none"
+                  />
+                </div>
+
+                {/* Link Input */}
+                <div>
+                  <label className="block text-xs font-medium mb-1 text-gray-300">
+                    Link (URL)
+                  </label>
+                  <textarea
+                    name={`works-${index}-link`}
+                    placeholder="https://example.com or /project-details"
+                    value={work.link}
+                    onChange={handleChange}
+                    rows={2}
+                    className="w-full p-2 rounded bg-[#3b2e65] text-white outline-none resize-none"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
 
           <div className="space-y-2">
             <div className="flex justify-between items-center">
@@ -434,17 +512,15 @@ export default function ServiceForm({
               Cancel
             </button>
             <button
-          type="submit"
-          disabled={loading}
-          className="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700"
-        >
-          {loading ? "Saving..." : "Save"}
-        </button>
-      </div>
-    </form>
-
-
-  </motion.div>
+              type="submit"
+              disabled={loading}
+              className="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 disabled:cursor-not-allowed"
+            >
+              {loading ? "Saving..." : "Save"}
+            </button>
+          </div>
+        </form>
+      </motion.div>
     </div>
   );
 }
