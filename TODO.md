@@ -1,7 +1,10 @@
-# Contact Inquiries Admin Panel Task
+# TODO: Fix Build Errors and Warnings
 
-- [x] Create API route for sending emails (src/app/api/send-email/route.ts)
-- [x] Update admin contact page to fetch and display inquiries (src/app/(pages)/admin/contact/page.tsx)
-- [x] Add reply modal/form in the admin page
-- [x] Integrate email sending with the reply functionality
-- [x] Add view dialog for full inquiry details
+## Critical Errors (Build Failing)
+- [ ] Fix type error in `src/app/(pages)/portfolio/[id]/page.tsx`: Update params type to Promise and await params (Next.js 15 compatibility)
+
+## Warnings to Fix
+- [ ] Replace `<img>` with `<Image>` from next/image in `src/app/(components)/ServiceWorksGallery.tsx`
+- [ ] Remove unused imports (`Clock`, `Handshake`, `DollarSign`) in `src/app/(pages)/admin/dashboard/page.tsx`
+- [ ] Add `fetchAll` to useEffect dependency array in `src/app/(pages)/admin/dashboard/page.tsx`
+- [ ] Remove unused import `TextType` in `src/app/(pages)/services/page.tsx`

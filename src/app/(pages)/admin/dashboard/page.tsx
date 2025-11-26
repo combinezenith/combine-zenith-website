@@ -12,9 +12,6 @@ import {
   Users,
   Activity,
   Zap,
-  Clock,
-  Handshake,
-  DollarSign,
 } from "lucide-react";
 import {
   LineChart,

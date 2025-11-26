@@ -28,10 +28,6 @@ type PortfolioItem = {
   };
 };
 
-type Params = {
-  params: { id: string }
-};
-
 export async function generateStaticParams() {
   try {
     const snapshot = await getDocs(collection(db, "portfolios"));
@@ -42,7 +38,7 @@ export async function generateStaticParams() {
   }
 }
 
-export default async function PortfolioDetail({ params }: Params) {
+export default async function PortfolioDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   let item: PortfolioItem | null = null;
 

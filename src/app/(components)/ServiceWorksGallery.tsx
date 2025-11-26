@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import React, { useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Image from 'next/image';
 
 type WorkItem = {
   id: string;
@@ -85,9 +86,11 @@ const ServiceWorksGallery: React.FC<ServiceWorksGalleryProps> = ({ works }) => {
                 {/* Media Container */}
                 <div className="relative w-full h-64 bg-[#b5a6d0] overflow-hidden">
                   {work.mediaType === 'image' ? (
-                    <img
+                    <Image
                       src={work.mediaPath}
                       alt={work.title}
+                      width={400}
+                      height={256}
                       className="object-cover w-full h-full transition-transform duration-500"
                     />
                   ) : (
