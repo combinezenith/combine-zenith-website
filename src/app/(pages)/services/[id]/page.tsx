@@ -177,14 +177,15 @@ export default function DynamicServices() {
         </div>
       </div>
 
-      {/* Service works gallery */}
-      <ServiceWorksGallery works={works} />
 
       {/* Service-specific pillars */}
       {service.pillars && service.pillars.length > 0 && (
         <ServicePillars pillars={service.pillars} />
       )}
 
+      {/* Service works gallery */}
+      <ServiceWorksGallery works={works} />
+      
       {/* Pricing Packages */}
       {service.pricingPackages && Object.keys(service.pricingPackages).length > 0 && (
         <ServicePricingPlan pricingPackages={service.pricingPackages || []} />
