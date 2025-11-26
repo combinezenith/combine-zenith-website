@@ -20,7 +20,9 @@ type ApproachStep = {
 
 type WorkItem = {
   id: string;
-  image: string;
+  mediaType: 'image' | 'video';
+  mediaPath: string;
+  title: string;
   link: string;
 };
 
@@ -74,9 +76,13 @@ export default function DynamicServices() {
       (querySnapshot) => {
         const worksData: WorkItem[] = [];
         querySnapshot.forEach((doc) => {
+          const data = doc.data() as DocumentData;
           worksData.push({
             id: doc.id,
-            ...(doc.data() as DocumentData),
+            mediaType: data.mediaType || 'image',
+            mediaPath: data.mediaPath || data.image || '',
+            title: data.title || '',
+            link: data.link || '',
           } as WorkItem);
         });
         setWorks(worksData);
@@ -158,39 +164,40 @@ export default function DynamicServices() {
 
       {/* Service Title and Description */}
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="text-center">
-        <h1 
-          id="service-title" 
-          className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold leading-tight mb-4"
-        >
-          {service.name}
-        </h1>
-        <p className="text-[#b589fc] text-center sm:text-lg md:text-xl max-w-4xl mx-auto">
-          {service.description}
-        </p>
+        <div className="text-center">
+          <h1 
+            id="service-title" 
+            className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold leading-tight mb-4"
+          >
+            {service.name}
+          </h1>
+          <p className="text-[#b589fc] text-center sm:text-lg md:text-xl max-w-4xl mx-auto">
+            {service.description}
+          </p>
+        </div>
       </div>
-    </div>
 
-    {/* Service works gallery */}
-    <ServiceWorksGallery works={works} />
 
-    {/* Service-specific pillars */}
-    {service.pillars && service.pillars.length > 0 && (
-      <ServicePillars pillars={service.pillars} />
-    )}
+      {/* Service-specific pillars */}
+      {service.pillars && service.pillars.length > 0 && (
+        <ServicePillars pillars={service.pillars} />
+      )}
 
-    {/* Pricing Packages */}
-    {service.pricingPackages && Object.keys(service.pricingPackages).length > 0 && (
-      <ServicePricingPlan pricingPackages={service.pricingPackages || []} />
-    )}
+      {/* Service works gallery */}
+      <ServiceWorksGallery works={works} />
+      
+      {/* Pricing Packages */}
+      {service.pricingPackages && Object.keys(service.pricingPackages).length > 0 && (
+        <ServicePricingPlan pricingPackages={service.pricingPackages || []} />
+      )}
 
-    {/* Proven approach / FAQ */}
-    {service.approach && service.approach.length > 0 && (
-      <ServiceApproach approach={service.approach} />
-    )}
+      {/* Proven approach / FAQ */}
+      {service.approach && service.approach.length > 0 && (
+        <ServiceApproach approach={service.approach} />
+      )}
 
-    {/* CTA Section */}
-    <CTASectionEnhanced />
-  </section>
-);
+      {/* CTA Section */}
+      <CTASectionEnhanced />
+    </section>
+  );
 }
