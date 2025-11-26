@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import {
   collection,
   addDoc,
@@ -52,7 +52,7 @@ export default function ServiceForm({
     approaches: editService?.approach || [
       { id: "", title: "", content: "" }
     ],
-    works: editService?.works || [{ id: "", mediaType: "image" as "image" | "video", mediaPath: "", title: "", link: "" }],
+    works: [{ id: "", mediaType: "image" as "image" | "video", mediaPath: "", title: "", link: "" }],
     pricingPackages: editService?.pricingPackages || { 
       basic: { price: 0, description: "" }, 
       premium: { price: 0, description: "" }, 
@@ -62,6 +62,41 @@ export default function ServiceForm({
   });
 
   const [loading, setLoading] = useState(false);
+  const [loadingWorks, setLoadingWorks] = useState(false);
+
+  // ✅ Fetch works from subcollection when editing
+  useEffect(() => {
+    const fetchWorks = async () => {
+      if (!editService?.id) return;
+      
+      setLoadingWorks(true);
+      try {
+        const worksCollectionRef = collection(db, "services", editService.id, "works");
+        const worksSnapshot = await getDocs(worksCollectionRef);
+        
+        const worksData = worksSnapshot.docs.map(doc => ({
+          id: doc.id,
+          mediaType: doc.data().mediaType || "image" as "image" | "video",
+          mediaPath: doc.data().mediaPath || "",
+          title: doc.data().title || "",
+          link: doc.data().link || "",
+        }));
+
+        if (worksData.length > 0) {
+          setFormData(prev => ({
+            ...prev,
+            works: worksData
+          }));
+        }
+      } catch (error) {
+        console.error("Error fetching works:", error);
+      } finally {
+        setLoadingWorks(false);
+      }
+    };
+
+    fetchWorks();
+  }, [editService?.id]);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -166,20 +201,25 @@ export default function ServiceForm({
       };
 
       let docRef;
+      let serviceId: string;
+
       if (editService?.id) {
         // Updating existing service
-        docRef = doc(db, "services", editService.id);
+        serviceId = editService.id;
+        docRef = doc(db, "services", serviceId);
         await updateDoc(docRef, serviceData);
       } else {
         // Adding new service
-        docRef = await addDoc(collection(db, "services"), {
+        const newDocRef = await addDoc(collection(db, "services"), {
           ...serviceData,
           createdAt: serverTimestamp(),
         });
+        serviceId = newDocRef.id;
+        docRef = newDocRef;
       }
 
       // Sync works subcollection
-      const worksCollectionRef = collection(db, "services", docRef.id, "works");
+      const worksCollectionRef = collection(db, "services", serviceId, "works");
 
       // Fetch current works docs in subcollection
       const currentWorksSnapshot = await getDocs(worksCollectionRef);
@@ -188,7 +228,7 @@ export default function ServiceForm({
       // Delete docs missing from formData.works
       for (const docSnap of currentWorksDocs) {
         if (!works.find((w) => w.id === docSnap.id)) {
-          await deleteDoc(doc(db, "services", docRef.id, "works", docSnap.id));
+          await deleteDoc(doc(db, "services", serviceId, "works", docSnap.id));
         }
       }
 
@@ -196,7 +236,7 @@ export default function ServiceForm({
       for (const work of works) {
         if (work.id) {
           // Update existing doc
-          const workDocRef = doc(db, "services", docRef.id, "works", work.id);
+          const workDocRef = doc(db, "services", serviceId, "works", work.id);
           await updateDoc(workDocRef, {
             mediaType: work.mediaType,
             mediaPath: work.mediaPath,
@@ -216,7 +256,7 @@ export default function ServiceForm({
 
       // Notify success with updated service data
       const updatedService = {
-        id: docRef.id,
+        id: serviceId,
         ...serviceData,
         works,
       };
@@ -299,7 +339,10 @@ export default function ServiceForm({
           {/* 📸 Works Gallery Section - Image or Video */}
           <div className="space-y-2 mt-6">
             <div className="flex justify-between items-center">
-              <h3 className="text-sm font-semibold">Gallery (Images/Videos)</h3>
+              <h3 className="text-sm font-semibold">
+                Gallery (Images/Videos)
+                {loadingWorks && <span className="text-xs text-gray-400 ml-2">Loading...</span>}
+              </h3>
               <button
                 type="button"
                 onClick={addWork}
