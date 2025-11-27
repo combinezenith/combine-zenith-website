@@ -159,6 +159,16 @@ export default function PortfolioCard() {
         >
           {loading ? (
             <SkeletonLoader count={6} className="h-80" />
+          ) : filteredPortfolios.length === 0 ? (
+            <div className="col-span-full flex flex-col items-center justify-center py-16 px-4">
+              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-12 max-w-md w-full">
+                <LuFolder className="w-16 h-16 text-white/30 mx-auto mb-4" strokeWidth={1.5} />
+                <h3 className="text-xl font-semibold text-white mb-2">No Projects Available</h3>
+                <p className="text-gray-400 text-sm">
+                  There are no projects in the "{activeCategory}" category yet.
+                </p>
+              </div>
+            </div>
           ) : (
             filteredPortfolios.map((portfolio) => {
               const Icon = LuFolder;
