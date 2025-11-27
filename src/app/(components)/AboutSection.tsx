@@ -126,7 +126,7 @@ export default function AboutSection() {
   ];
 
   return (
-    <section ref={sectionRef} aria-label="About Section" className="py-8 md:py-20 px-4 sm:px-6">
+    <section ref={sectionRef} aria-label="About Section" className="py-8 md:py-20 px-4 sm:px-6 overflow-x-hidden">
       <div aria-label="About Container" className="container mx-auto max-w-6xl">
         {/* About Content */}
         <div aria-label="About Content" className="text-center mb-8 md:mb-16">
@@ -145,15 +145,15 @@ export default function AboutSection() {
         </div>
 
         {/* Trusted By Section */}
-        <div aria-label="Trusted Companies" className="bg-purple-800/30 backdrop-blur-sm rounded-xl md:rounded-3xl p-4 md:p-12 overflow-hidden">
+        <div aria-label="Trusted Companies" className="bg-purple-800/30 backdrop-blur-sm rounded-xl md:rounded-3xl p-4 md:p-12">
           <h3 ref={trustedHeadingRef} className="text-xl md:text-4xl font-bold text-white text-center mb-6 md:mb-12">
             Trusted by Industry Leaders.
           </h3>
 
-          <div ref={marqueeRef}>
+          <div ref={marqueeRef} className="overflow-hidden">
             {/* Row 1 - moves left */}
-            <div className="relative overflow-hidden mb-6 md:mb-8">
-              <div className="flex animate-marquee-left gap-4 md:gap-8">
+            <div className="mb-6 md:mb-8 overflow-hidden">
+              <div className="flex gap-4 md:gap-8 animate-marquee-left">
                 {[...items.slice(0, 13), ...items.slice(0, 13)].map((item, index) => (
                   <a
                     key={`row1-${index}`}
@@ -164,8 +164,8 @@ export default function AboutSection() {
                       src={item.img} 
                       alt={`Partner ${item.id}`}
                       className="w-full h-full object-contain"
-                      width={200}
-                      height={200}
+                      width={250}
+                      height={250}
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         if (target.parentElement) {
@@ -179,8 +179,8 @@ export default function AboutSection() {
             </div>
 
             {/* Row 2 - moves right */}
-            <div className="relative overflow-hidden">
-              <div className="flex animate-marquee-right gap-4 md:gap-8">
+            <div className="overflow-hidden">
+              <div className="flex gap-4 md:gap-8 animate-marquee-right">
                 {[...items.slice(13, 25), ...items.slice(13, 25)].map((item, index) => (
                   <a
                     key={`row2-${index}`}
@@ -191,8 +191,8 @@ export default function AboutSection() {
                       src={item.img} 
                       alt={`Partner ${item.id}`}
                       className="w-full h-full object-contain"
-                      width={200}
-                      height={200}
+                      width={250}
+                      height={250}
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         if (target.parentElement) {
@@ -208,30 +208,28 @@ export default function AboutSection() {
         </div>
       </div>
 
-      <style jsx>{`
-        @keyframes marquee-left {
-          0% {
-            transform: translateX(0);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
-        }
-        @keyframes marquee-right {
-          0% {
-            transform: translateX(-50%);
-          }
-          100% {
-            transform: translateX(0);
-          }
-        }
-        .animate-marquee-left {
-          animation: marquee-left 10s linear infinite;
-        }
-        .animate-marquee-right {
-          animation: marquee-right 10s linear infinite;
-        }
-      `}</style>
+<style jsx>{`
+  @keyframes marquee-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  @keyframes marquee-right {
+    0% { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+  }
+
+  .animate-marquee-left {
+    animation: marquee-left 30s linear infinite;
+    width: fit-content;
+  }
+
+  .animate-marquee-right {
+    animation: marquee-right 30s linear infinite;
+    width: fit-content;
+  }
+`}</style>
+
     </section>
   );
 }
