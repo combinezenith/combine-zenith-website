@@ -165,7 +165,7 @@ export default function PortfolioCard() {
                 <LuFolder className="w-16 h-16 text-white/30 mx-auto mb-4" strokeWidth={1.5} />
                 <h3 className="text-xl font-semibold text-white mb-2">No Projects Available</h3>
                 <p className="text-gray-400 text-sm">
-                  There are no projects in the "{activeCategory}" category yet.
+                  There are no projects in the &apos;{activeCategory}&apos; category yet.
                 </p>
               </div>
             </div>
