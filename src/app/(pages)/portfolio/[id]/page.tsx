@@ -28,6 +28,14 @@ type PortfolioItem = {
   };
 };
 
+<<<<<<< HEAD
+=======
+// Updated type definition for Next.js 15
+type PageProps = {
+  params: Promise<{ id: string }>;
+};
+
+>>>>>>> e86f18d7472c004230912a861b835a697052bc02
 export async function generateStaticParams() {
   try {
     const snapshot = await getDocs(collection(db, "portfolios"));
@@ -38,7 +46,13 @@ export async function generateStaticParams() {
   }
 }
 
+<<<<<<< HEAD
 export default async function PortfolioDetail({ params }: { params: Promise<{ id: string }> }) {
+=======
+// Updated function signature
+export default async function PortfolioDetail({ params }: PageProps) {
+  // Await the params Promise
+>>>>>>> e86f18d7472c004230912a861b835a697052bc02
   const { id } = await params;
   let item: PortfolioItem | null = null;
 

@@ -1,4 +1,5 @@
 "use client";
+
 import Image from 'next/image';
 import { LuFolder } from 'react-icons/lu';
 import Link from 'next/link';
@@ -38,14 +39,12 @@ export default function PortfolioCard() {
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState('All');
-
-  const containerRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch services
+        // Fetch services for categories
         const servicesSnapshot = await getDocs(collection(db, "services"));
         const servicesData = servicesSnapshot.docs.map(
           (d) => ({ id: d.id, ...(d.data() as DocumentData) } as Service)
@@ -69,11 +68,12 @@ export default function PortfolioCard() {
 
   useEffect(() => {
     if (!loading && cardsRef.current) {
-      // Animate cards on scroll
-      gsap.fromTo(cardsRef.current.children,
+      const cards = cardsRef.current.querySelectorAll('.portfolio-card');
+
+      gsap.fromTo(cards,
         {
           opacity: 0,
-          y: 50,
+          y: 60,
           scale: 0.9
         },
         {
@@ -81,7 +81,7 @@ export default function PortfolioCard() {
           y: 0,
           scale: 1,
           duration: 0.8,
-          stagger: 0.1,
+          stagger: 0.15,
           ease: "power2.out",
           scrollTrigger: {
             trigger: cardsRef.current,
@@ -92,38 +92,57 @@ export default function PortfolioCard() {
         }
       );
     }
-  }, [loading, portfolios]);
+  }, [loading, activeCategory]);
 
   // Get category names from services
   const categories = ['All', ...services.map(service => service.name)];
 
   const handleCategoryClick = (category: string) => {
     setActiveCategory(category);
-    console.log('Selected category:', category);
   };
 
   // Filter portfolios based on active category
   const filteredPortfolios = activeCategory === 'All'
     ? portfolios
-    : portfolios.filter(portfolio =>
-        portfolio.services?.some(service =>
-          service.toLowerCase().includes(activeCategory.toLowerCase())
-        )
-      );
+    : portfolios.filter(portfolio => {
+        // Check if portfolio has any services
+        if (!portfolio.services || portfolio.services.length === 0) {
+          return false;
+        }
+        
+        // Match service names - handle variations like "Ai Videos" vs "AI Video Creation"
+        return portfolio.services.some(service => {
+          const serviceStr = typeof service === 'string' ? service.toLowerCase().trim() : '';
+          const categoryStr = (activeCategory || '').toLowerCase().trim();
+          
+          // Exact match first
+          if (serviceStr === categoryStr) return true;
+          
+          // Check if either contains the other (for variations)
+          if (serviceStr.includes(categoryStr) || categoryStr.includes(serviceStr)) return true;
+          
+          // Handle "AI Video" variations - normalize both strings
+          const normalizedService = serviceStr.replace(/\s+/g, ' ');
+          const normalizedCategory = categoryStr.replace(/\s+/g, ' ');
+          
+          return normalizedService.includes(normalizedCategory) || 
+                 normalizedCategory.includes(normalizedService);
+        });
+      });
 
   return (
-    <div className="min-h-screen relative overflow-x-hidden" ref={containerRef}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div className="min-h-screen relative overflow-x-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Categories Section */}
-        <div className="py-16 lg:py-24">
+        <div className="py-12 lg:py-16">
           <div className="flex flex-wrap gap-3 sm:gap-4 justify-center items-center">
             {categories.map((category) => (
               <button
                 key={category}
-                className={`px-6 py-3 sm:px-8 sm:py-3.5 rounded-full text-sm sm:text-base font-medium border-none cursor-pointer transition-all duration-300 whitespace-nowrap outline-none transform hover:scale-105 ${
+                className={`px-6 py-3 sm:px-8 sm:py-3.5 rounded-full text-sm sm:text-base font-medium transition-all duration-300 whitespace-nowrap outline-none transform hover:scale-105 ${
                   activeCategory === category
-                    ? 'bg-gradient-to-br from-[#8b45c1] to-[#a855f7] border-transparent shadow-lg shadow-[#a855f7]/40 hover:-translate-y-0.5 text-white'
-                    : 'bg-black text-white border border-white/10 hover:bg-[rgba(139,69,193,0.3)] hover:border-[rgba(168,85,247,0.5)] hover:-translate-y-0.5'
+                    ? 'bg-white/20 text-white shadow-lg shadow-white/20 border border-white/30'
+                    : 'bg-white/5 text-gray-300 border border-white/10 hover:bg-white/10 hover:border-white/20'
                 }`}
                 onClick={() => handleCategoryClick(category)}
               >
@@ -136,64 +155,84 @@ export default function PortfolioCard() {
         {/* Portfolio Cards Grid */}
         <div
           ref={cardsRef}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-8 p-4 md:p-6 text-center justify-center items-center"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mx-4 md:mx-8 lg:mx-12 my-8 p-4 md:p-6 text-center justify-center items-center"
         >
           {loading ? (
             <SkeletonLoader count={6} className="h-80" />
+          ) : filteredPortfolios.length === 0 ? (
+            <div className="col-span-full flex flex-col items-center justify-center py-16 px-4">
+              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-12 max-w-md w-full">
+                <LuFolder className="w-16 h-16 text-white/30 mx-auto mb-4" strokeWidth={1.5} />
+                <h3 className="text-xl font-semibold text-white mb-2">No Projects Available</h3>
+                <p className="text-gray-400 text-sm">
+                  There are no projects in the &apos;{activeCategory}&apos; category yet.
+                </p>
+              </div>
+            </div>
           ) : (
             filteredPortfolios.map((portfolio) => {
               const Icon = LuFolder;
               return (
-                <Link
+                <div
                   key={portfolio.id}
-                  href={`/portfolio/${portfolio.id}`}
-                  className="group relative opacity-0 backdrop-blur-sm rounded-2xl transition-all duration-500 hover:scale-105 hover:-translate-y-2 overflow-hidden flex flex-col cursor-pointer shadow-xl hover:shadow-2xl hover:shadow-purple-500/20"
+                  className="portfolio-card group relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl transition-all duration-500 hover:scale-[1.02] hover:shadow-xl hover:shadow-white/10 overflow-hidden flex flex-col hover:border-white/30"
                 >
-                  {/* Animated Background Gradient */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  {/* Subtle background overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                  {/* Image Container with Parallax Effect */}
-                  <div className="w-full h-44 md:h-48 lg:h-48 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-10"></div>
+                  {/* Image section */}
+                  <div className="relative w-full h-44 md:h-48 lg:h-48 overflow-hidden">
                     <Image
                       src={portfolio.image || '/logo.jpg'}
-                      alt={portfolio.name || 'Portfolio'}
+                      alt={portfolio.name || 'Portfolio Image'}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover group-hover:scale-110 transition-transform duration-700"
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
                     />
-                    {/* Overlay Effects */}
-                    <div className="absolute inset-0  opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    {/* Minimal overlay */}
+                    <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-500" />
                   </div>
 
-                  <div className="p-4 md:p-6 flex-1 flex flex-col relative z-10">
+                  <div className="relative p-6 flex-1 flex flex-col">
+                    {/* Header with icon and title */}
                     <div className="mb-4 flex items-center gap-3 justify-center">
-                      <div className="h-12 w-12 rounded-lg flex items-center justify-center group-hover:bg-white group-hover:scale-110 transition-all duration-300 shadow-lg">
-                        <Icon className="w-6 h-6 text-white group-hover:text-[#685885] transition-colors duration-300" strokeWidth={1.5} />
+                      <div className="h-10 w-10 bg-white/10 rounded-lg flex items-center justify-center group-hover:bg-white/20 transition-colors duration-300">
+                        <Icon className="w-5 h-5 text-white" strokeWidth={1.5} />
                       </div>
-                      <h3 className="text-lg md:text-xl font-bold text-white group-hover:text-purple-200 transition-colors duration-300">
+                      <h3 className="text-lg md:text-xl font-semibold text-white group-hover:text-white transition-colors duration-300">
                         {portfolio.name}
                       </h3>
                     </div>
 
-                    <div className="flex flex-wrap gap-2 justify-center">
-                      {(portfolio.services && portfolio.services.length > 0
-                        ? portfolio.services
-                        : ['BRANDING', 'CONTENT', 'DESIGN', 'SOCIAL MEDIA']
-                      ).map((service, index) => (
-                        <span
-                          key={index}
-                          className="px-3 py-1 bg-[#b5a6d0]/30 text-purple-200 text-xs rounded-full border border-purple-300/20 group-hover:bg-white/20 group-hover:border-purple-300/40 transition-all duration-300 transform hover:scale-105"
-                        >
-                          {service}
+                    {/* Services Tags */}
+                    <div className="flex flex-wrap gap-2 justify-center mb-6">
+                      {portfolio.services && portfolio.services.length > 0 ? (
+                        portfolio.services.slice(0, 3).map((service, index) => (
+                          <span
+                            key={index}
+                            className="px-3 py-1 bg-white/10 text-gray-300 text-xs rounded-full border border-white/20 group-hover:bg-white/15 group-hover:text-white transition-all duration-300"
+                          >
+                            {service}
+                          </span>
+                        ))
+                      ) : (
+                        <span className="px-3 py-1 bg-white/10 text-gray-300 text-xs rounded-full border border-white/20">
+                          Portfolio
                         </span>
-                      ))}
+                      )}
                     </div>
 
-                    {/* Hover Reveal Effect */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-purple-600/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
+                    {/* CTA Button */}
+                    <div className="mt-auto">
+                      <Link href={`/portfolio/${portfolio.id}`} className="block">
+                        <span className="group/btn bg-white/10 hover:bg-white/20 w-full py-3 px-4 rounded-xl text-sm font-medium inline-block text-center text-white transition-all duration-300 hover:shadow-lg backdrop-blur-sm border border-white/20">
+                          View Project
+                          <span className="inline-block ml-2 transform group-hover/btn:translate-x-1 transition-transform duration-300">→</span>
+                        </span>
+                      </Link>
+                    </div>
                   </div>
-                </Link>
+                </div>
               );
             })
           )}
@@ -201,4 +240,4 @@ export default function PortfolioCard() {
       </div>
     </div>
   );
-};
+}
