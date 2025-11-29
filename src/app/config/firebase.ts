@@ -2,6 +2,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 // ✅ Your Firebase configuration
 const firebaseConfig = {
@@ -19,3 +20,4 @@ export const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
 // ✅ Export Firestore (for use across your app)
 export const db = getFirestore(app);
+export const storage = getStorage(app);

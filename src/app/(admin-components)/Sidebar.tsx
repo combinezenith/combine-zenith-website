@@ -20,6 +20,7 @@ export default function Sidebar() {
 
   const navItems = [
     { name: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
+    { name: "Home management",href:"/admin/home",icon:LayoutDashboard},
     { name: "Team Management", href: "/admin/team", icon: Users },
     { name: "Portfolio", href: "/admin/portfolio", icon: FolderKanban },
     { name: "Services", href: "/admin/services", icon: Package },

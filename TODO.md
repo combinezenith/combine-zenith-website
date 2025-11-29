@@ -1,10 +1,17 @@
-# TODO: Fix Build Errors and Warnings
+# Linting Errors Fix Plan
 
-## Critical Errors (Build Failing)
-- [ ] Fix type error in `src/app/(pages)/portfolio/[id]/page.tsx`: Update params type to Promise and await params (Next.js 15 compatibility)
+## HeroSection.tsx
+- [x] Replace 'any' type with proper interface for Firestore data
+- [x] Replace <img> with Next.js <Image> component
+- [x] Escape apostrophes in JSX text
 
-## Warnings to Fix
-- [ ] Replace `<img>` with `<Image>` from next/image in `src/app/(components)/ServiceWorksGallery.tsx`
-- [ ] Remove unused imports (`Clock`, `Handshake`, `DollarSign`) in `src/app/(pages)/admin/dashboard/page.tsx`
-- [ ] Add `fetchAll` to useEffect dependency array in `src/app/(pages)/admin/dashboard/page.tsx`
-- [ ] Remove unused import `TextType` in `src/app/(pages)/services/page.tsx`
+## dashboard/page.tsx
+- [x] Wrap fetchAll in useCallback and add to useEffect dependencies
+
+## admin/home/page.tsx
+- [x] Define proper types for Firestore data instead of 'any'
+- [x] Change error handling from 'any' to 'unknown'
+
+## Verification
+- [x] Run linting to check all errors are resolved
+- [ ] Test application functionality

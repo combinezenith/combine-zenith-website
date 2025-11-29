@@ -99,7 +99,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     fetchAll();
-  }, [range]);
+  }, [range, fetchAll]);
 
   // Poll realtime
   useEffect(() => {
