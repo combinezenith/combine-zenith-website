@@ -26,6 +26,7 @@ export default function ServicePricingPlan({ pricingPackages }: ServicePricingPa
         description: pkg.description,
       }));
 
+<<<<<<< HEAD
   // Sort packages in the order: Basic, Premium, Advanced
   const sortedPackages = packagesArray.sort((a, b) => {
     const order = { basic: 0, premium: 1, advanced: 2 };
@@ -35,6 +36,9 @@ export default function ServicePricingPlan({ pricingPackages }: ServicePricingPa
   });
 
   if (sortedPackages.length === 0) {
+=======
+  if (packagesArray.length === 0) {
+>>>>>>> 4c7705363112a00da02a00b1567cc6fc8f7f5787
     return (
       <div className="text-center py-12">
         <div className="bg-white/5 rounded-2xl p-8 max-w-md mx-auto">
@@ -59,17 +63,30 @@ export default function ServicePricingPlan({ pricingPackages }: ServicePricingPa
 
         {/* Pricing Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto items-stretch">
+<<<<<<< HEAD
           {sortedPackages.map((pkg) => {
             const isPremium = pkg.id.toLowerCase() === 'premium'; // Premium gets "Most Popular" tag
+=======
+          {packagesArray.map((pkg, index) => {
+            const isProfessional = index === 1; // Make middle package "professional"
+>>>>>>> 4c7705363112a00da02a00b1567cc6fc8f7f5787
             return (
               <div
                 key={pkg.id}
                 className={`bg-white rounded-2xl p-8 shadow-2xl relative flex flex-col min-h-[500px] ${
+<<<<<<< HEAD
                   isPremium ? 'transform md:scale-105 md:-translate-y-2' : ''
                 }`}
               >
                 {/* Most Popular Badge */}
                 {isPremium && (
+=======
+                  isProfessional ? 'transform md:scale-105 md:-translate-y-2' : ''
+                }`}
+              >
+                {/* Most Popular Badge */}
+                {isProfessional && (
+>>>>>>> 4c7705363112a00da02a00b1567cc6fc8f7f5787
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                     <span className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-xs font-bold px-4 py-1 rounded-full">
                       MOST POPULAR
@@ -102,7 +119,11 @@ export default function ServicePricingPlan({ pricingPackages }: ServicePricingPa
                 {/* Features List - Placeholder for now */}
                 <ul className="space-y-3 mb-8 flex-grow">
                   <li className="flex items-start gap-3">
+<<<<<<< HEAD
                     {isPremium ? (
+=======
+                    {isProfessional ? (
+>>>>>>> 4c7705363112a00da02a00b1567cc6fc8f7f5787
                       <Check className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
                     ) : (
                       <Circle className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" fill="currentColor" />
@@ -112,7 +133,11 @@ export default function ServicePricingPlan({ pricingPackages }: ServicePricingPa
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
+<<<<<<< HEAD
                     {isPremium ? (
+=======
+                    {isProfessional ? (
+>>>>>>> 4c7705363112a00da02a00b1567cc6fc8f7f5787
                       <Check className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
                     ) : (
                       <Circle className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" fill="currentColor" />
@@ -122,7 +147,11 @@ export default function ServicePricingPlan({ pricingPackages }: ServicePricingPa
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
+<<<<<<< HEAD
                     {isPremium ? (
+=======
+                    {isProfessional ? (
+>>>>>>> 4c7705363112a00da02a00b1567cc6fc8f7f5787
                       <Check className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
                     ) : (
                       <Circle className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" fill="currentColor" />
@@ -131,7 +160,11 @@ export default function ServicePricingPlan({ pricingPackages }: ServicePricingPa
                       Monthly progress reports
                     </span>
                   </li>
+<<<<<<< HEAD
                   {isPremium && (
+=======
+                  {isProfessional && (
+>>>>>>> 4c7705363112a00da02a00b1567cc6fc8f7f5787
                     <>
                       <li className="flex items-start gap-3">
                         <Check className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
@@ -151,8 +184,13 @@ export default function ServicePricingPlan({ pricingPackages }: ServicePricingPa
 
                 {/* CTA Button */}
                 <Link href="/contact">
+<<<<<<< HEAD
                   <button className="w-full bg-linear-to-r from-purple-900 to-indigo-900 hover:from-purple-800 hover:to-indigo-800 text-white font-semibold py-4 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl">
                     {isPremium ? 'Choose Plan' : 'Get Started'}
+=======
+                  <button className="w-full bg-gradient-to-r from-purple-900 to-indigo-900 hover:from-purple-800 hover:to-indigo-800 text-white font-semibold py-4 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl">
+                    {isProfessional ? 'Choose Plan' : 'Get Started'}
+>>>>>>> 4c7705363112a00da02a00b1567cc6fc8f7f5787
                   </button>
                 </Link>
               </div>
@@ -162,4 +200,8 @@ export default function ServicePricingPlan({ pricingPackages }: ServicePricingPa
       </div>
     </div>
   );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 4c7705363112a00da02a00b1567cc6fc8f7f5787
