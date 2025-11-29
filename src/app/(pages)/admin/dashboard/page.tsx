@@ -12,12 +12,6 @@ import {
   Users,
   Activity,
   Zap,
-<<<<<<< HEAD
-=======
-  Clock,
-  Handshake,
-  DollarSign,
->>>>>>> 4c7705363112a00da02a00b1567cc6fc8f7f5787
 } from "lucide-react";
 import {
   LineChart,
@@ -105,11 +99,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     fetchAll();
-<<<<<<< HEAD
   }, [range, fetchAll]);
-=======
-  }, [range]);
->>>>>>> 4c7705363112a00da02a00b1567cc6fc8f7f5787
 
   // Poll realtime
   useEffect(() => {

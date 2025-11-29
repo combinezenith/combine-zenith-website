@@ -5,10 +5,6 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ChevronDown, Star, Award, Users, TrendingUp, ArrowRight, Sparkles } from 'lucide-react';
 import ServiceCard from '@/app/(components)/ServiceCard';
-<<<<<<< HEAD
-=======
-// import TextType from '@/app/(components)/TextType';
->>>>>>> 4c7705363112a00da02a00b1567cc6fc8f7f5787
 import { CountingNumber } from '@/app/components/CountingNumber';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/app/config/firebase';

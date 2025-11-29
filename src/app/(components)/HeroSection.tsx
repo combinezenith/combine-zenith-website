@@ -1,7 +1,6 @@
 'use client';
 
 import Link from "next/link";
-<<<<<<< HEAD
 import Image from "next/image";
 import TextType from './TextType';
 import { useEffect, useRef, useState } from 'react';
@@ -20,11 +19,6 @@ interface HeroBackgroundData {
   type: HeroBgType;
   value: string;
 }
-=======
-import TextType from './TextType';
-import { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
->>>>>>> 4c7705363112a00da02a00b1567cc6fc8f7f5787
 
 export default function HeroSection() {
   const heroRef = useRef<HTMLElement>(null);
@@ -33,7 +27,6 @@ export default function HeroSection() {
   const socialRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-<<<<<<< HEAD
   const [heroBg, setHeroBg] = useState<HeroBackground | null>(null);
 
   useEffect(() => {
@@ -162,92 +155,6 @@ export default function HeroSection() {
 
       {/* Overlay for better text readability */}
       <div className="absolute inset-0 bg-black/50" />
-=======
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Video fade-in animation
-      gsap.fromTo(videoRef.current,
-        {
-          opacity: 0,
-        },
-        {
-          opacity: 1,
-          duration: 1.5,
-          ease: "power2.inOut",
-        }
-      );
-
-      // Text fade-up animation
-      gsap.fromTo(textRef.current,
-        {
-          opacity: 0,
-          y: 50,
-        },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1.2,
-          delay: 0.5,
-          ease: "power3.out",
-        }
-      );
-
-      // Button entrance animation
-      gsap.fromTo(buttonRef.current,
-        {
-          opacity: 0,
-          scale: 0.8,
-        },
-        {
-          opacity: 1,
-          scale: 1,
-          duration: 0.8,
-          delay: 0.8,
-          ease: "back.out(1.7)",
-        }
-      );
-
-      // Social links slide-in animation
-      gsap.fromTo(socialRef.current,
-        {
-          opacity: 0,
-          x: -50,
-        },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 1,
-          delay: 1,
-          ease: "power3.out",
-        }
-      );
-    }, heroRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  return (
-    <section
-      ref={heroRef}
-      aria-label="Hero Section"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden m-10 lg:mt-10 mt-20"
-    >
-      {/* Video Background */}
-      <video
-        ref={videoRef}
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover"
-      >
-        <source src="/intro-of-team.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-
-      {/* Overlay for better text readability */}
-      <div className="absolute inset-0 bg-black/50"></div>
->>>>>>> 4c7705363112a00da02a00b1567cc6fc8f7f5787
 
       <div aria-label="Hero Content" className="container mx-4 lg:mx-32 relative z-10">
         <div aria-label="Hero Grid" className="flex flex-col items-center justify-center text-center">
@@ -267,11 +174,7 @@ export default function HeroSection() {
 
             <div aria-label="Description" className="space-y-4">
               <p className="text-gray-300 text-lg leading-relaxed mx-auto">
-<<<<<<< HEAD
                 At Combine Zenith, we don&apos;t just market brands — we partner with dreamers, creators, and changemakers. Every idea starts as a spark; we turn that spark into a story that connects, inspires, and drives real growth.
-=======
-                At Combine Zenith, we don&apos;t just market brands we partner with dreamers, creators, and changemakers. Every idea starts as a spark we turn that spark into a story that connects, inspires, and drives real growth. Through creativity, strategy, and innovation, we help your brand not just stand out but truly stand for something.
->>>>>>> 4c7705363112a00da02a00b1567cc6fc8f7f5787
               </p>
             </div>
             <Link href="/services">
@@ -292,13 +195,6 @@ export default function HeroSection() {
         aria-label="Social Media Links"
         className="absolute left-8 top-1/2 -translate-y-1/2 hidden xl:flex flex-col space-y-6 z-30"
       >
-<<<<<<< HEAD
-        {/* ... keep your social icons markup if needed ... */}
-      </div>
-    </section>
-  );
-}
-=======
         <a href="https://www.facebook.com/profile.php?id=61583245775368" aria-label="Facebook" className="text-white hover:text-purple-300 transition transform hover:scale-110 p-2 bg-white/10 backdrop-blur-sm rounded-full">
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
             <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
@@ -325,4 +221,3 @@ export default function HeroSection() {
     </section>
   );
 }
->>>>>>> 4c7705363112a00da02a00b1567cc6fc8f7f5787

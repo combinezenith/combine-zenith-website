@@ -89,11 +89,8 @@ const ServiceWorksGallery: React.FC<ServiceWorksGalleryProps> = ({ works }) => {
                     <Image
                       src={work.mediaPath}
                       alt={work.title}
-<<<<<<< HEAD
                       width={400}
                       height={256}
-=======
->>>>>>> 4c7705363112a00da02a00b1567cc6fc8f7f5787
                       className="object-cover w-full h-full transition-transform duration-500"
                     />
                   ) : (
