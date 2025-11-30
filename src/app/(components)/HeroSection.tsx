@@ -26,8 +26,10 @@ export default function HeroSection() {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const socialRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   const [heroBg, setHeroBg] = useState<HeroBackground | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // fetch hero background
@@ -46,6 +48,8 @@ export default function HeroSection() {
       } catch (err) {
         console.warn("Failed to load hero bg", err);
         setHeroBg({ type: "default", value: "" });
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -53,11 +57,22 @@ export default function HeroSection() {
   }, []);
 
   useEffect(() => {
+    if (isLoading) return; // Don't run animations until data is loaded
+
     const ctx = gsap.context(() => {
       // Video fade-in animation (only if there's a video element)
       if (videoRef.current) {
         gsap.fromTo(
           videoRef.current,
+          { opacity: 0 },
+          { opacity: 1, duration: 1.5, ease: "power2.inOut" }
+        );
+      }
+
+      // Overlay fade-in animation (synced with video)
+      if (overlayRef.current) {
+        gsap.fromTo(
+          overlayRef.current,
           { opacity: 0 },
           { opacity: 1, duration: 1.5, ease: "power2.inOut" }
         );
@@ -92,10 +107,10 @@ export default function HeroSection() {
     }, heroRef);
 
     return () => ctx.revert();
-  }, [heroBg]); // re-run animations when heroBg changes
+  }, [heroBg, isLoading]); // re-run animations when heroBg changes
 
-  // choose default gradient here — change this string to match your design
-  const defaultGradientClass = "";
+  // Default gradient - matches your admin panel preview
+  const defaultGradientClass = "bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-800";
 
   // decide what to render for bg
   const renderBg = () => {
@@ -114,7 +129,6 @@ export default function HeroSection() {
           />
         );
       case "image":
-        // value can be a public path (/hero/x.png) or a storage URL
         return (
           <Image
             src={heroBg.value}
@@ -122,10 +136,10 @@ export default function HeroSection() {
             fill
             className="absolute inset-0 w-full h-full object-cover"
             draggable={false}
+            priority
           />
         );
       case "video":
-        // video tag behind content
         return (
           <video
             ref={videoRef}
@@ -148,13 +162,25 @@ export default function HeroSection() {
       ? `relative min-h-screen flex items-center justify-center overflow-hidden m-10 lg:mt-10 mt-20 ${defaultGradientClass}`
       : "relative min-h-screen flex items-center justify-center overflow-hidden m-10 lg:mt-10 mt-20";
 
+  // Show loading state
+  if (isLoading) {
+    return (
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden m-10 lg:mt-10 mt-20 bg-gradient-to-br from-purple-900 via-indigo-900 to-purple-800">
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="relative z-10 text-white">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto"></div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section ref={heroRef} aria-label="Hero Section" className={sectionClass}>
       {/* render background layers */}
       {renderBg()}
 
-      {/* Overlay for better text readability */}
-      <div className="absolute inset-0 bg-black/50" />
+      {/* Overlay for better text readability - starts invisible, fades in with video */}
+      <div ref={overlayRef} className="absolute inset-0 bg-black/50 opacity-0" />
 
       <div aria-label="Hero Content" className="container mx-4 lg:mx-32 relative z-10">
         <div aria-label="Hero Grid" className="flex flex-col items-center justify-center text-center">
@@ -174,7 +200,7 @@ export default function HeroSection() {
 
             <div aria-label="Description" className="space-y-4">
               <p className="text-gray-300 text-lg leading-relaxed mx-auto">
-                At Combine Zenith, we don&apos;t just market brands — we partner with dreamers, creators, and changemakers. Every idea starts as a spark; we turn that spark into a story that connects, inspires, and drives real growth.
+                At Combine Zenith, we don&apos;t just market brands we partner with dreamers, creators, and changemakers. Every idea starts as a spark we turn that spark into a story that connects, inspires, and drives real growth. Through creativity, strategy, and innovation, we help your brand not just stand out but truly stand for something.
               </p>
             </div>
             <Link href="/services">
@@ -201,7 +227,7 @@ export default function HeroSection() {
           </svg>
         </a>
         <a href="https://www.tiktok.com/@combine.zenith" aria-label="Tiktok" className="text-white hover:text-purple-300 transition transform hover:scale-110 p-2 bg-white/10 backdrop-blur-sm rounded-full">
-        <svg fill="#ffffff" viewBox="-3.2 -3.2 38.40 38.40" version="1.1" xmlns="http://www.w3.org/2000/svg" transform="matrix(1, 0, 0, 1, 0, 0)rotate(0)" stroke="#ffffff">
+        <svg fill="#ffffff" viewBox="-3.2 -3.2 38.40 38.40" version="1.1" xmlns="http://www.w3.org/2000/svg" transform="matrix(1, 0, 0, 1, 0, 0)rotate(0)" stroke="#ffffff" className="w-5 h-5">
         <g id="SVGRepo_bgCarrier"></g>
         <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round">
           </g><g id="SVGRepo_iconCarrier"> <title>tiktok</title>
