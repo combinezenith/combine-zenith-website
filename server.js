@@ -1,19 +1,15 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
 import { createServer } from "http";
 import next from "next";
-import { parse } from "url";
 
 const port = process.env.PORT || 3000;
-const dev = process.env.NODE_ENV !== "production";
-const app = next({ dev });
+const dev = false; // always production in cPanel
+const app = next({ dev, dir: "." });
 const handle = app.getRequestHandler();
 
 app.prepare().then(() => {
   createServer((req, res) => {
-    const parsedUrl = parse(req.url, true);
-    handle(req, res, parsedUrl);
-  }).listen(port, (err) => {
-    if (err) throw err;
-    console.log(`> Ready on http://localhost:${port}`);
+    handle(req, res);
+  }).listen(port, () => {
+    console.log("Next.js running on port", port);
   });
 });
