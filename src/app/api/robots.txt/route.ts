@@ -8,6 +8,8 @@ Allow: /
 Disallow: /admin/
 Disallow: /api/
 Disallow: /_next/
+Disallow: /cgi-bin/
+
 
 # Allow access to sitemap
 Sitemap: https://www.combinezenith.com/sitemap.xml
