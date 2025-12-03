@@ -1,0 +1,99 @@
+[
+  {
+    "slug": "rise-and-recognize",
+    "name": "Rise & Recognize - Branding Identity",
+    "description": "We transformed an idea into a living, breathing brand that speaks louder than words.",
+    "overview": "Client wanted a meaningful identity with depth and direction. We brought emotion, storytelling, and visual impact through a complete rebrand.",
+    "image": "/portfolio/rise-recognize.jpg",
+    "services": ["Branding", "Identity Design", "Brand Strategy"],
+    "creativeApproach": "Deep brand story exploration, color psychology, symbolism, typography direction.",
+    "challenges": "Client’s old branding lacked emotion, consistency, and recognition.",
+    "clientWords": "“Combine Zenith didn’t just design a logo — they understood our heartbeat.“",
+    "client": {
+      "name": "Confidential",
+      "industry": "Branding",
+      "location": "Pakistan"
+    },
+    "highlights": [
+      "Complete emotional rebrand",
+      "Logo symbol representing strength and growth",
+      "Strong brand voice creation",
+      "Brand guidelines for visual consistency"
+    ],
+    "technologies": [
+      "Adobe Illustrator",
+      "Adobe Photoshop",
+      "Figma",
+      "After Effects"
+    ],
+    "metrics": {
+      "efficiency": "85%",
+      "satisfaction": "95%",
+      "rating": "4.8/5"
+    }
+  },
+
+  {
+    "slug": "the-vision-code",
+    "name": "The Vision Code - Creative Strategy",
+    "description": "A strategy campaign built with harmony, purpose, and precision.",
+    "overview": "We created a narrative-driven strategy that helped the brand rise in recognition and engagement.",
+    "image": "/portfolio/vision-code.jpg",
+    "services": ["Creative Strategy", "Brand Positioning"],
+    "creativeApproach": "Message hierarchy, content mapping, funnel planning.",
+    "challenges": "Brand lacked structured communication.",
+    "clientWords": "“You turned our scattered ideas into a powerful strategy.“",
+    "client": {
+      "name": "Confidential",
+      "industry": "Strategy Planning",
+      "location": "Pakistan"
+    },
+    "highlights": [
+      "Strategic communication flow",
+      "Strong brand positioning",
+      "Campaign blueprint"
+    ],
+    "technologies": [
+      "Figma",
+      "Miro Board",
+      "AI-Assisted Planning"
+    ],
+    "metrics": {
+      "efficiency": "80%",
+      "satisfaction": "90%",
+      "rating": "4.6/5"
+    }
+  },
+
+  {
+    "slug": "beyond-imagination",
+    "name": "Beyond Imagination - Creative Work",
+    "description": "Where courage met creativity.",
+    "overview": "Emotional visuals + strong storytelling + bold design direction.",
+    "image": "/portfolio/beyond.jpg",
+    "services": ["Creative Work", "Visual Storytelling"],
+    "creativeApproach": "Story-based visuals, emotional tone, symbolic elements.",
+    "challenges": "Brand needed high-impact visuals.",
+    "clientWords": "“You told our story better than we could.“",
+    "client": {
+      "name": "Confidential",
+      "industry": "Design",
+      "location": "Pakistan"
+    },
+    "highlights": [
+      "Emotional design",
+      "Symbolic visuals",
+      "Modern storytelling"
+    ],
+    "technologies": [
+      "Illustrator",
+      "Photoshop",
+      "Figma"
+    ],
+    "metrics": {
+      "efficiency": "88%",
+      "satisfaction": "93%",
+      "rating": "4.7/5"
+    }
+  }
+]
