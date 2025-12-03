@@ -1,0 +1,146 @@
+{
+  "services_page": {
+    "meta": {
+      "title": "Combine Zenith – Services",
+      "prepared_by": "Maliha Naz",
+      "department": "Combine Zenith",
+      "date": "November 12, 2025"
+    },
+
+    "hero_section": {
+      "option_1": {
+        "heading": "Combine Zenith – Our Services",
+        "subheading": "Where Creativity Meets Intelligent Innovation",
+        "description": "At Combine Zenith, we don’t just offer services we craft experiences that move people and grow brands. Our blend of creativity, strategy, and technology transforms ideas into impact from compelling visuals to powerful digital strategies. Whatever your vision, we bring it to life with purpose, precision, and passion. Empower your brand to rise, resonate, and redefine success."
+      },
+      "option_2": {
+        "heading": "Combine Zenith – Our Services",
+        "subheading": "Creative Power. Digital Precision. Real Results.",
+        "description": "We help brands evolve in a world that never stops changing. From AI-driven video production to SEO, web development, and marketing Combine Zenith delivers the tools and creativity your business needs to stand out and stay ahead. We don’t follow trends we create them. Let’s build something unforgettable together."
+      }
+    },
+
+    "services": [
+      {
+        "name": "AI Video Production",
+        "tagline": "Transforming Ideas into Intelligent Visual Stories",
+        "description": "We use smart AI tools to turn your ideas into clean, modern, and engaging videos. From script to final edit, everything happens faster and with better quality. Whether you need an explainer, product video, or brand story we create visuals that look great and connect with your audience.",
+        "highlights": [
+          "AI-based scripting and animation",
+          "Personalized voiceovers",
+          "Faster turnaround",
+          "High-quality visuals optimized for all platforms"
+        ]
+      },
+      {
+        "name": "All Print Productions",
+        "tagline": "Print That Makes a Lasting Impression",
+        "description": "From business cards to billboards, we handle all your printing needs in one place. We turn your designs into high-quality prints that look professional, feel premium, and leave a strong impression on anyone who sees them.",
+        "highlights": [
+          "Business cards, flyers, banners, brochures",
+          "Custom packaging and stationery",
+          "High-resolution prints",
+          "Design-to-delivery services"
+        ]
+      },
+      {
+        "name": "SEO (Search Engine Optimization)",
+        "tagline": "Be Seen. Be Found. Be Chosen.",
+        "description": "We help your business appear higher on Google so the right people can find you easily. Through keyword research, website improvements, and smart SEO strategies, we increase your online visibility and bring more traffic to your website.",
+        "highlights": [
+          "Keyword research & strategy",
+          "On-page & technical SEO",
+          "Backlink building",
+          "Monthly analytics & reporting"
+        ]
+      },
+      {
+        "name": "Web Development",
+        "tagline": "Building Websites that Work and Wow",
+        "description": "We build modern, responsive, and user-friendly websites that look great and work smoothly. Our websites are designed to support your business goals, load fast, stay secure, and give your visitors a great experience.",
+        "highlights": [
+          "Custom front-end & back-end development",
+          "E-commerce & portfolio sites",
+          "Mobile-friendly & SEO-optimized",
+          "Maintenance & updates"
+        ]
+      },
+      {
+        "name": "Video Editing",
+        "tagline": "Turn Raw Footage into Cinematic Stories",
+        "description": "We turn your raw footage into polished, cinematic videos. Whether it’s a corporate promo, social reel, or brand story, every cut, transition, and effect is designed to engage your audience and tell your story beautifully.",
+        "highlights": [
+          "Color grading & sound design",
+          "Motion graphics & captions",
+          "YouTube & social media editing",
+          "Fast delivery & revisions"
+        ]
+      },
+      {
+        "name": "Graphic Design",
+        "tagline": "Design that Defines Your Brand",
+        "description": "Great design is more than pretty visuals it communicates your brand. Our creative team makes designs that reflect your identity and grab attention across digital and print platforms.",
+        "highlights": [
+          "Logo & brand identity design",
+          "Social media posts & ads",
+          "Packaging & marketing materials",
+          "UI/UX design support"
+        ]
+      },
+      {
+        "name": "Content Writing",
+        "tagline": "Words that Connect, Convince & Convert",
+        "description": "We write words that connect, convince, and convert. From web copy to blogs, our content builds trust, engages your audience, and drives action all in your brand’s voice.",
+        "highlights": [
+          "Website & landing page copy",
+          "Blog writing & SEO articles",
+          "Brand storytelling",
+          "Product descriptions"
+        ]
+      },
+      {
+        "name": "Influencer Marketing",
+        "tagline": "Power Your Brand with Real Voices",
+        "description": "We connect your brand with influencers who genuinely fit your message. With the right partnerships, we help you reach authentic audiences, increase trust, and generate meaningful engagement.",
+        "highlights": [
+          "Influencer partnerships & campaigns",
+          "Audience targeting",
+          "Content collaboration management",
+          "ROI tracking & reporting"
+        ]
+      },
+      {
+        "name": "Social Media Marketing",
+        "tagline": "Turn Followers into Fans",
+        "description": "We help your brand grow, engage, and turn followers into fans. From content planning to ad campaigns, we manage your social presence with strategy and creativity, building a loyal online community.",
+        "highlights": [
+          "Social media strategy & calendar",
+          "Creative content & ad design",
+          "Account growth management",
+          "Analytics & performance reports"
+        ]
+      },
+      {
+        "name": "Email Marketing",
+        "tagline": "Deliver Messages that Matter",
+        "description": "We make email marketing personal, automated, and effective. From newsletters to campaign sequences, our emails inform, inspire, and convert your audience into loyal customers.",
+        "highlights": [
+          "Newsletter & campaign design",
+          "Automation setup",
+          "Personalized templates",
+          "Conversion tracking"
+        ]
+      }
+    ],
+
+    "why_choose_us": {
+      "heading": "Why Choose Combine Zenith?",
+      "content": "We don’t just deliver services we deliver impact. In a market full of agencies, what makes Combine Zenith different isn’t just what we do, but how we do it. We blend human creativity, AI-driven innovation, and strategic thinking to craft results that truly matter. Unlike others who focus on quantity, we focus on quality, purpose, and transformation helping your brand grow with clarity and confidence."
+    },
+
+    "how_we_are_different": {
+      "heading": "How We’re Different",
+      "content": "At Combine Zenith, we don’t just complete projects we build powerful brand experiences. What sets us apart from other agencies is our unique mix of AI innovation, creative strategy, and personalized collaboration. While others rely on repetitive ideas and manual processes, we use intelligent tools to make every project faster, smarter, and more original. Every design, video, or campaign we create is backed by a clear strategy and measurable goals, ensuring your brand not only looks good but performs better. We work with you—not just for you—keeping communication transparent and every creative step aligned with your vision. Unlike agencies that outsource or scatter their services, Combine Zenith offers complete end-to-end solutions—from AI video production and web development to marketing, design, and branding—all under one roof. And most importantly, we don’t just promise growth; we prove it with data, reports, and real results that speak for themselves. At Combine Zenith, we redefine what 'creative agency' means—combining intelligence, innovation, and impact to help your brand stand out where others fade."
+    }
+  }
+}
