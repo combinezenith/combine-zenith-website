@@ -153,7 +153,7 @@ export default function TeamPage() {
                   <td className="py-3 px-4 font-medium">{team.name}</td>
                   <td className="py-3 px-4">
                     <Image
-                      src={team.image || "/"}
+                      src={team.image || "/partners/9.jpg"}
                       alt={team.name}
                       width={40}
                       height={40}
